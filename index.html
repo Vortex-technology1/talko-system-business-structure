@@ -19,6 +19,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
     :root {
@@ -546,6 +547,98 @@
         font-size: 16px;
     }
 
+    /* === SUPPORT DROPDOWN === */
+    .support-dropdown {
+        position: relative;
+    }
+
+    .support-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 260px;
+        background: white;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--gray-200);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: var(--transition);
+        overflow: hidden;
+    }
+
+    .support-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .support-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        color: var(--gray-700);
+        text-decoration: none;
+        transition: var(--transition);
+        border-bottom: 1px solid var(--gray-100);
+    }
+
+    .support-menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .support-menu-item:hover {
+        background: var(--gray-50);
+    }
+
+    .support-menu-item:hover .support-item-title {
+        color: var(--success-color);
+    }
+
+    .support-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .support-icon.ai {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        color: white;
+    }
+
+    .support-icon.ai svg {
+        stroke: white;
+    }
+
+    .support-icon.telegram {
+        background: linear-gradient(135deg, #0088cc 0%, #0077b5 100%);
+        color: white;
+    }
+
+    .support-item-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .support-item-title {
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--gray-800);
+        margin-bottom: 2px;
+    }
+
+    .support-item-desc {
+        font-size: 11px;
+        color: var(--gray-500);
+    }
+
     /* === USER INFO === */
     .user-info {
         display: flex;
@@ -705,6 +798,11 @@
     @keyframes pulse-ai {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.7; }
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
 
     /* === CANVAS === */
@@ -2302,6 +2400,21 @@
             font-size: 11px;
             padding: 4px 12px;
         }
+
+        /* Mobile FAB visible */
+        .mobile-fab {
+            display: flex;
+        }
+
+        /* Hide desktop add button when FAB is shown */
+        .tool-btn.add-btn {
+            display: none;
+        }
+
+        /* Bottom safe area spacing for zoom */
+        .zoom-controls {
+            bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+        }
     }
 
     /* Extra small devices */
@@ -2374,12 +2487,6 @@
     }
 
     /* Mobile FAB (Floating Action Button) for Add */
-    @media (max-width: 480px) {
-        .mobile-fab {
-            display: flex;
-        }
-    }
-
     .mobile-fab {
         display: none;
         position: fixed;
@@ -2413,20 +2520,6 @@
         .mobile-fab {
             bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px));
             right: max(16px, env(safe-area-inset-right));
-        }
-    }
-
-    /* Hide desktop add button on mobile when FAB is shown */
-    @media (max-width: 480px) {
-        .tool-btn.add-btn {
-            display: none;
-        }
-    }
-
-    /* Mobile bottom safe area spacing */
-    @media (max-width: 480px) {
-        .zoom-controls {
-            bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
         }
     }
 
@@ -2624,10 +2717,28 @@
                     </div>
                 </div>
 
-                <!-- Support Button -->
-                <a href="https://chatgpt.com/g/g-6870bc9f1658819192171561f5d8fe53-ai-konsultant-platformi-talko-management-system" target="_blank" rel="noopener noreferrer" class="tool-btn support-btn" data-title="toolbar.support">
-                    <span data-text="toolbar.support"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>ПІДТРИМКА 24/7</span>
-                </a>
+                <!-- Support Dropdown -->
+                <div class="support-dropdown">
+                    <button class="tool-btn support-btn" id="supportBtn" type="button" data-title="toolbar.support" aria-haspopup="true" aria-expanded="false">
+                        <span data-text="toolbar.support"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>ПІДТРИМКА 24/7</span>
+                    </button>
+                    <div class="support-menu" id="supportMenu" role="menu">
+                        <a href="https://chatgpt.com/g/g-6870bc9f1658819192171561f5d8fe53-ai-konsultant-platformi-talko-management-system" target="_blank" rel="noopener noreferrer" class="support-menu-item" role="menuitem">
+                            <div class="support-icon ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="8" cy="14" r="2"/><circle cx="16" cy="14" r="2"/></svg></div>
+                            <div class="support-item-content">
+                                <div class="support-item-title">AI Консультант</div>
+                                <div class="support-item-desc">Допомога з налаштуваннями</div>
+                            </div>
+                        </a>
+                        <a href="https://t.me/AlexEduPro_bot?start=68f4ac956d0d3141970a83e8" target="_blank" rel="noopener noreferrer" class="support-menu-item" role="menuitem">
+                            <div class="support-icon telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+                            <div class="support-item-content">
+                                <div class="support-item-title">Технічна підтримка</div>
+                                <div class="support-item-desc">Telegram бот</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
 
                 <!-- Export Dropdown -->
                 <div class="export-dropdown">
@@ -2642,6 +2753,10 @@
                         <div class="export-menu-item" id="exportPdfBtn" role="menuitem" tabindex="0">
                             <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
                             <span data-text="export.pdf">Зберегти як PDF</span>
+                        </div>
+                        <div class="export-menu-item" id="exportExcelBtn" role="menuitem" tabindex="0">
+                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></svg></span>
+                            <span data-text="export.excel">Зберегти як Excel</span>
                         </div>
                     </div>
                 </div>
@@ -2926,6 +3041,7 @@
             'toolbar.move': 'Переміщення',
             'export.jpeg': 'Зберегти як JPEG',
             'export.pdf': 'Зберегти як PDF',
+            'export.excel': 'Зберегти як Excel',
             'export.preparing': 'Створення експорту...',
             'export.success_jpeg': 'JPEG збережено!',
             'export.success_pdf': 'PDF збережено з активними посиланнями!',
@@ -3051,6 +3167,7 @@
             'toolbar.export': '↓ ЭКСПОРТ',
             'export.jpeg': 'Сохранить как JPEG',
             'export.pdf': 'Сохранить как PDF',
+            'export.excel': 'Сохранить как Excel',
             'ecosystem.header': 'Системы TALKO',
             'empty.title': 'Создайте бизнес-систему',
             'empty.subtitle': 'Начните с главной функции',
@@ -3104,6 +3221,7 @@
             'toolbar.export': '↓ EXPORT',
             'export.jpeg': 'Save as JPEG',
             'export.pdf': 'Save as PDF',
+            'export.excel': 'Save as Excel',
             'ecosystem.header': 'TALKO Systems',
             'empty.title': 'Create business system',
             'empty.subtitle': 'Start with the main function',
@@ -3153,6 +3271,8 @@
             'ecosystem.delegation.desc': 'Предаване на задачи на екипа',
             'ecosystem.strategy.title': 'Стратегическо планиране',
             'ecosystem.strategy.desc': 'Дългосрочни цели',
+            'export.pdf': 'Запази като PDF',
+            'export.excel': 'Запази като Excel',
             'lang.uk': 'УКР',
             'lang.ru': 'РУС',
             'lang.en': 'ENG',
@@ -3397,6 +3517,9 @@
             clearInterval(State.connectionCheckInterval);
             State.connectionCheckInterval = null;
         }
+        // Remove online/offline listeners to prevent memory leaks
+        window.removeEventListener('online', handleOnlineStatus);
+        window.removeEventListener('offline', handleOfflineStatus);
     }
 
     // === CONNECTION MONITORING ===
@@ -4318,6 +4441,11 @@
             e.stopPropagation();
             toggleMenu('exportMenu', 'exportBtn');
         });
+        
+        Utils.getElement('supportBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu('supportMenu', 'supportBtn');
+        });
 
         // Export buttons
         Utils.getElement('exportJpegBtn')?.addEventListener('click', () => {
@@ -4328,6 +4456,11 @@
         Utils.getElement('exportPdfBtn')?.addEventListener('click', () => {
             Utils.getElement('exportMenu')?.classList.remove('show');
             if (typeof window.exportToPDF === 'function') window.exportToPDF();
+        });
+        
+        Utils.getElement('exportExcelBtn')?.addEventListener('click', () => {
+            Utils.getElement('exportMenu')?.classList.remove('show');
+            if (typeof window.exportToExcel === 'function') window.exportToExcel();
         });
 
         // Zoom buttons
@@ -4445,6 +4578,11 @@
             if (!e.target.closest('.ecosystem-dropdown')) {
                 Utils.getElement('ecosystemMenu')?.classList.remove('show');
             }
+            
+            // Support menu
+            if (!e.target.closest('.support-dropdown')) {
+                Utils.getElement('supportMenu')?.classList.remove('show');
+            }
         });
 
         // Keyboard navigation
@@ -4452,7 +4590,7 @@
             if (e.key === 'Escape') {
                 closeModal();
                 closeConfirmModal();
-                Utils.queryAll('.ecosystem-menu, .export-menu, .language-options').forEach(m => {
+                Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .language-options').forEach(m => {
                     m.classList.remove('show');
                 });
             }
@@ -5104,6 +5242,133 @@
             });
             const svg = document.getElementById('connections');
             if (svg) svg.style.filter = '';
+        }
+    }
+
+    // === EXPORT TO EXCEL ===
+    function exportToExcel() {
+        console.log('[EXCEL] exportToExcel викликано');
+        
+        try {
+            if (!window.functions || window.functions.length === 0) {
+                const msg = 'Немає функцій для експорту';
+                window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
+                return;
+            }
+            
+            if (typeof XLSX === 'undefined') {
+                window.showNotification ? window.showNotification('XLSX library not loaded', 'error') : alert('XLSX library not loaded');
+                return;
+            }
+            
+            const t = window.t || ((k) => k);
+            
+            // Sheet 1: Functions
+            const functionsData = window.functions.map((func, index) => ({
+                '№': index + 1,
+                'Назва функції': func.name || '',
+                'Відповідальний': func.responsible || '',
+                'KPI': func.kpi || '',
+                'Посилання': func.link || '',
+                'Працівники': func.employees ? func.employees.join(', ') : '',
+                'Колір': func.color || 'default',
+                'Позиція X': func.x || 0,
+                'Позиція Y': func.y || 0,
+                'Створено': func.created || '',
+                'Змінено': func.modified || ''
+            }));
+            
+            // Sheet 2: Statistics
+            const statsData = [];
+            window.functions.forEach((func, funcIndex) => {
+                if (func.statisticsArray && func.statisticsArray.length > 0) {
+                    func.statisticsArray.forEach((stat, statIndex) => {
+                        statsData.push({
+                            '№': statsData.length + 1,
+                            'Функція': func.name || '',
+                            'Показник': stat.name || '',
+                            'Значення': stat.value || '',
+                            'Колір': stat.color || 'blue'
+                        });
+                    });
+                }
+            });
+            
+            // Sheet 3: Connections
+            const connectionsData = (window.connections || []).map((conn, index) => {
+                const fromFunc = window.functions[conn.from];
+                const toFunc = window.functions[conn.to];
+                return {
+                    '№': index + 1,
+                    'Від (індекс)': conn.from,
+                    'Від (назва)': fromFunc ? fromFunc.name : '',
+                    'До (індекс)': conn.to,
+                    'До (назва)': toFunc ? toFunc.name : ''
+                };
+            });
+            
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            
+            // Add Functions sheet
+            const wsFunctions = XLSX.utils.json_to_sheet(functionsData);
+            
+            // Set column widths for Functions sheet
+            wsFunctions['!cols'] = [
+                { wch: 4 },   // №
+                { wch: 30 },  // Назва
+                { wch: 20 },  // Відповідальний
+                { wch: 30 },  // KPI
+                { wch: 40 },  // Посилання
+                { wch: 30 },  // Працівники
+                { wch: 10 },  // Колір
+                { wch: 10 },  // X
+                { wch: 10 },  // Y
+                { wch: 20 },  // Створено
+                { wch: 20 }   // Змінено
+            ];
+            XLSX.utils.book_append_sheet(wb, wsFunctions, 'Функції');
+            
+            // Add Statistics sheet (if any)
+            if (statsData.length > 0) {
+                const wsStats = XLSX.utils.json_to_sheet(statsData);
+                wsStats['!cols'] = [
+                    { wch: 4 },   // №
+                    { wch: 30 },  // Функція
+                    { wch: 20 },  // Показник
+                    { wch: 15 },  // Значення
+                    { wch: 10 }   // Колір
+                ];
+                XLSX.utils.book_append_sheet(wb, wsStats, 'Статистика');
+            }
+            
+            // Add Connections sheet (if any)
+            if (connectionsData.length > 0) {
+                const wsConnections = XLSX.utils.json_to_sheet(connectionsData);
+                wsConnections['!cols'] = [
+                    { wch: 4 },   // №
+                    { wch: 12 },  // Від (індекс)
+                    { wch: 30 },  // Від (назва)
+                    { wch: 12 },  // До (індекс)
+                    { wch: 30 }   // До (назва)
+                ];
+                XLSX.utils.book_append_sheet(wb, wsConnections, 'Звязки');
+            }
+            
+            // Generate filename
+            const filename = `TALKO_Structure_${new Date().toISOString().split('T')[0]}.xlsx`;
+            
+            // Save file
+            XLSX.writeFile(wb, filename);
+            
+            console.log(`✅ Excel: ${window.functions.length} функцій, ${statsData.length} показників, ${connectionsData.length} зв'язків`);
+            
+            const msg = `Експортовано: ${window.functions.length} функцій`;
+            window.showNotification ? window.showNotification(msg, 'success') : alert(msg);
+            
+        } catch (error) {
+            console.error('[ERR] Excel error:', error);
+            window.showNotification ? window.showNotification('Помилка експорту в Excel', 'error') : alert('Помилка експорту в Excel');
         }
     }
 
@@ -5848,6 +6113,7 @@
     window.zoomToFit = zoomToFit;
     window.exportToJPEG = exportToJPEG;
     window.exportToPDF = exportToPDF;
+    window.exportToExcel = exportToExcel;
     window.listBackups = listBackups;
     window.restoreFromBackup = restoreFromBackup;
     window.updateCanvasTransform = updateCanvasTransform;
