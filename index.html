@@ -2013,6 +2013,11 @@
             padding: 0 10px;
         }
 
+        /* Hide third AI button on small screens */
+        .tool-btn#aiStructureBtn {
+            display: none;
+        }
+
         .function-card {
             width: 240px;
             min-height: 160px;
@@ -2333,8 +2338,9 @@
             height: 32px;
         }
 
-        /* Hide second AI button on very small screens */
-        .tool-btn#aiStructureBtn {
+        /* Hide second and third AI button on very small screens */
+        .tool-btn#aiStructureBtn,
+        .tool-btn#aiProcessBtn {
             display: none;
         }
 
@@ -2601,6 +2607,13 @@
                                 <div class="ecosystem-item-desc">AI генератор описів</div>
                             </div>
                         </a>
+                        <a href="https://chatgpt.com/g/g-693ec18df2c0819194f1c3de7404d6fe-talko-ai-business-process" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item ai-assistant" role="menuitem">
+                            <div class="ecosystem-icon ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                            <div class="ecosystem-item-content">
+                                <div class="ecosystem-item-title">Бізнес-процеси</div>
+                                <div class="ecosystem-item-desc">AI опис процесів</div>
+                            </div>
+                        </a>
                         <a href="https://chatgpt.com/g/g-68584f3314848191b812f6c0abaaae9e-organizational-structure" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item ai-assistant" role="menuitem">
                             <div class="ecosystem-icon ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/></svg></div>
                             <div class="ecosystem-item-content">
@@ -2651,6 +2664,14 @@
                         </svg>
                     </span>
                     <span>AI ОПИС</span>
+                </button>
+                <button class="tool-btn ai-btn" id="aiProcessBtn" type="button" title="AI: Бізнес-процеси">
+                    <span class="ai-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </span>
+                    <span>AI ПРОЦЕСИ</span>
                 </button>
                 <button class="tool-btn ai-btn" id="aiStructureBtn" type="button" title="AI: Розробка структури">
                     <span class="ai-icon">
@@ -4265,6 +4286,10 @@
         // AI buttons - open ChatGPT assistants
         Utils.getElement('aiDescriptionBtn')?.addEventListener('click', () => {
             window.open('https://chatgpt.com/g/g-684c0092653c81919f42552c12434fa7-function-description-generator', '_blank');
+        });
+        
+        Utils.getElement('aiProcessBtn')?.addEventListener('click', () => {
+            window.open('https://chatgpt.com/g/g-693ec18df2c0819194f1c3de7404d6fe-talko-ai-business-process', '_blank');
         });
         
         Utils.getElement('aiStructureBtn')?.addEventListener('click', () => {
