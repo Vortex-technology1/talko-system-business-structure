@@ -547,6 +547,96 @@
         font-size: 16px;
     }
 
+    /* === AI ASSISTANTS DROPDOWN === */
+    .ai-dropdown {
+        position: relative;
+    }
+
+    .ai-dropdown .dropdown-arrow {
+        margin-left: 4px;
+        transition: transform 0.2s;
+    }
+
+    .ai-dropdown.open .dropdown-arrow {
+        transform: rotate(180deg);
+    }
+
+    .ai-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 280px;
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        display: none;
+        z-index: 1001;
+        overflow: hidden;
+    }
+
+    .ai-menu.show {
+        display: block;
+        animation: slideDown 0.2s ease;
+    }
+
+    .ai-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        text-decoration: none;
+        color: var(--gray-700);
+        transition: all 0.2s;
+        border-bottom: 1px solid var(--gray-100);
+    }
+
+    .ai-menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .ai-menu-item:hover {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(99, 102, 241, 0.08) 100%);
+    }
+
+    .ai-menu-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .ai-menu-icon svg {
+        stroke: white;
+    }
+
+    .ai-menu-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .ai-menu-title {
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--gray-800);
+        margin-bottom: 2px;
+    }
+
+    .ai-menu-desc {
+        font-size: 11px;
+        color: var(--gray-500);
+        line-height: 1.3;
+    }
+
+    .ai-menu-item:hover .ai-menu-title {
+        color: #7c3aed;
+    }
+
     /* === SUPPORT DROPDOWN === */
     .support-dropdown {
         position: relative;
@@ -2221,11 +2311,6 @@
             padding: 0 10px;
         }
 
-        /* Hide third AI button on small screens */
-        .tool-btn#aiStructureBtn {
-            display: none;
-        }
-
         .function-card {
             width: 240px;
             min-height: 160px;
@@ -2561,10 +2646,19 @@
             height: 32px;
         }
 
-        /* Hide second and third AI button on very small screens */
-        .tool-btn#aiStructureBtn,
-        .tool-btn#aiProcessBtn {
+        /* AI dropdown on very small screens */
+        .ai-dropdown .ai-btn span:not(.ai-icon):not(.dropdown-arrow) {
             display: none;
+        }
+        
+        .ai-dropdown .dropdown-arrow {
+            margin-left: 2px;
+        }
+
+        .ai-menu {
+            right: auto;
+            left: 0;
+            min-width: 260px;
         }
 
         .tool-btn.ai-btn {
@@ -2752,41 +2846,6 @@
                                 <div class="ecosystem-item-desc" data-text="ecosystem.architecture.desc">Фундамент системи</div>
                             </div>
                         </a>
-                        <a href="https://alextalko.com/financecourse" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
-                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-5a3 3 0 0 0 0 6h2a3 3 0 0 1 0 6H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="18" x2="12" y2="20"/></svg></div>
-                            <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title" data-text="ecosystem.finance.title">Система фінансів</div>
-                                <div class="ecosystem-item-desc" data-text="ecosystem.finance.desc">Прозорість грошей</div>
-                            </div>
-                        </a>
-                        <a href="https://alextalko.com/hiring-and-team-building-system" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
-                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-                            <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title" data-text="ecosystem.hiring.title">Найм і введення</div>
-                                <div class="ecosystem-item-desc" data-text="ecosystem.hiring.desc">Команда на автопілоті</div>
-                            </div>
-                        </a>
-                        <a href="https://alextalko.com/delegation-platform" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
-                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
-                            <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title" data-text="ecosystem.delegation.title">Делегування</div>
-                                <div class="ecosystem-item-desc" data-text="ecosystem.delegation.desc">Передача задач команді</div>
-                            </div>
-                        </a>
-                        <a href="https://alextalko.com/atm" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
-                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-                            <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title" data-text="ecosystem.strategy.title">Стратегічне планування</div>
-                                <div class="ecosystem-item-desc" data-text="ecosystem.strategy.desc">Довгострокові цілі</div>
-                            </div>
-                        </a>
-                        <a href="https://alextalko.com/learning-platform-marketing-and-sales-system" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
-                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-                            <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title" data-text="ecosystem.marketing.title">Маркетинг і продажі</div>
-                                <div class="ecosystem-item-desc" data-text="ecosystem.marketing.desc">Передбачувані продажі</div>
-                            </div>
-                        </a>
                         <a href="https://alextalko.com/kpi" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
                             <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
                             <div class="ecosystem-item-content">
@@ -2801,27 +2860,39 @@
                                 <div class="ecosystem-item-desc" data-text="ecosystem.taskmanager.desc">Управління задачами</div>
                             </div>
                         </a>
-                        <div class="ecosystem-divider"></div>
-                        <div class="ecosystem-section-title">AI Асистенти</div>
-                        <a href="https://chatgpt.com/g/g-684c0092653c81919f42552c12434fa7-function-description-generator" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item ai-assistant" role="menuitem">
-                            <div class="ecosystem-icon ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/><circle cx="8" cy="14" r="2"/><circle cx="16" cy="14" r="2"/></svg></div>
+                        <a href="https://alextalko.com/hiring-and-team-building-system" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
+                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
                             <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title">Опис функцій</div>
-                                <div class="ecosystem-item-desc">AI генератор описів</div>
+                                <div class="ecosystem-item-title" data-text="ecosystem.hiring.title">Система найму</div>
+                                <div class="ecosystem-item-desc" data-text="ecosystem.hiring.desc">Команда на автопілоті</div>
                             </div>
                         </a>
-                        <a href="https://chatgpt.com/g/g-693ec18df2c0819194f1c3de7404d6fe-talko-ai-business-process" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item ai-assistant" role="menuitem">
-                            <div class="ecosystem-icon ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                        <a href="https://alextalko.com/financecourse" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
+                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-5a3 3 0 0 0 0 6h2a3 3 0 0 1 0 6H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="18" x2="12" y2="20"/></svg></div>
                             <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title">Бізнес-процеси</div>
-                                <div class="ecosystem-item-desc">AI опис процесів</div>
+                                <div class="ecosystem-item-title" data-text="ecosystem.finance.title">Система фінансів</div>
+                                <div class="ecosystem-item-desc" data-text="ecosystem.finance.desc">Прозорість грошей</div>
                             </div>
                         </a>
-                        <a href="https://chatgpt.com/g/g-68584f3314848191b812f6c0abaaae9e-organizational-structure" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item ai-assistant" role="menuitem">
-                            <div class="ecosystem-icon ai"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/></svg></div>
+                        <a href="https://alextalko.com/learning-platform-marketing-and-sales-system" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
+                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
                             <div class="ecosystem-item-content">
-                                <div class="ecosystem-item-title">Розробка структури</div>
-                                <div class="ecosystem-item-desc">AI архітектор бізнесу</div>
+                                <div class="ecosystem-item-title" data-text="ecosystem.marketing.title">Система маркетингу і продажів</div>
+                                <div class="ecosystem-item-desc" data-text="ecosystem.marketing.desc">Передбачувані продажі</div>
+                            </div>
+                        </a>
+                        <a href="https://alextalko.com/delegation-platform" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
+                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
+                            <div class="ecosystem-item-content">
+                                <div class="ecosystem-item-title" data-text="ecosystem.delegation.title">Система делегування</div>
+                                <div class="ecosystem-item-desc" data-text="ecosystem.delegation.desc">Передача задач команді</div>
+                            </div>
+                        </a>
+                        <a href="https://alextalko.com/atm" target="_blank" rel="noopener noreferrer" class="ecosystem-menu-item" role="menuitem">
+                            <div class="ecosystem-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                            <div class="ecosystem-item-content">
+                                <div class="ecosystem-item-title" data-text="ecosystem.strategy.title">Стратегічне планування</div>
+                                <div class="ecosystem-item-desc" data-text="ecosystem.strategy.desc">Довгострокові цілі</div>
                             </div>
                         </a>
                     </div>
@@ -2888,36 +2959,89 @@
                 <button class="tool-btn" id="showAllBtn" type="button" data-title="toolbar.show_all">
                     <span data-text="toolbar.show_all">ПОКАЗАТИ ВСЕ</span>
                 </button>
-                <button class="tool-btn ai-btn" id="aiDescriptionBtn" type="button" title="AI: Опис функцій">
-                    <span class="ai-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
-                            <circle cx="8" cy="14" r="2"/>
-                            <circle cx="16" cy="14" r="2"/>
-                        </svg>
-                    </span>
-                    <span>AI ОПИС</span>
-                </button>
-                <button class="tool-btn ai-btn" id="aiProcessBtn" type="button" title="AI: Бізнес-процеси">
-                    <span class="ai-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                        </svg>
-                    </span>
-                    <span>AI ПРОЦЕСИ</span>
-                </button>
-                <button class="tool-btn ai-btn" id="aiStructureBtn" type="button" title="AI: Розробка структури">
-                    <span class="ai-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <rect x="3" y="3" width="7" height="7" rx="1"/>
-                            <rect x="14" y="3" width="7" height="7" rx="1"/>
-                            <rect x="3" y="14" width="7" height="7" rx="1"/>
-                            <rect x="14" y="14" width="7" height="7" rx="1"/>
-                            <path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/>
-                        </svg>
-                    </span>
-                    <span>AI СТРУКТУРА</span>
-                </button>
+                <!-- AI Assistants Dropdown -->
+                <div class="ai-dropdown">
+                    <button class="tool-btn ai-btn" id="aiAssistantsBtn" type="button" title="AI Асистенти" aria-haspopup="true" aria-expanded="false">
+                        <span class="ai-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                <circle cx="8" cy="14" r="2"/>
+                                <circle cx="16" cy="14" r="2"/>
+                            </svg>
+                        </span>
+                        <span data-text="toolbar.ai_assistants">AI АСИСТЕНТИ</span>
+                        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="ai-menu" id="aiMenu" role="menu">
+                        <a href="https://chatgpt.com/g/g-6870bc9f1658819192171561f5d8fe53-ai-konsultant-platformi-talko-management-system" target="_blank" rel="noopener noreferrer" class="ai-menu-item" role="menuitem">
+                            <div class="ai-menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                    <circle cx="8" cy="14" r="2"/>
+                                    <circle cx="16" cy="14" r="2"/>
+                                </svg>
+                            </div>
+                            <div class="ai-menu-content">
+                                <div class="ai-menu-title" data-text="ai.function">AI Опис функції</div>
+                                <div class="ai-menu-desc" data-text="ai.function_desc">Створення описів для функцій</div>
+                            </div>
+                        </a>
+                        <a href="https://chatgpt.com/g/g-684deb1df3f88191a916de7c9a16afa4-ai-asistent-napisannia-biznes-procesiv" target="_blank" rel="noopener noreferrer" class="ai-menu-item" role="menuitem">
+                            <div class="ai-menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                </svg>
+                            </div>
+                            <div class="ai-menu-content">
+                                <div class="ai-menu-title" data-text="ai.process">AI Опис процесу</div>
+                                <div class="ai-menu-desc" data-text="ai.process_desc">Написання бізнес-процесів</div>
+                            </div>
+                        </a>
+                        <a href="https://chatgpt.com/g/g-6839541f0ed08191b9e9dd604e7c5e19-asistent-z-rozrobki-organizaciinoi-strukturi" target="_blank" rel="noopener noreferrer" class="ai-menu-item" role="menuitem">
+                            <div class="ai-menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                                    <path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/>
+                                </svg>
+                            </div>
+                            <div class="ai-menu-content">
+                                <div class="ai-menu-title" data-text="ai.structure">AI Структура</div>
+                                <div class="ai-menu-desc" data-text="ai.structure_desc">Розробка організаційної структури</div>
+                            </div>
+                        </a>
+                        <a href="https://chatgpt.com/g/g-6948fe9852508191a8d0f9f912baa547-ai-asistent-dlia-stvorennia-politiki-kompanii" target="_blank" rel="noopener noreferrer" class="ai-menu-item" role="menuitem">
+                            <div class="ai-menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
+                            </div>
+                            <div class="ai-menu-content">
+                                <div class="ai-menu-title" data-text="ai.policy">AI Опис політики / правил</div>
+                                <div class="ai-menu-desc" data-text="ai.policy_desc">Створення політик та правил компанії</div>
+                            </div>
+                        </a>
+                        <a href="https://chatgpt.com/g/g-685640bc592881918743da9332b83f31-ai-alex-talko-technical-lead" target="_blank" rel="noopener noreferrer" class="ai-menu-item" role="menuitem">
+                            <div class="ai-menu-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                                    <rect x="9" y="3" width="6" height="4" rx="1"/>
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                            </div>
+                            <div class="ai-menu-content">
+                                <div class="ai-menu-title" data-text="ai.instruction">AI Опис інструкції</div>
+                                <div class="ai-menu-desc" data-text="ai.instruction_desc">Як виконувати інструкцію крок за кроком</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
                 <div class="user-info">
                     <span class="user-email" id="userEmail"></span>
                     <button class="logout-btn" id="logoutBtn" type="button" data-title="toolbar.logout" data-text="toolbar.logout">Вийти</button>
@@ -3174,6 +3298,7 @@
             'toolbar.copy': 'КОПІЮВАТИ',
             'toolbar.paste': 'ВСТАВИТИ',
             'toolbar.show_all': 'ПОКАЗАТИ ВСЕ',
+            'toolbar.ai_assistants': 'AI АСИСТЕНТИ',
             'toolbar.logout': 'Вийти',
             'toolbar.sync': 'СИНХРОНІЗУВАТИ',
             'toolbar.export': '↓ ЕКСПОРТ',
@@ -3188,6 +3313,16 @@
             'export.error': 'Помилка експорту',
             'export.active_links': 'активних посилань',
             'export.links_section': 'ПОСИЛАННЯ НА СИСТЕМИ:',
+            'ai.function': 'AI Опис функції',
+            'ai.function_desc': 'Створення описів для функцій',
+            'ai.process': 'AI Опис процесу',
+            'ai.process_desc': 'Написання бізнес-процесів',
+            'ai.structure': 'AI Структура',
+            'ai.structure_desc': 'Розробка організаційної структури',
+            'ai.policy': 'AI Опис політики / правил',
+            'ai.policy_desc': 'Створення політик та правил компанії',
+            'ai.instruction': 'AI Опис інструкції',
+            'ai.instruction_desc': 'Як виконувати інструкцію крок за кроком',
             'backup.restore': 'Відновити з backup',
             'backup.restore_desc': 'Попередні версії структури',
             'backup.modal_title': '🔄 Відновлення з backup',
@@ -3198,15 +3333,15 @@
             'ecosystem.architecture.desc': 'Фундамент системи',
             'ecosystem.finance.title': 'Система фінансів',
             'ecosystem.finance.desc': 'Прозорість грошей',
-            'ecosystem.hiring.title': 'Найм і введення',
+            'ecosystem.hiring.title': 'Система найму',
             'ecosystem.hiring.desc': 'Команда на автопілоті',
-            'ecosystem.marketing.title': 'Маркетинг і продажі',
+            'ecosystem.marketing.title': 'Система маркетингу і продажів',
             'ecosystem.marketing.desc': 'Передбачувані продажі',
             'ecosystem.kpi.title': 'Система статистик',
             'ecosystem.kpi.desc': 'Контроль показників',
             'ecosystem.taskmanager.title': 'Таск менеджер',
             'ecosystem.taskmanager.desc': 'Управління задачами',
-            'ecosystem.delegation.title': 'Делегування',
+            'ecosystem.delegation.title': 'Система делегування',
             'ecosystem.delegation.desc': 'Передача задач команді',
             'ecosystem.strategy.title': 'Стратегічне планування',
             'ecosystem.strategy.desc': 'Довгострокові цілі',
@@ -3307,12 +3442,23 @@
             'toolbar.copy': 'КОПИРОВАТЬ',
             'toolbar.paste': 'ВСТАВИТЬ',
             'toolbar.show_all': 'ПОКАЗАТЬ ВСЁ',
+            'toolbar.ai_assistants': 'AI АССИСТЕНТЫ',
             'toolbar.logout': 'Выйти',
             'toolbar.sync': 'СИНХРОНИЗИРОВАТЬ',
             'toolbar.export': '↓ ЭКСПОРТ',
             'export.jpeg': 'Сохранить как JPEG',
             'export.pdf': 'Сохранить как PDF',
             'export.excel': 'Сохранить как Excel',
+            'ai.function': 'AI Описание функции',
+            'ai.function_desc': 'Создание описаний для функций',
+            'ai.process': 'AI Описание процесса',
+            'ai.process_desc': 'Написание бизнес-процессов',
+            'ai.structure': 'AI Структура',
+            'ai.structure_desc': 'Разработка организационной структуры',
+            'ai.policy': 'AI Описание политики / правил',
+            'ai.policy_desc': 'Создание политик и правил компании',
+            'ai.instruction': 'AI Описание инструкции',
+            'ai.instruction_desc': 'Как выполнять инструкцию пошагово',
             'backup.restore': 'Восстановить из backup',
             'backup.restore_desc': 'Предыдущие версии структуры',
             'backup.modal_title': '🔄 Восстановление из backup',
@@ -3334,7 +3480,7 @@
             'confirm.delete': 'Удалить',
             'notification.data_synced': 'Данные синхронизированы',
             'notification.sync_error': 'Ошибка синхронизации',
-            'ecosystem.delegation.title': 'Делегирование',
+            'ecosystem.delegation.title': 'Система делегирования',
             'ecosystem.delegation.desc': 'Передача задач команде',
             'ecosystem.strategy.title': 'Стратегическое планирование',
             'ecosystem.strategy.desc': 'Долгосрочные цели',
@@ -3366,12 +3512,23 @@
             'toolbar.copy': 'COPY',
             'toolbar.paste': 'PASTE',
             'toolbar.show_all': 'SHOW ALL',
+            'toolbar.ai_assistants': 'AI ASSISTANTS',
             'toolbar.logout': 'Logout',
             'toolbar.sync': 'SYNC',
             'toolbar.export': '↓ EXPORT',
             'export.jpeg': 'Save as JPEG',
             'export.pdf': 'Save as PDF',
             'export.excel': 'Save as Excel',
+            'ai.function': 'AI Function Description',
+            'ai.function_desc': 'Create descriptions for functions',
+            'ai.process': 'AI Process Description',
+            'ai.process_desc': 'Write business processes',
+            'ai.structure': 'AI Structure',
+            'ai.structure_desc': 'Develop organizational structure',
+            'ai.policy': 'AI Policy / Rules Description',
+            'ai.policy_desc': 'Create company policies and rules',
+            'ai.instruction': 'AI Instruction Description',
+            'ai.instruction_desc': 'How to execute instructions step by step',
             'backup.restore': 'Restore from backup',
             'backup.restore_desc': 'Previous structure versions',
             'backup.modal_title': '🔄 Restore from backup',
@@ -3393,7 +3550,7 @@
             'confirm.delete': 'Delete',
             'notification.data_synced': 'Data synced',
             'notification.sync_error': 'Sync error',
-            'ecosystem.delegation.title': 'Delegation',
+            'ecosystem.delegation.title': 'Delegation System',
             'ecosystem.delegation.desc': 'Task transfer to team',
             'ecosystem.strategy.title': 'Strategic Planning',
             'ecosystem.strategy.desc': 'Long-term goals',
@@ -3422,7 +3579,7 @@
             'confirm.title': '[!] Потвърждение за изтриване',
             'confirm.cancel': 'Отказ',
             'confirm.delete': 'Изтрий',
-            'ecosystem.delegation.title': 'Делегиране',
+            'ecosystem.delegation.title': 'Система за делегиране',
             'ecosystem.delegation.desc': 'Предаване на задачи на екипа',
             'ecosystem.strategy.title': 'Стратегическо планиране',
             'ecosystem.strategy.desc': 'Дългосрочни цели',
@@ -4566,17 +4723,12 @@
         Utils.getElement('handTool')?.addEventListener('click', () => setTool('hand'));
         Utils.getElement('connectTool')?.addEventListener('click', () => setTool('connect'));
         Utils.getElement('logoutBtn')?.addEventListener('click', logout);
-        // AI buttons - open ChatGPT assistants
-        Utils.getElement('aiDescriptionBtn')?.addEventListener('click', () => {
-            window.open('https://chatgpt.com/g/g-684c0092653c81919f42552c12434fa7-function-description-generator', '_blank');
-        });
         
-        Utils.getElement('aiProcessBtn')?.addEventListener('click', () => {
-            window.open('https://chatgpt.com/g/g-693ec18df2c0819194f1c3de7404d6fe-talko-ai-business-process', '_blank');
-        });
-        
-        Utils.getElement('aiStructureBtn')?.addEventListener('click', () => {
-            window.open('https://chatgpt.com/g/g-68584f3314848191b812f6c0abaaae9e-organizational-structure', '_blank');
+        // AI Assistants dropdown toggle
+        Utils.getElement('aiAssistantsBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu('aiMenu', 'aiAssistantsBtn');
+            document.querySelector('.ai-dropdown')?.classList.toggle('open');
         });
         
         Utils.getElement('copyBtn')?.addEventListener('click', () => {
@@ -4758,6 +4910,12 @@
             if (!e.target.closest('.support-dropdown')) {
                 Utils.getElement('supportMenu')?.classList.remove('show');
             }
+            
+            // AI menu
+            if (!e.target.closest('.ai-dropdown')) {
+                Utils.getElement('aiMenu')?.classList.remove('show');
+                document.querySelector('.ai-dropdown')?.classList.remove('open');
+            }
         });
 
         // Keyboard navigation
@@ -4765,9 +4923,10 @@
             if (e.key === 'Escape') {
                 closeModal();
                 closeConfirmModal();
-                Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .language-options').forEach(m => {
+                Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu, .language-options').forEach(m => {
                     m.classList.remove('show');
                 });
+                document.querySelector('.ai-dropdown')?.classList.remove('open');
             }
         });
 
@@ -6450,4 +6609,3 @@
 
 </body>
 </html>
-
