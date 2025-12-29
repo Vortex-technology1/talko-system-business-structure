@@ -3764,16 +3764,30 @@
     }
 
     // === LOADING OVERLAY ===
+    let loadingTimeout = null;
+    
     function showLoading(message = 'Завантаження...') {
         const overlay = Utils.getElement('loadingOverlay');
         const text = Utils.getElement('loadingText');
         if (overlay) {
             if (text) text.textContent = message;
             overlay.classList.add('show');
+            
+            // Автоматично приховуємо через 30 секунд (захист від зависання)
+            if (loadingTimeout) clearTimeout(loadingTimeout);
+            loadingTimeout = setTimeout(() => {
+                hideLoading();
+                console.warn('[WARN] Loading timeout - примусово приховано');
+                showNotification('Завантаження тривало надто довго. Спробуйте оновити сторінку.', 'error');
+            }, 30000);
         }
     }
 
     function hideLoading() {
+        if (loadingTimeout) {
+            clearTimeout(loadingTimeout);
+            loadingTimeout = null;
+        }
         const overlay = Utils.getElement('loadingOverlay');
         if (overlay) {
             overlay.classList.remove('show');
@@ -3867,10 +3881,23 @@
         console.log('[OK] Інтернет з\'єднання відновлено');
         updateConnectionStatus('syncing', t('notification.connection_restored'));
         
-        if (State.currentUser && State.functions.length === 0) {
-            loadFromFirestore();
-        } else if (State.currentUser) {
+        if (!State.currentUser) return;
+        
+        // Якщо є локальні дані - спочатку зберігаємо їх
+        if (State.functions.length > 0 && State.hasPendingChanges) {
+            console.log('[SYNC] Зберігаємо локальні зміни...');
             saveToFirestore();
+        } 
+        // Якщо немає даних - завантажуємо з сервера
+        else if (State.functions.length === 0) {
+            console.log('[SYNC] Завантажуємо дані з сервера...');
+            loadFromFirestore();
+        }
+        // Інакше - просто перевіряємо синхронізацію
+        else {
+            setTimeout(() => {
+                updateConnectionStatus('success', t('notification.connected'));
+            }, 1000);
         }
     }
 
@@ -3918,48 +3945,89 @@
                 if (doc.exists) {
                     const data = doc.data();
                     
-                    if (data.functions && data.functions.length > 0) {
-                        State.functions = data.functions.map(func => ({
+                    // Підтримка обох структур: data.functions АБО data.structure.functions
+                    const functions = data.functions || (data.structure && data.structure.functions) || [];
+                    const connections = data.connections || (data.structure && data.structure.connections) || [];
+                    const language = data.language || data.Language || (data.structure && data.structure.Language);
+                    
+                    if (functions.length > 0) {
+                        State.functions = functions.map(func => ({
                             ...func,
                             id: func.id || Utils.generateId(),
                             created: func.created || new Date().toISOString(),
                             modified: func.modified || func.created || new Date().toISOString()
                         }));
-                        State.connections = data.connections || [];
+                        State.connections = connections;
                         State.dataVersion = data.version || 0;
                         
-                        if (data.language && translations[data.language]) {
-                            State.currentLanguage = data.language;
-                            localStorage.setItem('talko_language', data.language);
+                        if (language && translations[language]) {
+                            State.currentLanguage = language;
+                            localStorage.setItem('talko_language', language);
                             updateLanguageInterface();
                         }
                         
                         console.log('[OK] Завантажено функцій:', State.functions.length);
+                        
+                        // Зберігаємо локальний backup
+                        try {
+                            localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
+                                functions: State.functions,
+                                connections: State.connections,
+                                language: State.currentLanguage,
+                                timestamp: Date.now()
+                            }));
+                        } catch (e) {}
+                        
+                        // Якщо була вкладена структура - нормалізуємо
+                        if (data.structure && data.structure.functions && !data.functions) {
+                            console.log('[FIX] Нормалізація структури...');
+                            saveToFirestore();
+                        }
+                        
+                        // Trigger render
+                        if (typeof window.renderFunctions === 'function') {
+                            window.renderFunctions();
+                        }
+                        
+                        setTimeout(() => {
+                            State.isLocalUpdate = false;
+                            setupStructureListener();
+                        }, 1000);
+                        
                     } else {
-                        State.functions = [];
-                        State.connections = [];
+                        // Спробуємо відновити з локального backup
+                        console.log('[EMPTY] Структура не знайдена, перевіряємо локальний backup...');
+                        const restored = tryRestoreFromLocalBackup();
+                        if (!restored) {
+                            State.functions = [];
+                            State.connections = [];
+                            if (typeof window.renderFunctions === 'function') {
+                                window.renderFunctions();
+                            }
+                            setTimeout(() => {
+                                State.isLocalUpdate = false;
+                                setupStructureListener();
+                            }, 1000);
+                        }
                     }
-                    
-                    // Trigger render
-                    if (typeof window.renderFunctions === 'function') {
-                        window.renderFunctions();
-                    }
-                    
-                    setTimeout(() => {
-                        State.isLocalUpdate = false;
-                        setupStructureListener();
-                    }, 1000);
-                    
                 } else {
                     console.log('[EMPTY] Структура не знайдена, перевіряємо стару...');
-                    migrateFromOldStructure();
+                    const restored = tryRestoreFromLocalBackup();
+                    if (!restored) {
+                        migrateFromOldStructure();
+                    }
                 }
             })
             .catch(error => {
                 hideLoading();
                 console.error('[ERR] Помилка завантаження:', error);
                 State.isLocalUpdate = false;
-                showNotification(t('notification.sync_error'), 'error');
+                
+                // Спробуємо відновити з локального backup
+                const restored = tryRestoreFromLocalBackup();
+                if (!restored) {
+                    showNotification(t('notification.sync_error'), 'error');
+                }
                 
                 // Retry after delay
                 setTimeout(() => {
@@ -3988,16 +4056,37 @@
                     const localModified = State.lastLocalSaveTime || 0;
                     const timeDiff = serverModified - localModified;
                     
-                    if (timeDiff > 5000 && data.functions && data.functions.length > 0) {
-                        if (State.functions.length === 0 || data.functions.length >= State.functions.length) {
-                            console.log('[LOAD] Застосовуємо серверні дані');
+                    // Підтримка обох структур
+                    const functions = data.functions || (data.structure && data.structure.functions) || [];
+                    const connections = data.connections || (data.structure && data.structure.connections) || [];
+                    
+                    if (timeDiff > 5000 && functions.length > 0) {
+                        // Захист від втрати даних - якщо сервер має менше функцій
+                        if (functions.length < State.functions.length && State.functions.length > 0) {
+                            console.warn('[WARN] Сервер має менше функцій ніж локально:', functions.length, 'vs', State.functions.length);
+                            // Не перезаписуємо - можливо інша вкладка видалила дані
+                            return;
+                        }
+                        
+                        if (State.functions.length === 0 || functions.length >= State.functions.length) {
+                            console.log('[LOAD] Застосовуємо серверні дані:', functions.length, 'функцій');
                             
-                            State.functions = data.functions.map(func => ({
+                            State.functions = functions.map(func => ({
                                 ...func,
                                 id: func.id || Utils.generateId()
                             }));
-                            State.connections = data.connections || [];
+                            State.connections = connections;
                             State.dataVersion = data.version || 0;
+                            
+                            // Оновлюємо локальний backup
+                            try {
+                                localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
+                                    functions: State.functions,
+                                    connections: State.connections,
+                                    language: State.currentLanguage,
+                                    timestamp: Date.now()
+                                }));
+                            } catch (e) {}
                             
                             if (typeof window.renderFunctions === 'function') {
                                 window.renderFunctions();
@@ -4009,6 +4098,60 @@
             }, error => {
                 console.error('[ERR] Помилка підписки:', error);
             });
+    }
+
+    function tryRestoreFromLocalBackup() {
+        if (!State.currentUser) return false;
+        
+        try {
+            const localBackup = localStorage.getItem('talko_local_backup_' + State.currentUser.uid);
+            if (!localBackup) return false;
+            
+            const data = JSON.parse(localBackup);
+            
+            // Перевіряємо чи backup свіжий (не старший 7 днів)
+            const backupAge = Date.now() - (data.timestamp || 0);
+            const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 днів
+            
+            if (backupAge > maxAge) {
+                console.log('[LOCAL] Локальний backup застарілий, ігноруємо');
+                return false;
+            }
+            
+            if (data.functions && data.functions.length > 0) {
+                console.log('[LOCAL] Відновлюємо з локального backup:', data.functions.length, 'функцій');
+                
+                State.functions = data.functions;
+                State.connections = data.connections || [];
+                
+                if (data.language && translations[data.language]) {
+                    State.currentLanguage = data.language;
+                    localStorage.setItem('talko_language', data.language);
+                    updateLanguageInterface();
+                }
+                
+                hideLoading();
+                
+                if (typeof window.renderFunctions === 'function') {
+                    window.renderFunctions();
+                }
+                
+                showNotification('Відновлено з локального backup', 'info');
+                
+                // Зберігаємо в Firebase
+                setTimeout(() => {
+                    saveToFirestore();
+                    State.isLocalUpdate = false;
+                    setupStructureListener();
+                }, 2000);
+                
+                return true;
+            }
+        } catch (err) {
+            console.error('[ERR] Помилка відновлення з локального backup:', err);
+        }
+        
+        return false;
     }
 
     function migrateFromOldStructure() {
@@ -4068,6 +4211,12 @@
     function saveToFirestore() {
         if (!State.currentUser) return Promise.resolve();
         
+        // ЗАХИСТ: не зберігаємо порожні дані якщо раніше були функції
+        if (State.functions.length === 0 && State.dataVersion > 1) {
+            console.warn('[WARN] Спроба зберегти порожню структуру заблокована!');
+            return Promise.resolve();
+        }
+        
         State.isLocalUpdate = true;
         State.isSaving = true;
         State.hasPendingChanges = false;
@@ -4082,7 +4231,8 @@
             language: State.currentLanguage,
             version: State.dataVersion,
             lastModified: new Date().toISOString(),
-            deviceId: navigator.userAgent.substring(0, 50)
+            deviceId: navigator.userAgent.substring(0, 50),
+            functionsCount: State.functions.length
         };
         
         console.log('[SAVE] Зберігаю структуру:', data.functions.length, 'функцій');
@@ -4093,6 +4243,16 @@
                 console.log('[OK] Збережено в Firestore');
                 updateConnectionStatus('success', t('notification.saved'));
                 
+                // Оновлюємо локальний backup
+                try {
+                    localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
+                        functions: State.functions,
+                        connections: State.connections,
+                        language: State.currentLanguage,
+                        timestamp: Date.now()
+                    }));
+                } catch (e) {}
+                
                 setTimeout(() => {
                     State.isLocalUpdate = false;
                     State.isSaving = false;
@@ -4102,6 +4262,18 @@
                 console.error('[ERR] Помилка збереження:', error);
                 State.isLocalUpdate = false;
                 State.isSaving = false;
+                
+                // Зберігаємо локально навіть при помилці Firebase
+                try {
+                    localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
+                        functions: State.functions,
+                        connections: State.connections,
+                        language: State.currentLanguage,
+                        timestamp: Date.now(),
+                        pendingSync: true
+                    }));
+                    console.log('[LOCAL] Збережено локально, очікує синхронізації');
+                } catch (e) {}
                 
                 updateConnectionStatus('error', t('notification.sync_error'));
                 
@@ -4133,24 +4305,58 @@
     }
 
     function createBackup() {
-        if (!State.currentUser) return;
+        if (!State.currentUser || State.functions.length === 0) return;
         
+        // Зберігаємо в ПЛОСКОМУ форматі (не вкладеному!)
         const backupData = {
-            structure: {
-                functions: State.functions,
-                connections: State.connections,
-                language: State.currentLanguage
-            },
+            functions: State.functions,
+            connections: State.connections,
+            language: State.currentLanguage,
             timestamp: new Date().toISOString(),
-            version: State.dataVersion
+            version: State.dataVersion,
+            functionsCount: State.functions.length
         };
         
         const backupId = Utils.formatDate() + '_' + Date.now();
         
+        // Зберігаємо в Firebase
         db.collection('users').doc(State.currentUser.uid)
             .collection('backups').doc(backupId).set(backupData)
-            .then(() => console.log('[SAVE] Резервна копія:', backupId))
+            .then(() => {
+                console.log('[BACKUP] Створено:', backupId, '- функцій:', State.functions.length);
+                // Очищаємо старі бекапи (залишаємо останні 30)
+                cleanupOldBackups();
+            })
             .catch(error => console.error('[ERR] Помилка бекапу:', error));
+        
+        // Також зберігаємо локально
+        try {
+            localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify(backupData));
+        } catch (err) {
+            console.warn('[WARN] Не вдалося зберегти локальний backup');
+        }
+    }
+    
+    function cleanupOldBackups() {
+        if (!State.currentUser) return;
+        
+        const MAX_BACKUPS = 30;
+        
+        db.collection('users').doc(State.currentUser.uid)
+            .collection('backups')
+            .orderBy('timestamp', 'desc')
+            .get()
+            .then(snapshot => {
+                if (snapshot.size > MAX_BACKUPS) {
+                    const toDelete = snapshot.docs.slice(MAX_BACKUPS);
+                    const batch = db.batch();
+                    toDelete.forEach(doc => batch.delete(doc.ref));
+                    batch.commit()
+                        .then(() => console.log('[CLEANUP] Видалено', toDelete.length, 'старих бекапів'))
+                        .catch(err => console.error('[ERR] Помилка очищення бекапів:', err));
+                }
+            })
+            .catch(err => console.error('[ERR] Помилка отримання бекапів:', err));
     }
 
     // === TOOL MANAGEMENT ===
@@ -4953,16 +5159,31 @@
         });
 
         // Save before unload
-        window.addEventListener('beforeunload', () => {
+        window.addEventListener('beforeunload', (e) => {
             cleanupListeners();
             
             if (State.currentUser && State.functions.length > 0) {
-                // Synchronous save attempt
-                navigator.sendBeacon && navigator.sendBeacon('/api/save', JSON.stringify({
-                    userId: State.currentUser.uid,
-                    functions: State.functions,
-                    connections: State.connections
-                }));
+                // Зберігаємо в localStorage як резервну копію
+                try {
+                    const backupData = {
+                        functions: State.functions,
+                        connections: State.connections,
+                        language: State.currentLanguage,
+                        timestamp: Date.now(),
+                        userId: State.currentUser.uid
+                    };
+                    localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify(backupData));
+                    console.log('[BACKUP] Локальний backup збережено');
+                } catch (err) {
+                    console.error('[ERR] Помилка локального backup:', err);
+                }
+                
+                // Якщо є незбережені зміни - попередити
+                if (State.hasPendingChanges) {
+                    e.preventDefault();
+                    e.returnValue = 'У вас є незбережені зміни. Ви впевнені що хочете вийти?';
+                    return e.returnValue;
+                }
             }
         });
 
@@ -5830,26 +6051,41 @@
             
             const backupData = backupDoc.data();
             
-            // Визначаємо де функції - в structure чи напряму
-            let structure;
-            if (backupData.structure) {
-                structure = backupData.structure;
-            } else {
-                structure = backupData;
+            // Визначаємо де функції - шукаємо на різних рівнях вкладеності
+            let functions = [];
+            let connections = [];
+            let language = 'uk';
+            
+            if (backupData.functions) {
+                functions = backupData.functions;
+                connections = backupData.connections || [];
+                language = backupData.language || backupData.Language || 'uk';
+            } else if (backupData.structure && backupData.structure.functions) {
+                functions = backupData.structure.functions;
+                connections = backupData.structure.connections || [];
+                language = backupData.structure.language || backupData.structure.Language || 'uk';
             }
             
-            const functionsCount = structure.functions ? structure.functions.length : 0;
+            const functionsCount = functions.length;
             
             if (functionsCount === 0) {
                 throw new Error('Backup пустий (0 функцій)');
             }
             
-            // Зберігаємо в main/structure
+            // Зберігаємо в НОРМАЛІЗОВАНОМУ форматі (без вкладеності)
             await db.collection('users')
                 .doc(userId)
                 .collection('main')
                 .doc('structure')
-                .set(structure);
+                .set({
+                    functions: functions,
+                    connections: connections,
+                    language: language,
+                    version: (backupData.version || 0) + 1,
+                    lastModified: new Date().toISOString(),
+                    restoredFrom: backupId,
+                    restoredAt: new Date().toISOString()
+                });
             
             console.log(`[BACKUP] Відновлено ${functionsCount} функцій з backup ${backupId}`);
             
