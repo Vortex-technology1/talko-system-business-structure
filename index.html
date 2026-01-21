@@ -556,6 +556,20 @@
         font-size: 16px;
     }
 
+    .export-menu-divider {
+        height: 1px;
+        background: var(--gray-200);
+        margin: 4px 0;
+    }
+
+    .import-item {
+        color: var(--primary-color);
+    }
+
+    .dark-mode .export-menu-divider {
+        background: #30363d;
+    }
+
     /* === AI ASSISTANTS DROPDOWN === */
     .ai-dropdown {
         position: relative;
@@ -965,6 +979,528 @@
         border-color: #38a169;
     }
 
+    .toolbar-divider {
+        width: 1px;
+        height: 24px;
+        background: var(--gray-300);
+        margin: 0 4px;
+    }
+
+    .tool-btn.undo-redo-btn {
+        padding: 0 10px;
+        min-width: 36px;
+    }
+
+    .tool-btn.undo-redo-btn.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .tool-btn.undo-redo-btn:not(.disabled):hover {
+        background: var(--gray-100);
+        border-color: var(--gray-400);
+    }
+
+    .tool-btn.undo-redo-btn svg {
+        stroke: var(--gray-600);
+    }
+
+    /* Search */
+    .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 10px;
+        stroke: var(--gray-400);
+        pointer-events: none;
+    }
+
+    .search-input {
+        height: 36px;
+        width: 180px;
+        padding: 0 30px 0 32px;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--border-radius);
+        font-size: 13px;
+        background: white;
+        transition: var(--transition);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        width: 240px;
+    }
+
+    .search-input::placeholder {
+        color: var(--gray-400);
+    }
+
+    .search-clear {
+        position: absolute;
+        right: 8px;
+        width: 18px;
+        height: 18px;
+        border: none;
+        background: var(--gray-300);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-clear:hover {
+        background: var(--gray-400);
+    }
+
+    .search-results-count {
+        position: absolute;
+        right: 30px;
+        font-size: 11px;
+        color: var(--gray-500);
+        background: var(--gray-100);
+        padding: 2px 6px;
+        border-radius: 10px;
+    }
+
+    /* Highlight search results */
+    .function-card.search-highlight {
+        box-shadow: 0 0 0 3px var(--primary-color), var(--shadow-md) !important;
+        transform: scale(1.02);
+    }
+
+    .function-card.search-dimmed {
+        opacity: 0.3;
+    }
+
+    .function-card.filter-hidden {
+        display: none !important;
+    }
+
+    /* Notes field */
+    .form-textarea {
+        resize: vertical;
+        min-height: 60px;
+        max-height: 150px;
+        font-family: inherit;
+    }
+
+    .card-notes .field-notes {
+        font-size: 12px;
+        color: var(--gray-500);
+        line-height: 1.4;
+        max-height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        background: var(--gray-50);
+        padding: 6px 8px;
+        border-radius: 6px;
+        margin-top: 4px;
+    }
+
+    .dark-mode .card-notes .field-notes {
+        background: #21262d;
+        color: var(--gray-400);
+    }
+
+    /* Tags */
+    .tags-input {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px 12px;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--border-radius);
+        min-height: 42px;
+        background: white;
+    }
+
+    .tags-input:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+
+    .tag-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        background: var(--gray-100);
+        border-radius: 12px;
+        font-size: 12px;
+        color: var(--gray-700);
+    }
+
+    .tag-item .remove-tag {
+        width: 14px;
+        height: 14px;
+        border: none;
+        background: var(--gray-300);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 10px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tag-item .remove-tag:hover {
+        background: var(--danger-color);
+    }
+
+    .tag-input-field {
+        border: none;
+        outline: none;
+        flex: 1;
+        min-width: 100px;
+        font-size: 14px;
+        padding: 4px;
+        background: transparent;
+    }
+
+    .quick-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .quick-tag {
+        padding: 4px 10px;
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .quick-tag:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-300);
+    }
+
+    /* Tags on card */
+    .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 8px;
+    }
+
+    .card-tag {
+        display: inline-block;
+        padding: 2px 8px;
+        background: var(--gray-100);
+        border-radius: 10px;
+        font-size: 11px;
+        color: var(--gray-600);
+    }
+
+    .dark-mode .tags-input {
+        background: #21262d;
+        border-color: #30363d;
+    }
+
+    .dark-mode .tag-item {
+        background: #30363d;
+        color: var(--gray-500);
+    }
+
+    .dark-mode .quick-tag {
+        background: #21262d;
+        border-color: #30363d;
+        color: var(--gray-500);
+    }
+
+    .dark-mode .card-tag {
+        background: #30363d;
+        color: var(--gray-400);
+    }
+
+    /* Filter Dropdown */
+    .filter-dropdown {
+        position: relative;
+    }
+
+    .filter-btn {
+        gap: 6px;
+    }
+
+    .filter-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .filter-btn.active svg {
+        stroke: white;
+    }
+
+    .filter-label {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .filter-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 4px;
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        min-width: 200px;
+        max-height: 300px;
+        overflow: hidden;
+        display: none;
+        z-index: 1000;
+    }
+
+    .filter-menu.show {
+        display: block;
+    }
+
+    .filter-menu-header {
+        padding: 12px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .filter-list {
+        max-height: 240px;
+        overflow-y: auto;
+    }
+
+    .filter-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        font-size: 14px;
+        color: var(--gray-700);
+    }
+
+    .filter-item:hover {
+        background: var(--gray-50);
+    }
+
+    .filter-item.active {
+        background: rgba(66, 153, 225, 0.1);
+        color: var(--primary-color);
+    }
+
+    .filter-item-count {
+        margin-left: auto;
+        font-size: 12px;
+        color: var(--gray-400);
+        background: var(--gray-100);
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+
+    .dark-mode .filter-menu {
+        background: #161b22;
+        border-color: #30363d;
+    }
+
+    .dark-mode .filter-menu-header {
+        border-color: #30363d;
+    }
+
+    .dark-mode .filter-item:hover {
+        background: #21262d;
+    }
+
+    /* Save Indicator */
+    .save-indicator-container {
+        display: flex;
+        align-items: center;
+        margin-right: 16px;
+    }
+
+    .save-indicator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        transition: var(--transition);
+    }
+
+    .save-indicator.saved {
+        color: var(--success-color);
+        background: rgba(72, 187, 120, 0.1);
+    }
+
+    .save-indicator.saving {
+        color: var(--primary-color);
+        background: rgba(66, 153, 225, 0.1);
+    }
+
+    .save-indicator.saving .save-icon {
+        animation: spin 1s linear infinite;
+    }
+
+    .save-indicator.unsaved {
+        color: var(--warning-color);
+        background: rgba(237, 137, 54, 0.1);
+    }
+
+    .save-indicator.error {
+        color: var(--danger-color);
+        background: rgba(229, 62, 62, 0.1);
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .save-icon {
+        width: 12px;
+        height: 12px;
+    }
+
+    /* Shortcuts Modal */
+    .shortcuts-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        padding: 20px;
+    }
+
+    .shortcuts-modal.show {
+        display: flex;
+    }
+
+    .shortcuts-content {
+        background: white;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        max-width: 500px;
+        width: 100%;
+        max-height: 80vh;
+        overflow: hidden;
+    }
+
+    .shortcuts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .shortcuts-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .shortcuts-close {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: var(--gray-100);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        color: var(--gray-600);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .shortcuts-close:hover {
+        background: var(--gray-200);
+    }
+
+    .shortcuts-body {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: calc(80vh - 70px);
+    }
+
+    .shortcuts-section {
+        margin-bottom: 20px;
+    }
+
+    .shortcuts-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .shortcuts-section h4 {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--gray-500);
+        margin: 0 0 12px 0;
+        letter-spacing: 0.5px;
+    }
+
+    .shortcut-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--gray-100);
+    }
+
+    .shortcut-item:last-child {
+        border-bottom: none;
+    }
+
+    .shortcut-item kbd {
+        background: var(--gray-100);
+        border: 1px solid var(--gray-300);
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        font-family: inherit;
+        font-weight: 500;
+        margin-right: 4px;
+        min-width: 24px;
+        text-align: center;
+    }
+
+    .shortcut-item span {
+        margin-left: auto;
+        color: var(--gray-600);
+        font-size: 14px;
+    }
+
     .tool-btn.support-btn {
         background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         color: white;
@@ -1121,6 +1657,13 @@
     .card-header.teal { background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%); }
     .card-header.pink { background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%); }
     .card-header.yellow { background: linear-gradient(135deg, #ecc94b 0%, #d69e2e 100%); color: var(--gray-800); }
+    .card-header.indigo { background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%); }
+    .card-header.cyan { background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); }
+    .card-header.lime { background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%); color: var(--gray-800); }
+    .card-header.rose { background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); }
+    .card-header.amber { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: var(--gray-800); }
+    .card-header.emerald { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+    .card-header.slate { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
 
     .card-title {
         font-size: 16px;
@@ -1444,14 +1987,14 @@
 
     .color-picker {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(8, 1fr);
         gap: 8px;
         margin-top: 8px;
     }
 
     .color-option {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
         border-radius: var(--border-radius);
         cursor: pointer;
         border: 2px solid transparent;
@@ -1475,6 +2018,14 @@
     .color-option.orange { background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); }
     .color-option.teal { background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%); }
     .color-option.pink { background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%); }
+    .color-option.yellow { background: linear-gradient(135deg, #ecc94b 0%, #d69e2e 100%); }
+    .color-option.indigo { background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%); }
+    .color-option.cyan { background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); }
+    .color-option.lime { background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%); }
+    .color-option.rose { background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); }
+    .color-option.amber { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); }
+    .color-option.emerald { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+    .color-option.slate { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
 
     /* === EMPLOYEES INPUT === */
     .employees-input {
@@ -2023,6 +2574,383 @@
     .modal-body {
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
+    }
+
+    /* === DARK THEME === */
+    .dark-mode {
+        --primary-color: #63b3ed;
+        --success-color: #68d391;
+        --danger-color: #fc8181;
+        --warning-color: #f6ad55;
+        --purple-color: #b794f4;
+        --gray-50: #1a202c;
+        --gray-100: #2d3748;
+        --gray-200: #4a5568;
+        --gray-300: #718096;
+        --gray-400: #a0aec0;
+        --gray-500: #cbd5e0;
+        --gray-600: #e2e8f0;
+        --gray-700: #edf2f7;
+        --gray-800: #f7fafc;
+    }
+
+    .dark-mode body,
+    .dark-mode .talko-system-wrapper {
+        background: #0d1117;
+        color: var(--gray-700);
+    }
+
+    .dark-mode .toolbar {
+        background: #161b22;
+        border-color: #30363d;
+    }
+
+    .dark-mode .tool-btn {
+        background: #21262d;
+        border-color: #30363d;
+        color: var(--gray-600);
+    }
+
+    .dark-mode .tool-btn:hover {
+        background: #30363d;
+        border-color: #484f58;
+    }
+
+    .dark-mode .tool-btn.active {
+        background: var(--primary-color);
+        color: #0d1117;
+    }
+
+    .dark-mode .search-input {
+        background: #21262d;
+        border-color: #30363d;
+        color: var(--gray-700);
+    }
+
+    .dark-mode .search-input:focus {
+        border-color: var(--primary-color);
+    }
+
+    .dark-mode .canvas-container {
+        background: #0d1117;
+    }
+
+    .dark-mode .function-card {
+        background: #161b22;
+        border-color: #30363d;
+    }
+
+    .dark-mode .function-card:hover {
+        border-color: #484f58;
+    }
+
+    .dark-mode .card-header {
+        border-color: #30363d;
+    }
+
+    .dark-mode .card-body {
+        color: var(--gray-500);
+    }
+
+    .dark-mode .modal-content,
+    .dark-mode .confirm-content,
+    .dark-mode .shortcuts-content {
+        background: #161b22;
+        border-color: #30363d;
+    }
+
+    .dark-mode .modal-header,
+    .dark-mode .confirm-header,
+    .dark-mode .shortcuts-header {
+        border-color: #30363d;
+    }
+
+    .dark-mode .form-input {
+        background: #21262d;
+        border-color: #30363d;
+        color: var(--gray-700);
+    }
+
+    .dark-mode .form-input:focus {
+        border-color: var(--primary-color);
+    }
+
+    .dark-mode .ecosystem-menu,
+    .dark-mode .export-menu,
+    .dark-mode .ai-menu,
+    .dark-mode .support-menu {
+        background: #161b22;
+        border-color: #30363d;
+    }
+
+    .dark-mode .ecosystem-menu-item:hover,
+    .dark-mode .ai-menu-item:hover {
+        background: #21262d;
+    }
+
+    .dark-mode .shortcut-item {
+        border-color: #30363d;
+    }
+
+    .dark-mode .shortcut-item kbd {
+        background: #21262d;
+        border-color: #30363d;
+        color: var(--gray-600);
+    }
+
+    .dark-mode .login-container {
+        background: #161b22;
+    }
+
+    .dark-mode .notification-toast {
+        background: #21262d;
+        color: var(--gray-700);
+    }
+
+    .dark-mode .save-indicator.saved {
+        background: rgba(104, 211, 145, 0.15);
+    }
+
+    .dark-mode .save-indicator.saving {
+        background: rgba(99, 179, 237, 0.15);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--gray-200);
+        background: white;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        margin-right: 12px;
+    }
+
+    .theme-toggle-btn:hover {
+        background: var(--gray-100);
+        border-color: var(--gray-300);
+    }
+
+    .theme-toggle-btn svg {
+        stroke: var(--gray-600);
+    }
+
+    .dark-mode .theme-toggle-btn {
+        background: #21262d;
+        border-color: #30363d;
+    }
+
+    .dark-mode .theme-toggle-btn:hover {
+        background: #30363d;
+    }
+
+    .dark-mode .theme-toggle-btn svg {
+        stroke: var(--gray-500);
+    }
+
+    .dark-mode .theme-icon-light {
+        display: none !important;
+    }
+
+    .dark-mode .theme-icon-dark {
+        display: block !important;
+    }
+
+    /* Stats Modal */
+    .stats-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        padding: 20px;
+    }
+
+    .stats-modal.show {
+        display: flex;
+    }
+
+    .stats-modal-content {
+        background: white;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        max-width: 600px;
+        width: 100%;
+        max-height: 80vh;
+        overflow: hidden;
+    }
+
+    .stats-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .stats-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .stats-close {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: var(--gray-100);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        color: var(--gray-600);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stats-close:hover {
+        background: var(--gray-200);
+    }
+
+    .stats-modal-body {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: calc(80vh - 70px);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: var(--gray-50);
+        border-radius: var(--border-radius);
+        padding: 16px;
+        text-align: center;
+    }
+
+    .stat-card-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-color);
+        line-height: 1;
+    }
+
+    .stat-card-label {
+        font-size: 12px;
+        color: var(--gray-500);
+        margin-top: 4px;
+        text-transform: uppercase;
+    }
+
+    .stats-section {
+        margin-bottom: 20px;
+    }
+
+    .stats-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .stats-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .stats-bar-label {
+        width: 120px;
+        font-size: 13px;
+        color: var(--gray-600);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .stats-bar-track {
+        flex: 1;
+        height: 8px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .stats-bar-fill {
+        height: 100%;
+        background: var(--primary-color);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .stats-bar-value {
+        width: 40px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-700);
+        text-align: right;
+    }
+
+    .stats-tags-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .stats-tag-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: var(--gray-100);
+        border-radius: 16px;
+        font-size: 13px;
+    }
+
+    .stats-tag-count {
+        background: var(--primary-color);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .dark-mode .stats-modal-content {
+        background: #161b22;
+    }
+
+    .dark-mode .stats-modal-header {
+        border-color: #30363d;
+    }
+
+    .dark-mode .stat-card {
+        background: #21262d;
+    }
+
+    .dark-mode .stats-bar-track {
+        background: #30363d;
+    }
+
+    .dark-mode .stats-tag-item {
+        background: #21262d;
     }
 
     /* Fix iOS input zoom */
@@ -2844,6 +3772,40 @@
                 <button class="tool-btn" id="connectTool" type="button" data-title="toolbar.connect" aria-pressed="false">
                     <span data-text="toolbar.connect">З'ЄДНАТИ</span>
                 </button>
+                <div class="toolbar-divider"></div>
+                <button class="tool-btn undo-redo-btn disabled" id="undoBtn" type="button" data-title="toolbar.undo" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 2.5-6.5L3 9"/>
+                    </svg>
+                </button>
+                <button class="tool-btn undo-redo-btn disabled" id="redoBtn" type="button" data-title="toolbar.redo" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 7v6h-6"/><path d="M21 13a9 9 0 1 1-2.5-6.5L21 9"/>
+                    </svg>
+                </button>
+                <div class="toolbar-divider"></div>
+                <div class="search-container">
+                    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Пошук..." data-placeholder="search.placeholder">
+                    <button class="search-clear" id="searchClear" type="button" style="display:none;">×</button>
+                    <span class="search-results-count" id="searchResultsCount" style="display:none;"></span>
+                </div>
+                <div class="filter-dropdown">
+                    <button class="tool-btn filter-btn" id="filterBtn" type="button" data-title="filter.title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        <span class="filter-label" data-text="filter.all">Всі</span>
+                    </button>
+                    <div class="filter-menu" id="filterMenu">
+                        <div class="filter-menu-header" data-text="filter.responsible">Відповідальний</div>
+                        <div class="filter-list" id="filterList">
+                            <!-- Заповнюється динамічно -->
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="toolbar-right">
                 <!-- Ecosystem Menu -->
@@ -2984,6 +3946,20 @@
                             <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></svg></span>
                             <span data-text="export.excel">Зберегти як Excel</span>
                         </div>
+                        <div class="export-menu-item" id="exportJsonBtn" role="menuitem" tabindex="0">
+                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13l2 2 4-4"/></svg></span>
+                            <span data-text="export.json">Зберегти як JSON</span>
+                        </div>
+                        <div class="export-menu-item" id="exportCsvBtn" role="menuitem" tabindex="0">
+                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></span>
+                            <span data-text="export.csv">Зберегти як CSV</span>
+                        </div>
+                        <div class="export-menu-divider"></div>
+                        <div class="export-menu-item import-item" id="importJsonBtn" role="menuitem" tabindex="0">
+                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+                            <span data-text="import.json">Імпорт з JSON</span>
+                        </div>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none;">
                     </div>
                 </div>
 
@@ -2995,6 +3971,12 @@
                 </button>
                 <button class="tool-btn" id="showAllBtn" type="button" data-title="toolbar.show_all">
                     <span data-text="toolbar.show_all">ПОКАЗАТИ ВСЕ</span>
+                </button>
+                <button class="tool-btn stats-btn" id="statsBtn" type="button" data-title="toolbar.stats">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    <span data-text="toolbar.stats">СТАТИСТИКА</span>
                 </button>
                 <!-- AI Assistants Dropdown -->
                 <div class="ai-dropdown">
@@ -3079,6 +4061,22 @@
                         </a>
                     </div>
                 </div>
+                <div class="save-indicator-container">
+                    <span class="save-indicator saved" id="saveIndicator">
+                        <svg class="save-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span class="save-text" data-text="save.saved">Збережено</span>
+                    </span>
+                </div>
+                <button class="theme-toggle-btn" id="themeToggleBtn" type="button" data-title="theme.toggle">
+                    <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
                 <div class="user-info">
                     <span class="user-email" id="userEmail"></span>
                     <button class="logout-btn" id="logoutBtn" type="button" data-title="toolbar.logout" data-text="toolbar.logout">Вийти</button>
@@ -3152,6 +4150,14 @@
                             <div class="color-option orange" data-color="orange" role="radio" aria-checked="false" tabindex="-1"></div>
                             <div class="color-option teal" data-color="teal" role="radio" aria-checked="false" tabindex="-1"></div>
                             <div class="color-option pink" data-color="pink" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option yellow" data-color="yellow" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option indigo" data-color="indigo" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option cyan" data-color="cyan" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option lime" data-color="lime" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option rose" data-color="rose" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option amber" data-color="amber" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option emerald" data-color="emerald" role="radio" aria-checked="false" tabindex="-1"></div>
+                            <div class="color-option slate" data-color="slate" role="radio" aria-checked="false" tabindex="-1"></div>
                         </div>
                     </div>
 
@@ -3163,6 +4169,25 @@
                     <div class="form-group">
                         <label class="form-label" for="kpi" data-text="modal.kpi">ЦКП (Цінний кінцевий продукт)</label>
                         <input type="text" class="form-input" id="kpi" data-placeholder="modal.kpi_placeholder" placeholder="Наприклад: Підписані договори, Готові відео, Нові клієнти" maxlength="200">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="notes" data-text="modal.notes">Нотатки / Коментарі</label>
+                        <textarea class="form-input form-textarea" id="notes" data-placeholder="modal.notes_placeholder" placeholder="Додаткова інформація, коментарі..." maxlength="500" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-text="modal.tags">Теги</label>
+                        <div class="tags-input" id="tagsInput" role="list">
+                            <!-- Теги будуть додані тут динамічно -->
+                        </div>
+                        <div class="quick-tags" id="quickTags">
+                            <span class="quick-tag" data-tag="urgent" data-text="tag.urgent"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ef4444"/></svg> Терміново</span>
+                            <span class="quick-tag" data-tag="in_progress" data-text="tag.in_progress"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#f59e0b"/></svg> В процесі</span>
+                            <span class="quick-tag" data-tag="done" data-text="tag.done"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#22c55e"/></svg> Готово</span>
+                            <span class="quick-tag" data-tag="important" data-text="tag.important"><svg width="10" height="10" viewBox="0 0 24 24" fill="#3b82f6"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg> Важливо</span>
+                            <span class="quick-tag" data-tag="waiting" data-text="tag.waiting"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Очікує</span>
+                        </div>
                     </div>
 
                     <div class="stats-form-group">
@@ -3206,6 +4231,55 @@
             <div class="confirm-footer">
                 <button class="btn btn-secondary" id="confirmCancelBtn" type="button" data-text="confirm.cancel">Скасувати</button>
                 <button class="btn btn-danger" id="confirmDeleteBtn" type="button" data-text="confirm.delete">Видалити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shortcuts Help Modal -->
+    <div id="shortcutsModal" class="shortcuts-modal" role="dialog" aria-modal="true">
+        <div class="shortcuts-content">
+            <div class="shortcuts-header">
+                <h3 data-text="shortcuts.title">⌨️ Гарячі клавіші</h3>
+                <button class="shortcuts-close" id="shortcutsCloseBtn" type="button">×</button>
+            </div>
+            <div class="shortcuts-body">
+                <div class="shortcuts-section">
+                    <h4 data-text="shortcuts.editing">Редагування</h4>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Z</kbd><span data-text="shortcuts.undo">Відмінити</span></div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd><span data-text="shortcuts.redo">Повторити</span></div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>N</kbd><span data-text="shortcuts.new">Нова функція</span></div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>S</kbd><span data-text="shortcuts.save">Зберегти</span></div>
+                </div>
+                <div class="shortcuts-section">
+                    <h4 data-text="shortcuts.navigation">Навігація</h4>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>F</kbd><span data-text="shortcuts.search">Пошук</span></div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>+</kbd><span data-text="shortcuts.zoom_in">Збільшити</span></div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>-</kbd><span data-text="shortcuts.zoom_out">Зменшити</span></div>
+                    <div class="shortcut-item"><kbd>Ctrl</kbd>+<kbd>0</kbd><span data-text="shortcuts.fit">Показати все</span></div>
+                </div>
+                <div class="shortcuts-section">
+                    <h4 data-text="shortcuts.general">Загальне</h4>
+                    <div class="shortcut-item"><kbd>Esc</kbd><span data-text="shortcuts.close">Закрити / Скасувати</span></div>
+                    <div class="shortcut-item"><kbd>?</kbd><span data-text="shortcuts.help">Показати гарячі клавіші</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal" class="stats-modal" role="dialog" aria-modal="true">
+        <div class="stats-modal-content">
+            <div class="stats-modal-header">
+                <h3 data-text="stats.title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    Статистика структури
+                </h3>
+                <button class="stats-close" id="statsCloseBtn" type="button">×</button>
+            </div>
+            <div class="stats-modal-body" id="statsModalBody">
+                <!-- Stats will be rendered here -->
             </div>
         </div>
     </div>
@@ -3295,11 +4369,28 @@
         saveRetryAttempts: 0,
         MAX_RETRY_ATTEMPTS: 5,
         
+        // History (Undo/Redo)
+        history: [],
+        historyIndex: -1,
+        MAX_HISTORY: 50,
+        isUndoRedo: false,
+        
+        // Search
+        searchQuery: '',
+        searchResults: [],
+        
+        // Theme
+        darkMode: false,
+        
+        // Filter
+        filterResponsible: null,
+        
         // UI State
         editingIndex: -1,
         deletingIndex: -1,
         currentEmployees: [],
         currentStats: [],
+        currentTags: [],
         selectedColor: 'default',
         currentTool: 'select',
         scale: 1,
@@ -3464,6 +4555,73 @@
             'card.delete_tooltip': 'Видалити',
             'card.add_subfunction': 'Додати підфункцію',
             'prompt.logout': 'Ви дійсно хочете вийти?',
+            'toolbar.undo': 'Відмінити (Ctrl+Z)',
+            'toolbar.redo': 'Повторити (Ctrl+Shift+Z)',
+            'undo.done': 'Дію відмінено',
+            'undo.nothing': 'Немає що відміняти',
+            'redo.done': 'Дію повторено',
+            'redo.nothing': 'Немає що повторювати',
+            'search.placeholder': 'Пошук... (Ctrl+F)',
+            'search.no_results': 'Нічого не знайдено',
+            'save.saved': 'Збережено',
+            'save.saving': 'Зберігаю...',
+            'save.unsaved': 'Не збережено',
+            'save.error': 'Помилка',
+            'shortcuts.title': '⌨️ Гарячі клавіші',
+            'shortcuts.editing': 'Редагування',
+            'shortcuts.navigation': 'Навігація',
+            'shortcuts.general': 'Загальне',
+            'shortcuts.undo': 'Відмінити',
+            'shortcuts.redo': 'Повторити',
+            'shortcuts.new': 'Нова функція',
+            'shortcuts.save': 'Зберегти',
+            'shortcuts.search': 'Пошук',
+            'shortcuts.zoom_in': 'Збільшити',
+            'shortcuts.zoom_out': 'Зменшити',
+            'shortcuts.fit': 'Показати все',
+            'shortcuts.close': 'Закрити / Скасувати',
+            'shortcuts.help': 'Показати гарячі клавіші',
+            'theme.toggle': 'Змінити тему',
+            'theme.light': 'Світла тема',
+            'theme.dark': 'Темна тема',
+            'filter.title': 'Фільтр по відповідальному',
+            'filter.responsible': 'Відповідальний',
+            'filter.all': 'Всі',
+            'filter.unknown': 'Не вказано',
+            'field.notes': 'Нотатки',
+            'modal.notes': 'Нотатки / Коментарі',
+            'modal.notes_placeholder': 'Додаткова інформація, коментарі...',
+            'modal.tags': 'Теги',
+            'modal.tags_placeholder': 'Введіть тег і натисніть Enter',
+            'field.tags': 'Теги',
+            'tag.urgent': 'Терміново',
+            'tag.in_progress': 'В процесі',
+            'tag.done': 'Готово',
+            'tag.important': 'Важливо',
+            'tag.waiting': 'Очікує',
+            'export.json': 'Зберегти як JSON',
+            'export.csv': 'Зберегти як CSV',
+            'export.success': 'Структуру експортовано',
+            'export.no_data': 'Немає даних для експорту',
+            'import.json': 'Імпорт з JSON',
+            'import.confirm': 'Імпортувати %d функцій та %c зв\'язків? Це замінить поточну структуру.',
+            'import.success': 'Імпортовано %d функцій',
+            'import.error': 'Помилка імпорту файлу',
+            'import.invalid_format': 'Невірний формат файлу',
+            'toolbar.stats': 'СТАТИСТИКА',
+            'stats.title': 'Статистика структури',
+            'stats.functions': 'Функцій',
+            'stats.connections': 'Зв\'язків',
+            'stats.responsibles': 'Відповідальних',
+            'stats.by_responsible': 'По відповідальних',
+            'stats.completion': 'Заповненість',
+            'stats.with_kpi': 'З ЦКП',
+            'stats.with_notes': 'З нотатками',
+            'stats.with_employees': 'З працівниками',
+            'stats.popular_tags': 'Популярні теги',
+            'card.duplicate_tooltip': 'Дублювати функцію',
+            'duplicate.copy': '(копія)',
+            'duplicate.success': 'Функцію дубльовано',
             'prompt.delete_connection': 'Видалити зв\'язок між "%s" та "%s"?',
             'lang.uk': 'УКР',
             'lang.ru': 'РУС',
@@ -3562,6 +4720,73 @@
             'loading.data': 'Загрузка данных...',
             'loading.syncing': 'Синхронизация...',
             'prompt.logout': 'Вы действительно хотите выйти?',
+            'toolbar.undo': 'Отменить (Ctrl+Z)',
+            'toolbar.redo': 'Повторить (Ctrl+Shift+Z)',
+            'undo.done': 'Действие отменено',
+            'undo.nothing': 'Нечего отменять',
+            'redo.done': 'Действие повторено',
+            'redo.nothing': 'Нечего повторять',
+            'search.placeholder': 'Поиск... (Ctrl+F)',
+            'search.no_results': 'Ничего не найдено',
+            'save.saved': 'Сохранено',
+            'save.saving': 'Сохраняю...',
+            'save.unsaved': 'Не сохранено',
+            'save.error': 'Ошибка',
+            'shortcuts.title': '⌨️ Горячие клавиши',
+            'shortcuts.editing': 'Редактирование',
+            'shortcuts.navigation': 'Навигация',
+            'shortcuts.general': 'Общее',
+            'shortcuts.undo': 'Отменить',
+            'shortcuts.redo': 'Повторить',
+            'shortcuts.new': 'Новая функция',
+            'shortcuts.save': 'Сохранить',
+            'shortcuts.search': 'Поиск',
+            'shortcuts.zoom_in': 'Увеличить',
+            'shortcuts.zoom_out': 'Уменьшить',
+            'shortcuts.fit': 'Показать всё',
+            'shortcuts.close': 'Закрыть / Отменить',
+            'shortcuts.help': 'Показать горячие клавиши',
+            'theme.toggle': 'Сменить тему',
+            'theme.light': 'Светлая тема',
+            'theme.dark': 'Тёмная тема',
+            'filter.title': 'Фильтр по ответственному',
+            'filter.responsible': 'Ответственный',
+            'filter.all': 'Все',
+            'filter.unknown': 'Не указано',
+            'field.notes': 'Заметки',
+            'modal.notes': 'Заметки / Комментарии',
+            'modal.notes_placeholder': 'Дополнительная информация, комментарии...',
+            'modal.tags': 'Теги',
+            'modal.tags_placeholder': 'Введите тег и нажмите Enter',
+            'field.tags': 'Теги',
+            'tag.urgent': 'Срочно',
+            'tag.in_progress': 'В процессе',
+            'tag.done': 'Готово',
+            'tag.important': 'Важно',
+            'tag.waiting': 'Ожидает',
+            'export.json': 'Сохранить как JSON',
+            'export.csv': 'Сохранить как CSV',
+            'export.success': 'Структура экспортирована',
+            'export.no_data': 'Нет данных для экспорта',
+            'import.json': 'Импорт из JSON',
+            'import.confirm': 'Импортировать %d функций и %c связей? Это заменит текущую структуру.',
+            'import.success': 'Импортировано %d функций',
+            'import.error': 'Ошибка импорта файла',
+            'import.invalid_format': 'Неверный формат файла',
+            'toolbar.stats': 'СТАТИСТИКА',
+            'stats.title': 'Статистика структуры',
+            'stats.functions': 'Функций',
+            'stats.connections': 'Связей',
+            'stats.responsibles': 'Ответственных',
+            'stats.by_responsible': 'По ответственным',
+            'stats.completion': 'Заполненность',
+            'stats.with_kpi': 'С ЦКП',
+            'stats.with_notes': 'С заметками',
+            'stats.with_employees': 'С сотрудниками',
+            'stats.popular_tags': 'Популярные теги',
+            'card.duplicate_tooltip': 'Дублировать функцию',
+            'duplicate.copy': '(копия)',
+            'duplicate.success': 'Функция дублирована',
             'prompt.delete_connection': 'Удалить связь между "%s" и "%s"?',
             'modal.add_subfunction': 'Добавить подфункцию',
             'modal.card_color': 'Цвет карточки',
@@ -3706,6 +4931,73 @@
             'loading.data': 'Loading data...',
             'loading.syncing': 'Syncing...',
             'prompt.logout': 'Do you really want to logout?',
+            'toolbar.undo': 'Undo (Ctrl+Z)',
+            'toolbar.redo': 'Redo (Ctrl+Shift+Z)',
+            'undo.done': 'Action undone',
+            'undo.nothing': 'Nothing to undo',
+            'redo.done': 'Action redone',
+            'redo.nothing': 'Nothing to redo',
+            'search.placeholder': 'Search... (Ctrl+F)',
+            'search.no_results': 'Nothing found',
+            'save.saved': 'Saved',
+            'save.saving': 'Saving...',
+            'save.unsaved': 'Unsaved',
+            'save.error': 'Error',
+            'shortcuts.title': '⌨️ Keyboard Shortcuts',
+            'shortcuts.editing': 'Editing',
+            'shortcuts.navigation': 'Navigation',
+            'shortcuts.general': 'General',
+            'shortcuts.undo': 'Undo',
+            'shortcuts.redo': 'Redo',
+            'shortcuts.new': 'New function',
+            'shortcuts.save': 'Save',
+            'shortcuts.search': 'Search',
+            'shortcuts.zoom_in': 'Zoom in',
+            'shortcuts.zoom_out': 'Zoom out',
+            'shortcuts.fit': 'Fit all',
+            'shortcuts.close': 'Close / Cancel',
+            'shortcuts.help': 'Show keyboard shortcuts',
+            'theme.toggle': 'Toggle theme',
+            'theme.light': 'Light theme',
+            'theme.dark': 'Dark theme',
+            'filter.title': 'Filter by responsible',
+            'filter.responsible': 'Responsible',
+            'filter.all': 'All',
+            'filter.unknown': 'Not specified',
+            'field.notes': 'Notes',
+            'modal.notes': 'Notes / Comments',
+            'modal.notes_placeholder': 'Additional information, comments...',
+            'modal.tags': 'Tags',
+            'modal.tags_placeholder': 'Enter tag and press Enter',
+            'field.tags': 'Tags',
+            'tag.urgent': 'Urgent',
+            'tag.in_progress': 'In Progress',
+            'tag.done': 'Done',
+            'tag.important': 'Important',
+            'tag.waiting': 'Waiting',
+            'export.json': 'Save as JSON',
+            'export.csv': 'Save as CSV',
+            'export.success': 'Structure exported',
+            'export.no_data': 'No data to export',
+            'import.json': 'Import from JSON',
+            'import.confirm': 'Import %d functions and %c connections? This will replace the current structure.',
+            'import.success': 'Imported %d functions',
+            'import.error': 'File import error',
+            'import.invalid_format': 'Invalid file format',
+            'toolbar.stats': 'STATS',
+            'stats.title': 'Structure Statistics',
+            'stats.functions': 'Functions',
+            'stats.connections': 'Connections',
+            'stats.responsibles': 'Responsibles',
+            'stats.by_responsible': 'By Responsible',
+            'stats.completion': 'Completion',
+            'stats.with_kpi': 'With KPI',
+            'stats.with_notes': 'With Notes',
+            'stats.with_employees': 'With Employees',
+            'stats.popular_tags': 'Popular Tags',
+            'card.duplicate_tooltip': 'Duplicate function',
+            'duplicate.copy': '(copy)',
+            'duplicate.success': 'Function duplicated',
             'prompt.delete_connection': 'Delete connection between "%s" and "%s"?',
             'modal.add_subfunction': 'Add subfunction',
             'modal.card_color': 'Card color',
@@ -3830,6 +5122,73 @@
             'loading.data': 'Зареждане на данни...',
             'loading.syncing': 'Синхронизация...',
             'prompt.logout': 'Наистина ли искате да излезете?',
+            'toolbar.undo': 'Отмени (Ctrl+Z)',
+            'toolbar.redo': 'Повтори (Ctrl+Shift+Z)',
+            'undo.done': 'Действието е отменено',
+            'undo.nothing': 'Няма какво да се отмени',
+            'redo.done': 'Действието е повторено',
+            'redo.nothing': 'Няма какво да се повтори',
+            'search.placeholder': 'Търсене... (Ctrl+F)',
+            'search.no_results': 'Нищо не е намерено',
+            'save.saved': 'Запазено',
+            'save.saving': 'Запазвам...',
+            'save.unsaved': 'Не е запазено',
+            'save.error': 'Грешка',
+            'shortcuts.title': '⌨️ Клавишни комбинации',
+            'shortcuts.editing': 'Редактиране',
+            'shortcuts.navigation': 'Навигация',
+            'shortcuts.general': 'Общи',
+            'shortcuts.undo': 'Отмени',
+            'shortcuts.redo': 'Повтори',
+            'shortcuts.new': 'Нова функция',
+            'shortcuts.save': 'Запази',
+            'shortcuts.search': 'Търсене',
+            'shortcuts.zoom_in': 'Увеличи',
+            'shortcuts.zoom_out': 'Намали',
+            'shortcuts.fit': 'Покажи всичко',
+            'shortcuts.close': 'Затвори / Отмени',
+            'shortcuts.help': 'Покажи клавишни комбинации',
+            'theme.toggle': 'Промени темата',
+            'theme.light': 'Светла тема',
+            'theme.dark': 'Тъмна тема',
+            'filter.title': 'Филтър по отговорник',
+            'filter.responsible': 'Отговорник',
+            'filter.all': 'Всички',
+            'filter.unknown': 'Не е посочен',
+            'field.notes': 'Бележки',
+            'modal.notes': 'Бележки / Коментари',
+            'modal.notes_placeholder': 'Допълнителна информация, коментари...',
+            'modal.tags': 'Етикети',
+            'modal.tags_placeholder': 'Въведете етикет и натиснете Enter',
+            'field.tags': 'Етикети',
+            'tag.urgent': 'Спешно',
+            'tag.in_progress': 'В процес',
+            'tag.done': 'Готово',
+            'tag.important': 'Важно',
+            'tag.waiting': 'Чака',
+            'export.json': 'Запази като JSON',
+            'export.csv': 'Запази като CSV',
+            'export.success': 'Структурата е експортирана',
+            'export.no_data': 'Няма данни за експорт',
+            'import.json': 'Импорт от JSON',
+            'import.confirm': 'Импортирай %d функции и %c връзки? Това ще замени текущата структура.',
+            'import.success': 'Импортирани %d функции',
+            'import.error': 'Грешка при импорт на файл',
+            'import.invalid_format': 'Невалиден формат на файла',
+            'toolbar.stats': 'СТАТИСТИКА',
+            'stats.title': 'Статистика на структурата',
+            'stats.functions': 'Функции',
+            'stats.connections': 'Връзки',
+            'stats.responsibles': 'Отговорници',
+            'stats.by_responsible': 'По отговорник',
+            'stats.completion': 'Попълненост',
+            'stats.with_kpi': 'С КПИ',
+            'stats.with_notes': 'С бележки',
+            'stats.with_employees': 'Със служители',
+            'stats.popular_tags': 'Популярни етикети',
+            'card.duplicate_tooltip': 'Дублирай функция',
+            'duplicate.copy': '(копие)',
+            'duplicate.success': 'Функцията е дублирана',
             'prompt.delete_connection': 'Изтриване на връзката между "%s" и "%s"?',
             'modal.add_subfunction': 'Добави подфункция',
             'modal.edit_function': 'Редактирай функция',
@@ -3948,6 +5307,222 @@
             });
         }
         return text;
+    }
+
+    // === UNDO/REDO SYSTEM ===
+    function saveHistory(actionName = '') {
+        // Не зберігаємо історію під час undo/redo
+        if (State.isUndoRedo) return;
+        
+        const snapshot = JSON.stringify({
+            functions: State.functions,
+            connections: State.connections,
+            action: actionName,
+            timestamp: Date.now()
+        });
+        
+        // Видаляємо "майбутню" історію при новій дії
+        if (State.historyIndex < State.history.length - 1) {
+            State.history = State.history.slice(0, State.historyIndex + 1);
+        }
+        
+        // Додаємо новий snapshot
+        State.history.push(snapshot);
+        
+        // Обмежуємо розмір історії
+        if (State.history.length > State.MAX_HISTORY) {
+            State.history.shift();
+        }
+        
+        State.historyIndex = State.history.length - 1;
+        updateUndoRedoButtons();
+        
+        console.log('[HISTORY] Збережено:', actionName, '| Індекс:', State.historyIndex, '/', State.history.length - 1);
+    }
+    
+    function undo() {
+        if (!canUndo()) {
+            showNotification(t('undo.nothing'), 'info');
+            return;
+        }
+        
+        State.isUndoRedo = true;
+        State.historyIndex--;
+        
+        const snapshot = JSON.parse(State.history[State.historyIndex]);
+        State.functions = snapshot.functions;
+        State.connections = snapshot.connections;
+        
+        if (typeof window.renderFunctions === 'function') {
+            window.renderFunctions();
+        }
+        
+        debouncedSave();
+        State.isUndoRedo = false;
+        
+        updateUndoRedoButtons();
+        showNotification(t('undo.done'), 'success');
+        console.log('[UNDO] Повернуто до індексу:', State.historyIndex);
+    }
+    
+    function redo() {
+        if (!canRedo()) {
+            showNotification(t('redo.nothing'), 'info');
+            return;
+        }
+        
+        State.isUndoRedo = true;
+        State.historyIndex++;
+        
+        const snapshot = JSON.parse(State.history[State.historyIndex]);
+        State.functions = snapshot.functions;
+        State.connections = snapshot.connections;
+        
+        if (typeof window.renderFunctions === 'function') {
+            window.renderFunctions();
+        }
+        
+        debouncedSave();
+        State.isUndoRedo = false;
+        
+        updateUndoRedoButtons();
+        showNotification(t('redo.done'), 'success');
+        console.log('[REDO] Повернуто до індексу:', State.historyIndex);
+    }
+    
+    function canUndo() {
+        return State.historyIndex > 0;
+    }
+    
+    function canRedo() {
+        return State.historyIndex < State.history.length - 1;
+    }
+    
+    function updateUndoRedoButtons() {
+        const undoBtn = Utils.getElement('undoBtn');
+        const redoBtn = Utils.getElement('redoBtn');
+        
+        if (undoBtn) {
+            undoBtn.disabled = !canUndo();
+            undoBtn.classList.toggle('disabled', !canUndo());
+        }
+        if (redoBtn) {
+            redoBtn.disabled = !canRedo();
+            redoBtn.classList.toggle('disabled', !canRedo());
+        }
+    }
+    
+    function clearHistory() {
+        State.history = [];
+        State.historyIndex = -1;
+        // Зберігаємо початковий стан
+        saveHistory('initial');
+    }
+
+    // === SEARCH SYSTEM ===
+    function searchFunctions(query) {
+        State.searchQuery = query.toLowerCase().trim();
+        
+        const searchInput = Utils.getElement('searchInput');
+        const clearBtn = Utils.getElement('searchClear');
+        const resultsCount = Utils.getElement('searchResultsCount');
+        
+        if (!State.searchQuery) {
+            // Очищаємо пошук
+            State.searchResults = [];
+            if (clearBtn) clearBtn.style.display = 'none';
+            if (resultsCount) resultsCount.style.display = 'none';
+            clearSearchHighlights();
+            return;
+        }
+        
+        // Шукаємо
+        State.searchResults = [];
+        State.functions.forEach((func, index) => {
+            const searchIn = [
+                func.name || '',
+                func.responsible || '',
+                func.kpi || '',
+                ...(func.employees || [])
+            ].join(' ').toLowerCase();
+            
+            if (searchIn.includes(State.searchQuery)) {
+                State.searchResults.push(index);
+            }
+        });
+        
+        // Показуємо результати
+        if (clearBtn) clearBtn.style.display = 'block';
+        if (resultsCount) {
+            resultsCount.style.display = 'block';
+            resultsCount.textContent = State.searchResults.length + '/' + State.functions.length;
+        }
+        
+        highlightSearchResults();
+        
+        // Прокручуємо до першого результату
+        if (State.searchResults.length > 0) {
+            scrollToFunction(State.searchResults[0]);
+        }
+    }
+    
+    function highlightSearchResults() {
+        const cards = Utils.queryAll('.function-card');
+        
+        cards.forEach((card, index) => {
+            card.classList.remove('search-highlight', 'search-dimmed');
+            
+            if (State.searchQuery) {
+                if (State.searchResults.includes(index)) {
+                    card.classList.add('search-highlight');
+                } else {
+                    card.classList.add('search-dimmed');
+                }
+            }
+        });
+    }
+    
+    function clearSearchHighlights() {
+        const cards = Utils.queryAll('.function-card');
+        cards.forEach(card => {
+            card.classList.remove('search-highlight', 'search-dimmed');
+        });
+    }
+    
+    function clearSearch() {
+        const searchInput = Utils.getElement('searchInput');
+        if (searchInput) searchInput.value = '';
+        searchFunctions('');
+    }
+    
+    function scrollToFunction(index) {
+        const card = Utils.query(`.function-card[data-index="${index}"]`);
+        if (!card) return;
+        
+        const container = Utils.getElement('canvasContainer');
+        if (!container) return;
+        
+        // Отримуємо позицію карточки
+        const cardRect = card.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        
+        // Центруємо карточку на екрані
+        const scrollLeft = card.offsetLeft - container.clientWidth / 2 + card.offsetWidth / 2;
+        const scrollTop = card.offsetTop - container.clientHeight / 2 + card.offsetHeight / 2;
+        
+        container.scrollTo({
+            left: Math.max(0, scrollLeft),
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth'
+        });
+    }
+    
+    function focusSearch() {
+        const searchInput = Utils.getElement('searchInput');
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
     }
 
     // === LANGUAGE SYSTEM ===
@@ -4073,6 +5648,32 @@
                     statusEl.classList.remove('show');
                 }, 3000);
             }
+        }
+    }
+    
+    function updateSaveIndicator(status) {
+        const indicator = Utils.getElement('saveIndicator');
+        if (!indicator) return;
+        
+        const icon = indicator.querySelector('.save-icon');
+        const text = indicator.querySelector('.save-text');
+        
+        indicator.className = 'save-indicator ' + status;
+        
+        const icons = {
+            saved: '<polyline points="20 6 9 17 4 12"/>',
+            saving: '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>',
+            unsaved: '<circle cx="12" cy="12" r="4"/>',
+            error: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+        };
+        
+        if (icon) {
+            icon.innerHTML = icons[status] || icons.saved;
+        }
+        
+        if (text) {
+            text.setAttribute('data-text', 'save.' + status);
+            text.textContent = t('save.' + status);
         }
     }
 
@@ -4267,6 +5868,9 @@
                         if (typeof window.renderFunctions === 'function') {
                             window.renderFunctions();
                         }
+                        
+                        // Ініціалізуємо історію з завантаженими даними
+                        clearHistory();
                         
                         setTimeout(() => {
                             State.isLocalUpdate = false;
@@ -4539,6 +6143,7 @@
         State.dataVersion++;
         
         updateConnectionStatus('saving', t('notification.saving'));
+        updateSaveIndicator('saving');
         
         const data = {
             functions: State.functions,
@@ -4557,6 +6162,7 @@
             .then(() => {
                 console.log('[OK] Збережено в Firestore');
                 updateConnectionStatus('success', t('notification.saved'));
+                updateSaveIndicator('saved');
                 State.saveRetryAttempts = 0; // Скидаємо лічильник при успіху
                 
                 // Оновлюємо локальний backup
@@ -4594,6 +6200,7 @@
                 } catch (e) {}
                 
                 updateConnectionStatus('error', t('notification.sync_error'));
+                updateSaveIndicator('error');
                 
                 // Retry з обмеженням спроб
                 if (State.saveRetryAttempts < State.MAX_RETRY_ATTEMPTS) {
@@ -4746,6 +6353,7 @@
         State.editingIndex = index;
         State.currentEmployees = [];
         State.currentStats = [];
+        State.currentTags = [];
         State.selectedColor = 'default';
         
         // Reset form
@@ -4760,14 +6368,17 @@
             const responsibleInput = Utils.getElement('responsible');
             const linkInput = Utils.getElement('descriptionLink');
             const kpiInput = Utils.getElement('kpi');
+            const notesInput = Utils.getElement('notes');
             
             if (nameInput) nameInput.value = func.name || '';
             if (responsibleInput) responsibleInput.value = func.responsible || '';
             if (linkInput) linkInput.value = func.link || '';
             if (kpiInput) kpiInput.value = func.kpi || '';
+            if (notesInput) notesInput.value = func.notes || '';
             
             State.currentStats = (func.statisticsArray || []).map(s => ({...s}));
             State.currentEmployees = [...(func.employees || [])];
+            State.currentTags = [...(func.tags || [])];
             State.selectedColor = func.color || 'default';
         } else {
             if (modalTitle) {
@@ -4778,6 +6389,7 @@
         }
         
         updateEmployeesInput();
+        updateTagsInput();
         updateColorPicker();
         renderStatsForm();
         
@@ -4806,11 +6418,13 @@
         const responsibleInput = Utils.getElement('responsible');
         const linkInput = Utils.getElement('descriptionLink');
         const kpiInput = Utils.getElement('kpi');
+        const notesInput = Utils.getElement('notes');
         
         const name = (nameInput?.value || '').trim();
         const responsible = (responsibleInput?.value || '').trim();
         const link = (linkInput?.value || '').trim();
         const kpi = (kpiInput?.value || '').trim();
+        const notes = (notesInput?.value || '').trim();
         
         // Validation
         if (!name || !responsible) {
@@ -4855,6 +6469,8 @@
             responsible,
             link,
             kpi,
+            notes,
+            tags: [...State.currentTags],
             statisticsArray: [...State.currentStats],
             employees: [...State.currentEmployees],
             color: State.selectedColor,
@@ -4865,6 +6481,10 @@
                 : new Date().toISOString(),
             modified: new Date().toISOString()
         };
+        
+        // Зберігаємо історію ПЕРЕД зміною
+        const actionName = State.editingIndex >= 0 ? 'edit_function' : 'add_function';
+        saveHistory(actionName);
         
         if (State.editingIndex >= 0) {
             State.functions[State.editingIndex] = functionData;
@@ -4903,12 +6523,398 @@
         if (confirmModal) confirmModal.classList.remove('show');
         State.deletingIndex = -1;
     }
+    
+    function showShortcutsModal() {
+        const modal = Utils.getElement('shortcutsModal');
+        if (modal) modal.classList.add('show');
+    }
+    
+    function closeShortcutsModal() {
+        const modal = Utils.getElement('shortcutsModal');
+        if (modal) modal.classList.remove('show');
+    }
+    
+    // === STATS MODAL ===
+    function showStatsModal() {
+        const modal = Utils.getElement('statsModal');
+        const body = Utils.getElement('statsModalBody');
+        
+        if (!modal || !body) return;
+        
+        // Збираємо статистику
+        const totalFunctions = State.functions.length;
+        const totalConnections = State.connections.length;
+        
+        // Відповідальні
+        const responsibles = {};
+        State.functions.forEach(f => {
+            const name = f.responsible || t('filter.unknown');
+            responsibles[name] = (responsibles[name] || 0) + 1;
+        });
+        const topResponsibles = Object.entries(responsibles)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        // Кольори
+        const colors = {};
+        State.functions.forEach(f => {
+            const color = f.color || 'default';
+            colors[color] = (colors[color] || 0) + 1;
+        });
+        
+        // Теги
+        const tags = {};
+        State.functions.forEach(f => {
+            (f.tags || []).forEach(tag => {
+                tags[tag] = (tags[tag] || 0) + 1;
+            });
+        });
+        const topTags = Object.entries(tags)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10);
+        
+        // Функції з KPI / без KPI
+        const withKpi = State.functions.filter(f => f.kpi).length;
+        const withNotes = State.functions.filter(f => f.notes).length;
+        const withEmployees = State.functions.filter(f => f.employees?.length > 0).length;
+        
+        // Рендеримо
+        body.innerHTML = `
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-value">${totalFunctions}</div>
+                    <div class="stat-card-label" data-text="stats.functions">${t('stats.functions')}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${totalConnections}</div>
+                    <div class="stat-card-label" data-text="stats.connections">${t('stats.connections')}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${Object.keys(responsibles).length}</div>
+                    <div class="stat-card-label" data-text="stats.responsibles">${t('stats.responsibles')}</div>
+                </div>
+            </div>
+            
+            ${topResponsibles.length > 0 ? `
+            <div class="stats-section">
+                <div class="stats-section-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    ${t('stats.by_responsible')}
+                </div>
+                ${topResponsibles.map(([name, count]) => `
+                    <div class="stats-bar">
+                        <div class="stats-bar-label">${Utils.escapeHtml(name)}</div>
+                        <div class="stats-bar-track">
+                            <div class="stats-bar-fill" style="width: ${(count / totalFunctions * 100).toFixed(0)}%"></div>
+                        </div>
+                        <div class="stats-bar-value">${count}</div>
+                    </div>
+                `).join('')}
+            </div>
+            ` : ''}
+            
+            <div class="stats-section">
+                <div class="stats-section-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    ${t('stats.completion')}
+                </div>
+                <div class="stats-bar">
+                    <div class="stats-bar-label">${t('stats.with_kpi')}</div>
+                    <div class="stats-bar-track">
+                        <div class="stats-bar-fill" style="width: ${totalFunctions ? (withKpi / totalFunctions * 100).toFixed(0) : 0}%; background: var(--success-color);"></div>
+                    </div>
+                    <div class="stats-bar-value">${withKpi}/${totalFunctions}</div>
+                </div>
+                <div class="stats-bar">
+                    <div class="stats-bar-label">${t('stats.with_notes')}</div>
+                    <div class="stats-bar-track">
+                        <div class="stats-bar-fill" style="width: ${totalFunctions ? (withNotes / totalFunctions * 100).toFixed(0) : 0}%; background: var(--warning-color);"></div>
+                    </div>
+                    <div class="stats-bar-value">${withNotes}/${totalFunctions}</div>
+                </div>
+                <div class="stats-bar">
+                    <div class="stats-bar-label">${t('stats.with_employees')}</div>
+                    <div class="stats-bar-track">
+                        <div class="stats-bar-fill" style="width: ${totalFunctions ? (withEmployees / totalFunctions * 100).toFixed(0) : 0}%; background: var(--purple-color);"></div>
+                    </div>
+                    <div class="stats-bar-value">${withEmployees}/${totalFunctions}</div>
+                </div>
+            </div>
+            
+            ${topTags.length > 0 ? `
+            <div class="stats-section">
+                <div class="stats-section-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                    </svg>
+                    ${t('stats.popular_tags')}
+                </div>
+                <div class="stats-tags-list">
+                    ${topTags.map(([tag, count]) => `
+                        <div class="stats-tag-item">
+                            ${getTagIcon(tag)}
+                            ${Utils.escapeHtml(getTagLabel(tag))}
+                            <span class="stats-tag-count">${count}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+        `;
+        
+        modal.classList.add('show');
+    }
+    
+    function closeStatsModal() {
+        const modal = Utils.getElement('statsModal');
+        if (modal) modal.classList.remove('show');
+    }
+    
+    // === THEME SYSTEM ===
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('talko_dark_mode');
+        if (savedTheme === 'true') {
+            State.darkMode = true;
+            document.body.classList.add('dark-mode');
+            updateThemeIcon();
+        }
+    }
+    
+    function toggleDarkMode() {
+        State.darkMode = !State.darkMode;
+        document.body.classList.toggle('dark-mode', State.darkMode);
+        localStorage.setItem('talko_dark_mode', State.darkMode);
+        updateThemeIcon();
+    }
+    
+    function updateThemeIcon() {
+        const lightIcon = document.querySelector('.theme-icon-light');
+        const darkIcon = document.querySelector('.theme-icon-dark');
+        
+        if (lightIcon && darkIcon) {
+            if (State.darkMode) {
+                lightIcon.style.display = 'none';
+                darkIcon.style.display = 'block';
+            } else {
+                lightIcon.style.display = 'block';
+                darkIcon.style.display = 'none';
+            }
+        }
+    }
+    
+    // === FILTER SYSTEM ===
+    function getUniqueResponsibles() {
+        const responsibles = {};
+        State.functions.forEach(func => {
+            const name = func.responsible || t('filter.unknown');
+            responsibles[name] = (responsibles[name] || 0) + 1;
+        });
+        return responsibles;
+    }
+    
+    function updateFilterList() {
+        const filterList = Utils.getElement('filterList');
+        if (!filterList) return;
+        
+        const responsibles = getUniqueResponsibles();
+        const sorted = Object.entries(responsibles).sort((a, b) => b[1] - a[1]);
+        
+        let html = `<button class="filter-item ${!State.filterResponsible ? 'active' : ''}" data-filter="">
+            <span data-text="filter.all">${t('filter.all')}</span>
+            <span class="filter-item-count">${State.functions.length}</span>
+        </button>`;
+        
+        sorted.forEach(([name, count]) => {
+            const isActive = State.filterResponsible === name ? 'active' : '';
+            html += `<button class="filter-item ${isActive}" data-filter="${Utils.escapeHtml(name)}">
+                <span>${Utils.escapeHtml(name)}</span>
+                <span class="filter-item-count">${count}</span>
+            </button>`;
+        });
+        
+        filterList.innerHTML = html;
+        
+        // Додаємо listeners
+        filterList.querySelectorAll('.filter-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const filter = item.dataset.filter;
+                setFilter(filter || null);
+                Utils.getElement('filterMenu')?.classList.remove('show');
+            });
+        });
+    }
+    
+    function setFilter(responsible) {
+        State.filterResponsible = responsible;
+        
+        const filterBtn = Utils.getElement('filterBtn');
+        const filterLabel = filterBtn?.querySelector('.filter-label');
+        
+        if (filterBtn && filterLabel) {
+            if (responsible) {
+                filterBtn.classList.add('active');
+                filterLabel.textContent = responsible;
+            } else {
+                filterBtn.classList.remove('active');
+                filterLabel.textContent = t('filter.all');
+            }
+        }
+        
+        applyFilter();
+        updateFilterList();
+    }
+    
+    function applyFilter() {
+        const cards = Utils.queryAll('.function-card');
+        
+        cards.forEach((card, index) => {
+            card.classList.remove('filter-hidden');
+            
+            if (State.filterResponsible) {
+                const func = State.functions[index];
+                if (func && func.responsible !== State.filterResponsible) {
+                    card.classList.add('filter-hidden');
+                }
+            }
+        });
+    }
+    
+    function clearFilter() {
+        setFilter(null);
+    }
+    
+    function toggleFilterMenu() {
+        const menu = Utils.getElement('filterMenu');
+        if (menu) {
+            const isOpen = menu.classList.contains('show');
+            // Закриваємо інші меню
+            Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu').forEach(m => {
+                m.classList.remove('show');
+            });
+            
+            if (!isOpen) {
+                updateFilterList();
+            }
+            menu.classList.toggle('show');
+        }
+    }
+    
+    // === EXPORT FUNCTIONS ===
+    function exportToJSON() {
+        if (State.functions.length === 0) {
+            showNotification(t('export.no_data'), 'error');
+            return;
+        }
+        
+        const exportData = {
+            version: '2.0',
+            exportedAt: new Date().toISOString(),
+            exportedBy: State.currentUser?.email || 'anonymous',
+            functions: State.functions,
+            connections: State.connections
+        };
+        
+        const json = JSON.stringify(exportData, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `talko-structure-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification(t('export.success'), 'success');
+    }
+    
+    function exportToCSV() {
+        if (State.functions.length === 0) {
+            showNotification(t('export.no_data'), 'error');
+            return;
+        }
+        
+        // CSV headers
+        const headers = ['ID', 'Name', 'Responsible', 'KPI', 'Notes', 'Tags', 'Employees', 'Color', 'Created', 'Modified'];
+        
+        // CSV rows
+        const rows = State.functions.map(func => {
+            return [
+                func.id || '',
+                `"${(func.name || '').replace(/"/g, '""')}"`,
+                `"${(func.responsible || '').replace(/"/g, '""')}"`,
+                `"${(func.kpi || '').replace(/"/g, '""')}"`,
+                `"${(func.notes || '').replace(/"/g, '""')}"`,
+                `"${(func.tags || []).map(t => getTagLabel(t)).join(', ')}"`,
+                `"${(func.employees || []).join(', ')}"`,
+                func.color || 'default',
+                func.created || '',
+                func.modified || ''
+            ].join(',');
+        });
+        
+        const csv = [headers.join(','), ...rows].join('\n');
+        const BOM = '\uFEFF'; // UTF-8 BOM for Excel
+        const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `talko-structure-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification(t('export.success'), 'success');
+    }
+
+    // === DUPLICATE FUNCTION ===
+    function duplicateFunction(index) {
+        if (index < 0 || index >= State.functions.length) return;
+        
+        const original = State.functions[index];
+        
+        // Зберігаємо історію перед дублюванням
+        saveHistory('duplicate_function');
+        
+        // Створюємо копію
+        const duplicate = {
+            ...original,
+            id: Utils.generateId(),
+            name: original.name + ' ' + t('duplicate.copy'),
+            x: (original.x || 100) + 50,
+            y: (original.y || 100) + 50,
+            statisticsArray: original.statisticsArray ? original.statisticsArray.map(s => ({...s})) : [],
+            employees: original.employees ? [...original.employees] : [],
+            tags: original.tags ? [...original.tags] : [],
+            created: new Date().toISOString(),
+            modified: new Date().toISOString()
+        };
+        
+        State.functions.push(duplicate);
+        renderFunctions();
+        saveToFirestore();
+        
+        showNotification(t('duplicate.success'), 'success');
+    }
 
     function confirmDelete() {
         if (State.deletingIndex < 0 || State.deletingIndex >= State.functions.length) {
             closeConfirmModal();
             return;
         }
+        
+        // Зберігаємо історію ПЕРЕД видаленням
+        saveHistory('delete_function');
         
         const deletingIndex = State.deletingIndex;
         
@@ -5138,6 +7144,81 @@
         input.maxLength = 50;
         container.appendChild(input);
     }
+    
+    // === TAGS MANAGEMENT ===
+    function updateTagsInput() {
+        const container = Utils.getElement('tagsInput');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        State.currentTags.forEach((tag, index) => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'tag-item';
+            const icon = getTagIcon(tag);
+            const label = getTagLabel(tag);
+            tagEl.innerHTML = `
+                ${icon}${icon ? ' ' : ''}${Utils.escapeHtml(label)}
+                <button type="button" class="remove-tag" data-index="${index}">×</button>
+            `;
+            container.appendChild(tagEl);
+        });
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'tag-input-field';
+        input.placeholder = t('modal.tags_placeholder');
+        input.maxLength = 30;
+        container.appendChild(input);
+    }
+    
+    function addTag(e) {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        
+        const input = e.target;
+        const tag = input.value.trim();
+        
+        if (tag && !State.currentTags.includes(tag) && State.currentTags.length < 10) {
+            State.currentTags.push(tag);
+            updateTagsInput();
+            const newInput = Utils.query('.tag-input-field');
+            if (newInput) newInput.focus();
+        }
+        
+        input.value = '';
+    }
+    
+    function addQuickTag(tagKey) {
+        if (!State.currentTags.includes(tagKey) && State.currentTags.length < 10) {
+            State.currentTags.push(tagKey);
+            updateTagsInput();
+        }
+    }
+    
+    // SVG іконки для тегів
+    function getTagIcon(tagKey) {
+        const icons = {
+            'urgent': '<svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ef4444"/></svg>',
+            'in_progress': '<svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#f59e0b"/></svg>',
+            'done': '<svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#22c55e"/></svg>',
+            'important': '<svg width="10" height="10" viewBox="0 0 24 24" fill="#3b82f6"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>',
+            'waiting': '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
+        };
+        return icons[tagKey] || '';
+    }
+    
+    function getTagLabel(tagKey) {
+        const translated = t('tag.' + tagKey);
+        return translated !== 'tag.' + tagKey ? translated : tagKey;
+    }
+    
+    function removeTag(index) {
+        if (index >= 0 && index < State.currentTags.length) {
+            State.currentTags.splice(index, 1);
+            updateTagsInput();
+        }
+    }
 
     // === COLOR MANAGEMENT ===
     function updateColorPicker() {
@@ -5280,6 +7361,25 @@
         Utils.getElement('connectTool')?.addEventListener('click', () => setTool('connect'));
         Utils.getElement('logoutBtn')?.addEventListener('click', logout);
         
+        // Undo/Redo buttons
+        Utils.getElement('undoBtn')?.addEventListener('click', undo);
+        Utils.getElement('redoBtn')?.addEventListener('click', redo);
+        
+        // Search functionality
+        const searchInput = Utils.getElement('searchInput');
+        if (searchInput) {
+            const debouncedSearch = Utils.debounce((query) => searchFunctions(query), 200);
+            searchInput.addEventListener('input', (e) => {
+                debouncedSearch(e.target.value);
+            });
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    searchFunctions(searchInput.value);
+                }
+            });
+        }
+        Utils.getElement('searchClear')?.addEventListener('click', clearSearch);
+        
         // AI Assistants dropdown toggle
         Utils.getElement('aiAssistantsBtn')?.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -5329,6 +7429,29 @@
         Utils.getElement('exportExcelBtn')?.addEventListener('click', () => {
             Utils.getElement('exportMenu')?.classList.remove('show');
             if (typeof window.exportToExcel === 'function') window.exportToExcel();
+        });
+        
+        Utils.getElement('exportJsonBtn')?.addEventListener('click', () => {
+            Utils.getElement('exportMenu')?.classList.remove('show');
+            exportToJSON();
+        });
+        
+        Utils.getElement('exportCsvBtn')?.addEventListener('click', () => {
+            Utils.getElement('exportMenu')?.classList.remove('show');
+            exportToCSV();
+        });
+        
+        Utils.getElement('importJsonBtn')?.addEventListener('click', () => {
+            Utils.getElement('exportMenu')?.classList.remove('show');
+            Utils.getElement('importFileInput')?.click();
+        });
+        
+        Utils.getElement('importFileInput')?.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+                importFromJSON(file);
+                e.target.value = ''; // Reset input
+            }
         });
 
         // Backup restore button
@@ -5420,10 +7543,65 @@
                 }
             });
         }
+        
+        // Tags input (delegation)
+        const tagsInput = Utils.getElement('tagsInput');
+        if (tagsInput) {
+            tagsInput.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.remove-tag');
+                if (removeBtn) {
+                    const index = parseInt(removeBtn.dataset.index);
+                    if (!isNaN(index)) removeTag(index);
+                }
+                
+                // Focus input when clicking container
+                const input = tagsInput.querySelector('.tag-input-field');
+                if (input && e.target === tagsInput) input.focus();
+            });
+            
+            tagsInput.addEventListener('keypress', (e) => {
+                if (e.target.classList.contains('tag-input-field')) {
+                    addTag(e);
+                }
+            });
+        }
+        
+        // Quick tags
+        const quickTags = Utils.getElement('quickTags');
+        if (quickTags) {
+            quickTags.addEventListener('click', (e) => {
+                const quickTag = e.target.closest('.quick-tag');
+                if (quickTag) {
+                    addQuickTag(quickTag.dataset.tag);
+                }
+            });
+        }
 
         // Confirm modal buttons
         Utils.getElement('confirmCancelBtn')?.addEventListener('click', closeConfirmModal);
         Utils.getElement('confirmDeleteBtn')?.addEventListener('click', confirmDelete);
+        
+        // Shortcuts modal
+        Utils.getElement('shortcutsCloseBtn')?.addEventListener('click', closeShortcutsModal);
+        Utils.getElement('shortcutsModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'shortcutsModal') closeShortcutsModal();
+        });
+        
+        // Stats modal
+        Utils.getElement('statsBtn')?.addEventListener('click', showStatsModal);
+        Utils.getElement('statsCloseBtn')?.addEventListener('click', closeStatsModal);
+        Utils.getElement('statsModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'statsModal') closeStatsModal();
+        });
+        
+        // Theme toggle
+        Utils.getElement('themeToggleBtn')?.addEventListener('click', toggleDarkMode);
+        
+        // Filter dropdown
+        Utils.getElement('filterBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFilterMenu();
+        });
 
         // Modal close on backdrop click
         Utils.getElement('modal')?.addEventListener('click', (e) => {
@@ -5472,13 +7650,103 @@
                 Utils.getElement('aiMenu')?.classList.remove('show');
                 document.querySelector('.ai-dropdown')?.classList.remove('open');
             }
+            
+            // Filter menu
+            if (!e.target.closest('.filter-dropdown')) {
+                Utils.getElement('filterMenu')?.classList.remove('show');
+            }
         });
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
+            // Не обробляємо якщо фокус в input/textarea
+            const activeEl = document.activeElement;
+            const isInputFocused = activeEl && (
+                activeEl.tagName === 'INPUT' || 
+                activeEl.tagName === 'TEXTAREA' ||
+                activeEl.isContentEditable
+            );
+            
+            // Undo: Ctrl+Z (працює завжди)
+            if (e.ctrlKey && !e.shiftKey && e.key === 'z') {
+                e.preventDefault();
+                undo();
+                return;
+            }
+            
+            // Redo: Ctrl+Shift+Z або Ctrl+Y (працює завжди)
+            if ((e.ctrlKey && e.shiftKey && e.key === 'z') || (e.ctrlKey && e.key === 'y')) {
+                e.preventDefault();
+                redo();
+                return;
+            }
+            
+            // Search: Ctrl+F
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                focusSearch();
+                return;
+            }
+            
+            // Save: Ctrl+S
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                if (typeof forceSync === 'function') forceSync();
+                return;
+            }
+            
+            // New function: Ctrl+N (тільки якщо не в input)
+            if (e.ctrlKey && e.key === 'n' && !isInputFocused) {
+                e.preventDefault();
+                if (typeof addFunction === 'function') addFunction();
+                return;
+            }
+            
+            // Zoom: Ctrl++ / Ctrl+-
+            if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
+                e.preventDefault();
+                if (typeof window.zoomIn === 'function') window.zoomIn();
+                return;
+            }
+            if (e.ctrlKey && e.key === '-') {
+                e.preventDefault();
+                if (typeof window.zoomOut === 'function') window.zoomOut();
+                return;
+            }
+            
+            // Fit all: Ctrl+0
+            if (e.ctrlKey && e.key === '0') {
+                e.preventDefault();
+                if (typeof window.zoomToFit === 'function') window.zoomToFit();
+                return;
+            }
+            
+            // Delete selected: Delete key (тільки якщо не в input)
+            if (e.key === 'Delete' && !isInputFocused) {
+                // Видалення обробляється в картках
+                return;
+            }
+            
+            // Show shortcuts help: ?
+            if (e.key === '?' && !isInputFocused) {
+                e.preventDefault();
+                showShortcutsModal();
+                return;
+            }
+            
             if (e.key === 'Escape') {
+                // Якщо пошук активний - очищаємо
+                const searchInput = Utils.getElement('searchInput');
+                if (searchInput && document.activeElement === searchInput) {
+                    clearSearch();
+                    searchInput.blur();
+                    return;
+                }
+                
                 closeModal();
                 closeConfirmModal();
+                closeShortcutsModal();
+                closeStatsModal();
                 Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu, .language-options').forEach(m => {
                     m.classList.remove('show');
                 });
@@ -5534,6 +7802,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         console.log('[START] TALKO System v3.3 Block 2 initializing...');
         loadLanguage();
+        loadTheme();
         setupEventListeners();
         console.log('[OK] TALKO System v3.3 Block 2 ready!');
     });
@@ -5837,6 +8106,11 @@
     function executePaste(modal) {
         const pasteMode = modal.querySelector('input[name="pasteMode"]:checked')?.value || 'add';
         const { functions: importedFunctions, connections: importedConnections } = modal._pasteData;
+        
+        // Зберігаємо історію перед вставкою
+        if (typeof saveHistory === 'function') {
+            saveHistory('paste_structure');
+        }
         
         const startIndex = pasteMode === 'replace' ? 0 : window.functions.length;
         
@@ -6471,6 +8745,16 @@
         
         canvas.appendChild(fragment);
         renderConnections();
+        
+        // Застосовуємо фільтр якщо активний
+        if (State.filterResponsible) {
+            applyFilter();
+        }
+        
+        // Застосовуємо пошук якщо активний
+        if (State.searchQuery) {
+            highlightSearchResults();
+        }
     }
 
     function createFunctionCard(func, index) {
@@ -6516,6 +8800,10 @@
                             data-index="${index}" 
                             title="${t('card.edit_tooltip')}"
                             aria-label="${t('card.edit_tooltip')}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="action-btn duplicate-btn" 
+                            data-index="${index}" 
+                            title="${t('card.duplicate_tooltip')}"
+                            aria-label="${t('card.duplicate_tooltip')}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                     <button class="action-btn delete delete-btn" 
                             data-index="${index}" 
                             title="${t('card.delete_tooltip')}"
@@ -6540,6 +8828,28 @@
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="field-link">${t('field.view_instruction')}</a>
+                    </div>
+                ` : ''}
+                ${func.notes ? `
+                    <div class="card-field card-notes">
+                        <div class="field-label">${t('field.notes')}</div>
+                        <div class="field-notes">${Utils.escapeHtml(func.notes)}</div>
+                    </div>
+                ` : ''}
+                ${func.tags && func.tags.length > 0 ? `
+                    <div class="card-tags">
+                        ${func.tags.map(tag => {
+                            const icons = {
+                                'urgent': '<svg width="8" height="8" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ef4444"/></svg>',
+                                'in_progress': '<svg width="8" height="8" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#f59e0b"/></svg>',
+                                'done': '<svg width="8" height="8" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#22c55e"/></svg>',
+                                'important': '<svg width="8" height="8" viewBox="0 0 24 24" fill="#3b82f6"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg>',
+                                'waiting': '<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
+                            };
+                            const icon = icons[tag] || '';
+                            const label = t('tag.' + tag) !== 'tag.' + tag ? t('tag.' + tag) : tag;
+                            return `<span class="card-tag">${icon}${icon ? ' ' : ''}${Utils.escapeHtml(label)}</span>`;
+                        }).join('')}
                     </div>
                 ` : ''}
                 ${func.employees && func.employees.length > 0 ? `
@@ -6573,6 +8883,7 @@
         card.addEventListener('click', (e) => {
             const editBtn = e.target.closest('.edit-btn');
             const deleteBtn = e.target.closest('.delete-btn');
+            const duplicateBtn = e.target.closest('.duplicate-btn');
             const addSubBtn = e.target.closest('.add-sub-btn');
             const link = e.target.closest('.field-link');
             
@@ -6580,6 +8891,14 @@
                 e.stopPropagation();
                 if (typeof window.openModal === 'function') {
                     window.openModal(parseInt(editBtn.dataset.index));
+                }
+                return;
+            }
+            
+            if (duplicateBtn) {
+                e.stopPropagation();
+                if (typeof window.duplicateFunction === 'function') {
+                    window.duplicateFunction(parseInt(duplicateBtn.dataset.index));
                 }
                 return;
             }
@@ -6663,6 +8982,10 @@
             );
             
             if (!exists) {
+                // Зберігаємо історію перед створенням зв'язку
+                if (typeof saveHistory === 'function') {
+                    saveHistory('add_connection');
+                }
                 window.connections.push({ from: window.connectingFrom, to: index });
                 if (typeof window.debouncedSave === 'function') {
                     window.debouncedSave();
@@ -6838,6 +9161,10 @@
                     .replace('%s', toName);
                 
                 if (confirm(message)) {
+                    // Зберігаємо історію перед видаленням зв'язку
+                    if (typeof saveHistory === 'function') {
+                        saveHistory('delete_connection');
+                    }
                     window.connections.splice(connIndex, 1);
                     if (typeof window.debouncedSave === 'function') {
                         window.debouncedSave();
@@ -7189,6 +9516,92 @@
     window.listBackups = listBackups;
     window.restoreFromBackup = restoreFromBackup;
     window.updateCanvasTransform = updateCanvasTransform;
+    
+    // Undo/Redo
+    window.undo = undo;
+    window.redo = redo;
+    window.saveHistory = saveHistory;
+    window.clearHistory = clearHistory;
+    
+    // Search
+    window.searchFunctions = searchFunctions;
+    window.clearSearch = clearSearch;
+    window.focusSearch = focusSearch;
+    
+    // Save indicator
+    window.updateSaveIndicator = updateSaveIndicator;
+    
+    // Shortcuts modal
+    window.showShortcutsModal = showShortcutsModal;
+    window.closeShortcutsModal = closeShortcutsModal;
+    
+    // Stats modal
+    window.showStatsModal = showStatsModal;
+    window.closeStatsModal = closeStatsModal;
+    
+    // Theme
+    window.toggleDarkMode = toggleDarkMode;
+    window.loadTheme = loadTheme;
+    
+    // Filter
+    window.setFilter = setFilter;
+    window.clearFilter = clearFilter;
+    window.applyFilter = applyFilter;
+    
+    // Export
+    window.exportToJSON = exportToJSON;
+    window.exportToCSV = exportToCSV;
+    
+    // Import
+    function importFromJSON(file) {
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                // Валідація
+                if (!data.functions || !Array.isArray(data.functions)) {
+                    showNotification(t('import.invalid_format'), 'error');
+                    return;
+                }
+                
+                // Показуємо діалог підтвердження
+                const count = data.functions.length;
+                const connCount = data.connections?.length || 0;
+                
+                if (confirm(t('import.confirm').replace('%d', count).replace('%c', connCount))) {
+                    // Зберігаємо історію перед імпортом
+                    saveHistory('import');
+                    
+                    // Імпортуємо
+                    State.functions = data.functions.map(f => ({
+                        ...f,
+                        id: f.id || Utils.generateId(),
+                        x: f.x || Math.random() * 500 + 100,
+                        y: f.y || Math.random() * 300 + 100
+                    }));
+                    
+                    State.connections = data.connections || [];
+                    
+                    renderFunctions();
+                    saveToFirestore();
+                    
+                    showNotification(t('import.success').replace('%d', count), 'success');
+                }
+            } catch (err) {
+                console.error('Import error:', err);
+                showNotification(t('import.error'), 'error');
+            }
+        };
+        
+        reader.readAsText(file);
+    }
+    
+    window.importFromJSON = importFromJSON;
+    
+    // Duplicate
+    window.duplicateFunction = duplicateFunction;
 
 })();
 </script>
