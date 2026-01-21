@@ -8713,6 +8713,73 @@
     window.focusSearch = focusSearch;
     window.searchFunctions = searchFunctions;
     window.clearSearch = clearSearch;
+    window.updateSaveIndicator = updateSaveIndicator;
+    
+    // Shortcuts modal
+    window.showShortcutsModal = showShortcutsModal;
+    window.closeShortcutsModal = closeShortcutsModal;
+    
+    // Stats modal
+    window.showStatsModal = showStatsModal;
+    window.closeStatsModal = closeStatsModal;
+    
+    // Groups
+    window.toggleCardSelection = toggleCardSelection;
+    window.clearSelection = clearSelection;
+    window.showGroupModal = showGroupModal;
+    window.closeGroupModal = closeGroupModal;
+    window.createGroup = createGroup;
+    window.toggleGroup = toggleGroup;
+    window.ungroupCards = ungroupCards;
+    
+    // Theme
+    window.toggleDarkMode = toggleDarkMode;
+    window.loadTheme = loadTheme;
+    
+    // Filter
+    window.setFilter = setFilter;
+    window.clearFilter = clearFilter;
+    window.applyFilter = applyFilter;
+    
+    // Export
+    window.exportToJSON = exportToJSON;
+    window.exportToCSV = exportToCSV;
+    
+    // Modal
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.saveFunction = saveFunction;
+    window.deleteFunction = deleteFunction;
+    window.closeConfirmModal = closeConfirmModal;
+    window.confirmDelete = confirmDelete;
+    window.duplicateFunction = duplicateFunction;
+    
+    // Core
+    window.addFunction = addFunction;
+    window.addSubFunction = addSubFunction;
+    window.setTool = setTool;
+    window.forceSync = forceSync;
+    window.logout = logout;
+    
+    // UI helpers
+    window.showNotification = showNotification;
+    window.showLoading = showLoading;
+    window.hideLoading = hideLoading;
+    window.toggleMenu = toggleMenu;
+    window.updateZoomLevel = updateZoomLevel;
+    
+    // Stat fields
+    window.addStatField = addStatField;
+    window.removeStatField = removeStatField;
+    window.toggleStatColorDropdown = toggleStatColorDropdown;
+    window.setStatColor = setStatColor;
+    
+    // Employees & Tags
+    window.addEmployee = addEmployee;
+    window.removeEmployee = removeEmployee;
+    window.addTag = addTag;
+    window.addQuickTag = addQuickTag;
+    window.removeTag = removeTag;
 
 })();
 </script>
@@ -9600,15 +9667,22 @@
                     const name = stat.name || '';
                     const color = stat.color || 'blue';
                     
-                    // Якщо значення довше 15 символів - скорочуємо і показуємо повний текст у tooltip
-                    const isLongValue = value.length > 15;
-                    const displayValue = isLongValue ? value.substring(0, 12) + '...' : value;
-                    const tooltipAttr = isLongValue ? `data-full-text="${Utils.escapeHtml(value)}"` : '';
+                    // Скорочуємо значення якщо довше 10 символів
+                    const isLongValue = value.length > 10;
+                    const displayValue = isLongValue ? value.substring(0, 8) + '...' : value;
+                    
+                    // Скорочуємо назву якщо довше 12 символів
+                    const isLongName = name.length > 12;
+                    const displayName = isLongName ? name.substring(0, 10) + '...' : name;
+                    
+                    // Tooltip для повного тексту (назва + значення)
+                    const fullText = (isLongName || isLongValue) ? `${name}: ${value}` : '';
+                    const tooltipAttr = fullText ? `data-full-text="${Utils.escapeHtml(fullText)}" title="${Utils.escapeHtml(fullText)}"` : '';
                     
                     return `
                         <div class="stat-item ${Utils.escapeHtml(color)}" ${tooltipAttr}>
                             <div class="stat-value">${Utils.escapeHtml(displayValue)}</div>
-                            <div class="stat-label">${Utils.escapeHtml(name)}</div>
+                            <div class="stat-label">${Utils.escapeHtml(displayName)}</div>
                         </div>
                     `;
                 }).join('')}
@@ -10388,7 +10462,7 @@
         init();
     }
 
-    // === EXPORT TO GLOBAL SCOPE ===
+    // === EXPORT TO GLOBAL SCOPE (тільки функції Block 3) ===
     window.copyStructure = copyStructure;
     window.pasteStructure = pasteStructure;
     window.renderFunctions = renderFunctions;
@@ -10406,41 +10480,7 @@
     window.restoreFromBackup = restoreFromBackup;
     window.updateCanvasTransform = updateCanvasTransform;
     
-    // Undo/Redo/Search/renderGroups - експортовано в Block 2
-    
-    // Save indicator
-    window.updateSaveIndicator = updateSaveIndicator;
-    
-    // Shortcuts modal
-    window.showShortcutsModal = showShortcutsModal;
-    window.closeShortcutsModal = closeShortcutsModal;
-    
-    // Stats modal
-    window.showStatsModal = showStatsModal;
-    window.closeStatsModal = closeStatsModal;
-    
-    // Groups (toggleCardSelection etc визначені в Block 3)
-    window.toggleCardSelection = toggleCardSelection;
-    window.clearSelection = clearSelection;
-    window.showGroupModal = showGroupModal;
-    window.closeGroupModal = closeGroupModal;
-    window.createGroup = createGroup;
-    // renderGroups - експортовано в Block 2
-    window.toggleGroup = toggleGroup;
-    window.ungroupCards = ungroupCards;
-    
-    // Theme
-    window.toggleDarkMode = toggleDarkMode;
-    window.loadTheme = loadTheme;
-    
-    // Filter
-    window.setFilter = setFilter;
-    window.clearFilter = clearFilter;
-    window.applyFilter = applyFilter;
-    
-    // Export
-    window.exportToJSON = exportToJSON;
-    window.exportToCSV = exportToCSV;
+    // Всі інші функції (shortcuts, stats, groups, theme, filter, export) - експортовано в Block 2
     
     // Import
     function importFromJSON(file) {
