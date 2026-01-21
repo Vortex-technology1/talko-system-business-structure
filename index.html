@@ -910,16 +910,25 @@
         border-bottom: 1px solid var(--gray-200);
         display: flex;
         align-items: center;
-        padding: 0 20px;
+        padding: 0 12px;
         z-index: 1000;
         box-shadow: var(--shadow-sm);
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+
+    .toolbar::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
     }
 
     .toolbar-left,
     .toolbar-right {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
+        flex-shrink: 0;
     }
 
     .toolbar-right {
@@ -927,14 +936,21 @@
     }
 
     .logo {
-        font-size: 18px;
+        font-size: 14px;
         font-weight: 700;
         color: var(--gray-700);
-        margin-right: 8px;
+        margin-right: 4px;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 1100px) {
+        .logo {
+            font-size: 12px;
+        }
     }
 
     .tool-btn {
-        height: 40px;
+        height: 36px;
         border: 1px solid var(--gray-200);
         background: white;
         border-radius: var(--border-radius);
@@ -946,14 +962,74 @@
         font-weight: 600;
         transition: var(--transition);
         position: relative;
-        padding: 0 16px;
+        padding: 0 10px;
         white-space: nowrap;
         text-decoration: none;
         color: var(--gray-700);
+        flex-shrink: 0;
     }
 
     .tool-btn span {
         color: inherit;
+    }
+
+    .tool-btn svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Приховуємо текст на менших екранах */
+    @media (max-width: 1600px) {
+        .tool-btn .btn-text,
+        .tool-btn span[data-text]:not(.filter-label) {
+            display: none;
+        }
+        .tool-btn {
+            padding: 0 8px;
+        }
+        .toolbar-left, .toolbar-right {
+            gap: 6px;
+        }
+        /* Залишаємо текст тільки для критичних кнопок */
+        .tool-btn.add-btn span,
+        .tool-btn.support-btn span {
+            display: inline;
+        }
+    }
+
+    @media (max-width: 1300px) {
+        /* Приховуємо менш важливі кнопки */
+        #copyBtn, #pasteBtn, #showAllBtn {
+            display: none;
+        }
+        .toolbar {
+            padding: 0 8px;
+        }
+    }
+
+    @media (max-width: 1100px) {
+        /* Приховуємо ще більше */
+        #ecosystemBtn, #aiAssistantsBtn {
+            display: none;
+        }
+        .tool-btn.add-btn span,
+        .tool-btn.support-btn span {
+            display: none;
+        }
+    }
+
+    @media (max-width: 900px) {
+        /* Тільки найважливіше */
+        #statsBtn, #groupBtn {
+            display: none;
+        }
+        .search-container {
+            max-width: 120px;
+        }
+        .search-input {
+            font-size: 12px;
+        }
     }
 
     .tool-btn:hover {
@@ -1021,12 +1097,12 @@
     }
 
     .search-input {
-        height: 36px;
-        width: 180px;
-        padding: 0 30px 0 32px;
+        height: 34px;
+        width: 140px;
+        padding: 0 28px 0 30px;
         border: 1px solid var(--gray-200);
         border-radius: var(--border-radius);
-        font-size: 13px;
+        font-size: 12px;
         background: white;
         transition: var(--transition);
     }
@@ -1035,7 +1111,7 @@
         outline: none;
         border-color: var(--primary-color);
         box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
-        width: 240px;
+        width: 200px;
     }
 
     .search-input::placeholder {
@@ -3078,6 +3154,47 @@
         padding: 0 4px;
     }
 
+    /* Підказка для групування */
+    .group-hint {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--gray-700);
+        color: white;
+        font-size: 9px;
+        font-weight: 500;
+        padding: 2px 6px;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        z-index: 10;
+    }
+
+    .group-btn:disabled:hover .group-hint {
+        opacity: 1;
+    }
+
+    /* Коли є виділені картки - ховаємо підказку */
+    .group-btn:not(:disabled) .group-hint {
+        display: none;
+    }
+
+    /* Кнопка скасування виділення */
+    .cancel-selection-btn {
+        background: var(--danger-color) !important;
+        color: white !important;
+        border-color: var(--danger-color) !important;
+        padding: 0 8px !important;
+    }
+
+    .cancel-selection-btn:hover {
+        background: #e53e3e !important;
+        border-color: #e53e3e !important;
+    }
+
     .function-card.selected {
         outline: 3px solid var(--primary-color);
         outline-offset: 2px;
@@ -4317,13 +4434,19 @@
                     </svg>
                     <span data-text="toolbar.stats">СТАТИСТИКА</span>
                 </button>
-                <button class="tool-btn group-btn" id="groupBtn" type="button" data-title="toolbar.group" disabled>
+                <button class="tool-btn group-btn" id="groupBtn" type="button" data-title="toolbar.group" title="Shift+Click на картках для виділення" disabled>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                         <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
                     </svg>
                     <span data-text="toolbar.group">ГРУПУВАТИ</span>
                     <span class="selected-count" id="selectedCount" style="display:none;">0</span>
+                    <span class="group-hint" id="groupHint">Shift+Click</span>
+                </button>
+                <button class="tool-btn cancel-selection-btn" id="cancelSelectionBtn" type="button" title="Скасувати виділення (Esc)" style="display:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
                 </button>
                 <!-- AI Assistants Dropdown -->
                 <div class="ai-dropdown">
@@ -4606,6 +4729,7 @@
                 </div>
                 <div class="shortcuts-section">
                     <h4 data-text="shortcuts.general">Загальне</h4>
+                    <div class="shortcut-item"><kbd>Shift</kbd>+<kbd>Click</kbd><span data-text="shortcuts.select">Виділити картки для групування</span></div>
                     <div class="shortcut-item"><kbd>Esc</kbd><span data-text="shortcuts.close">Закрити / Скасувати</span></div>
                     <div class="shortcut-item"><kbd>?</kbd><span data-text="shortcuts.help">Показати гарячі клавіші</span></div>
                 </div>
@@ -7185,6 +7309,12 @@
             const count = State.selectedCards.length;
             groupBtn.disabled = count < 2;
             
+            // Показуємо/ховаємо кнопку скасування
+            const cancelBtn = Utils.getElement('cancelSelectionBtn');
+            if (cancelBtn) {
+                cancelBtn.style.display = count > 0 ? 'flex' : 'none';
+            }
+            
             if (count > 0) {
                 countBadge.textContent = count;
                 countBadge.style.display = 'flex';
@@ -8366,6 +8496,12 @@
         Utils.getElement('groupCreateBtn')?.addEventListener('click', createGroup);
         Utils.getElement('groupModal')?.addEventListener('click', (e) => {
             if (e.target.id === 'groupModal') closeGroupModal();
+        });
+        
+        // Cancel selection button
+        Utils.getElement('cancelSelectionBtn')?.addEventListener('click', () => {
+            clearSelection();
+            showNotification('Виділення скасовано', 'info');
         });
         
         // Group color picker
