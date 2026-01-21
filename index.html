@@ -913,14 +913,7 @@
         padding: 0 12px;
         z-index: 1000;
         box-shadow: var(--shadow-sm);
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE/Edge */
-    }
-
-    .toolbar::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
+        overflow: visible; /* Дозволяємо dropdown меню виходити за межі */
     }
 
     .toolbar-left,
@@ -8130,17 +8123,39 @@
 
     // === DROPDOWN MENUS ===
     function toggleMenu(menuId, btnId) {
+        console.log('[MENU] toggleMenu called:', menuId, btnId);
+        
         const menu = Utils.getElement(menuId);
         const btn = Utils.getElement(btnId);
         
-        if (!menu) return;
+        console.log('[MENU] Menu element:', menu);
+        console.log('[MENU] Button element:', btn);
         
-        // Close other menus
-        Utils.queryAll('.ecosystem-menu, .export-menu').forEach(m => {
+        if (!menu) {
+            console.warn('[MENU] Menu not found:', menuId);
+            return;
+        }
+        
+        // Close ALL other dropdown menus
+        Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu').forEach(m => {
             if (m.id !== menuId) m.classList.remove('show');
         });
         
+        // Close AI dropdown special class
+        document.querySelectorAll('.ai-dropdown').forEach(d => {
+            if (menu.id !== 'aiMenu') d.classList.remove('open');
+        });
+        
         const isOpen = menu.classList.toggle('show');
+        console.log('[MENU] Menu is now:', isOpen ? 'OPEN' : 'CLOSED');
+        
+        // Special handling for AI dropdown
+        if (menuId === 'aiMenu') {
+            const aiDropdown = menu.closest('.ai-dropdown');
+            if (aiDropdown) {
+                aiDropdown.classList.toggle('open', isOpen);
+            }
+        }
         
         if (btn) {
             btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
