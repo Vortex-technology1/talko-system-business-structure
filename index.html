@@ -1648,13 +1648,16 @@
 
     .canvas {
         position: relative;
-        width: 5000px;
-        height: 5000px;
+        min-width: 3000px;
+        min-height: 2000px;
+        width: var(--canvas-width, 3000px);
+        height: var(--canvas-height, 2000px);
         background-image: radial-gradient(circle, var(--gray-200) 1px, transparent 1px);
         background-size: 20px 20px;
         background-position: 0 0;
         transform-origin: 0 0;
         will-change: transform;
+        transition: width 0.3s ease, height 0.3s ease;
     }
 
     /* === CONNECTION LINES === */
@@ -9764,6 +9767,10 @@
         });
         
         canvas.appendChild(fragment);
+        
+        // Розраховуємо оптимальний розмір canvas
+        recalculateCanvasSize();
+        
         renderConnections();
         
         // Застосовуємо фільтр якщо активний
@@ -10138,6 +10145,9 @@
             window.functions[index].modified = new Date().toISOString();
         }
         
+        // Розширюємо canvas якщо картка близько до краю
+        expandCanvasIfNeeded(newX, newY);
+        
         // Throttled connection update
         if (!dragState.renderPending) {
             dragState.renderPending = true;
@@ -10145,6 +10155,72 @@
                 renderConnections();
                 dragState.renderPending = false;
             });
+        }
+    }
+    
+    // Динамічне розширення canvas
+    function expandCanvasIfNeeded(cardX, cardY) {
+        const canvas = document.getElementById('canvas');
+        if (!canvas) return;
+        
+        const cardWidth = 280; // ширина картки
+        const cardHeight = 200; // приблизна висота картки
+        const padding = 500; // відступ для розширення
+        
+        const currentWidth = canvas.offsetWidth;
+        const currentHeight = canvas.offsetHeight;
+        
+        const neededWidth = cardX + cardWidth + padding;
+        const neededHeight = cardY + cardHeight + padding;
+        
+        let expanded = false;
+        
+        if (neededWidth > currentWidth) {
+            canvas.style.setProperty('--canvas-width', neededWidth + 'px');
+            canvas.style.width = neededWidth + 'px';
+            expanded = true;
+        }
+        
+        if (neededHeight > currentHeight) {
+            canvas.style.setProperty('--canvas-height', neededHeight + 'px');
+            canvas.style.height = neededHeight + 'px';
+            expanded = true;
+        }
+        
+        // Оновлюємо SVG для з'єднань
+        if (expanded) {
+            const svg = document.getElementById('connections');
+            if (svg) {
+                svg.style.width = canvas.style.width;
+                svg.style.height = canvas.style.height;
+            }
+        }
+    }
+    
+    // Розрахунок оптимального розміру canvas на основі всіх карток
+    function recalculateCanvasSize() {
+        const canvas = document.getElementById('canvas');
+        if (!canvas || !window.functions || window.functions.length === 0) return;
+        
+        let maxX = 3000;
+        let maxY = 2000;
+        
+        window.functions.forEach(func => {
+            const x = (func.x || 0) + 280 + 500; // cardWidth + padding
+            const y = (func.y || 0) + 300 + 500; // cardHeight + padding
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+        });
+        
+        canvas.style.setProperty('--canvas-width', maxX + 'px');
+        canvas.style.setProperty('--canvas-height', maxY + 'px');
+        canvas.style.width = maxX + 'px';
+        canvas.style.height = maxY + 'px';
+        
+        const svg = document.getElementById('connections');
+        if (svg) {
+            svg.style.width = maxX + 'px';
+            svg.style.height = maxY + 'px';
         }
     }
 
@@ -10615,6 +10691,8 @@
     window.listBackups = listBackups;
     window.restoreFromBackup = restoreFromBackup;
     window.updateCanvasTransform = updateCanvasTransform;
+    window.expandCanvasIfNeeded = expandCanvasIfNeeded;
+    window.recalculateCanvasSize = recalculateCanvasSize;
     
     // Всі інші функції (shortcuts, stats, groups, theme, filter, export) - експортовано в Block 2
     
