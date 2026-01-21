@@ -14,9 +14,9 @@
 </head>
 <body>
 <!-- Firebase CDN -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -3261,12 +3261,21 @@
     const db = firebase.firestore();
     
     // Налаштування Firestore для офлайн режиму
-    db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+    // synchronizeTabs вимкнено - викликає помилки "Unexpected state"
+    db.enablePersistence({ synchronizeTabs: false }).catch(err => {
         if (err.code === 'failed-precondition') {
-            console.warn('Firestore persistence: Multiple tabs open');
+            // Вже відкрито в іншій вкладці - це нормально
+            console.warn('[FIRESTORE] Persistence вже активовано в іншій вкладці');
         } else if (err.code === 'unimplemented') {
-            console.warn('Firestore persistence: Browser not supported');
+            console.warn('[FIRESTORE] Persistence не підтримується браузером');
+        } else {
+            console.warn('[FIRESTORE] Persistence помилка:', err.code);
         }
+    });
+    
+    // Глобальний обробник помилок Firestore
+    db.onSnapshotsInSync(() => {
+        // Snapshots синхронізовано - все ок
     });
 
     // === GLOBAL STATE (приватний) ===
@@ -3283,6 +3292,7 @@
         isOnline: navigator.onLine,
         connectionCheckInterval: null,
         retryAttempts: 0,
+        saveRetryAttempts: 0,
         MAX_RETRY_ATTEMPTS: 5,
         
         // UI State
@@ -3548,7 +3558,63 @@
             'lang.uk': 'УКР',
             'lang.ru': 'РУС',
             'lang.en': 'ENG',
-            'lang.bg': 'БГ'
+            'lang.bg': 'БГ',
+            'loading.data': 'Загрузка данных...',
+            'loading.syncing': 'Синхронизация...',
+            'prompt.logout': 'Вы действительно хотите выйти?',
+            'prompt.delete_connection': 'Удалить связь между "%s" и "%s"?',
+            'modal.add_subfunction': 'Добавить подфункцию',
+            'modal.card_color': 'Цвет карточки',
+            'modal.description_link': 'Ссылка на описание функции',
+            'modal.link_placeholder': 'https://...',
+            'modal.kpi': 'ЦКП (Ценный конечный продукт)',
+            'modal.statistics': 'Статистика',
+            'modal.add_metric': '+ Добавить метрику',
+            'modal.employees': 'Сотрудники',
+            'modal.employees_placeholder': 'Введите имя и нажмите Enter',
+            'modal.required_fields': 'Заполните обязательные поля',
+            'modal.paste_structure': 'Вставить структуру',
+            'modal.found': 'Найдено',
+            'modal.functions': 'функций',
+            'modal.exported_by': 'Экспортировано',
+            'modal.current_functions': 'Текущих функций',
+            'modal.add_to_existing': 'Добавить к существующим',
+            'modal.replace_all': 'Заменить все',
+            'modal.auto_arrange': 'Функции будут расположены автоматически',
+            'modal.paste': 'Вставить',
+            'confirm.warning': 'Это также удалит все связи. Действие нельзя отменить.',
+            'zoom.in': 'Увеличить',
+            'zoom.out': 'Уменьшить',
+            'notification.structure_copied': 'Структура скопирована!',
+            'notification.copy_error': 'Ошибка копирования',
+            'notification.clipboard_empty': 'Буфер обмена пуст',
+            'notification.invalid_format': 'Неверный формат данных',
+            'notification.no_functions': 'Нет функций для вставки',
+            'notification.parse_error': 'Ошибка чтения данных',
+            'notification.clipboard_error': 'Ошибка доступа к буферу',
+            'notification.paste_not_supported': 'Вставка не поддерживается',
+            'notification.no_functions_to_copy': 'Нет функций для копирования',
+            'notification.functions_pasted': 'Вставлено функций:',
+            'notification.connection_lost': 'Соединение потеряно',
+            'notification.connection_restored': 'Соединение восстановлено',
+            'notification.sync_in_progress': 'Синхронизация...',
+            'notification.saving': 'Сохранение...',
+            'notification.saved': 'Сохранено',
+            'field.kpi': 'ЦКП',
+            'field.description': 'Описание функции',
+            'field.view_instruction': 'Просмотреть инструкцию',
+            'field.employees': 'Сотрудники',
+            'card.edit': 'ИЗМ',
+            'card.delete': 'УДА',
+            'card.edit_tooltip': 'Редактировать',
+            'card.delete_tooltip': 'Удалить',
+            'card.add_subfunction': 'Добавить подфункцию',
+            'export.preparing': 'Подготовка...',
+            'export.success_jpeg': 'JPEG сохранен!',
+            'export.success_pdf': 'PDF сохранен!',
+            'export.error': 'Ошибка экспорта',
+            'export.links_section': 'Ссылки на описания',
+            'export.active_links': 'Активные ссылки на описания функций'
         },
         
         en: {
@@ -3636,7 +3702,63 @@
             'lang.uk': 'UKR',
             'lang.ru': 'RUS',
             'lang.en': 'ENG',
-            'lang.bg': 'BG'
+            'lang.bg': 'BG',
+            'loading.data': 'Loading data...',
+            'loading.syncing': 'Syncing...',
+            'prompt.logout': 'Do you really want to logout?',
+            'prompt.delete_connection': 'Delete connection between "%s" and "%s"?',
+            'modal.add_subfunction': 'Add subfunction',
+            'modal.card_color': 'Card color',
+            'modal.description_link': 'Link to function description',
+            'modal.link_placeholder': 'https://...',
+            'modal.kpi': 'KPI (Key Performance Indicator)',
+            'modal.statistics': 'Statistics',
+            'modal.add_metric': '+ Add metric',
+            'modal.employees': 'Employees',
+            'modal.employees_placeholder': 'Enter name and press Enter',
+            'modal.required_fields': 'Fill in required fields',
+            'modal.paste_structure': 'Paste structure',
+            'modal.found': 'Found',
+            'modal.functions': 'functions',
+            'modal.exported_by': 'Exported by',
+            'modal.current_functions': 'Current functions',
+            'modal.add_to_existing': 'Add to existing',
+            'modal.replace_all': 'Replace all',
+            'modal.auto_arrange': 'Functions will be arranged automatically',
+            'modal.paste': 'Paste',
+            'confirm.warning': 'This will also delete all connections. Action cannot be undone.',
+            'zoom.in': 'Zoom in',
+            'zoom.out': 'Zoom out',
+            'notification.structure_copied': 'Structure copied!',
+            'notification.copy_error': 'Copy error',
+            'notification.clipboard_empty': 'Clipboard is empty',
+            'notification.invalid_format': 'Invalid data format',
+            'notification.no_functions': 'No functions to paste',
+            'notification.parse_error': 'Data read error',
+            'notification.clipboard_error': 'Clipboard access error',
+            'notification.paste_not_supported': 'Paste not supported',
+            'notification.no_functions_to_copy': 'No functions to copy',
+            'notification.functions_pasted': 'Functions pasted:',
+            'notification.connection_lost': 'Connection lost',
+            'notification.connection_restored': 'Connection restored',
+            'notification.sync_in_progress': 'Syncing...',
+            'notification.saving': 'Saving...',
+            'notification.saved': 'Saved',
+            'field.kpi': 'KPI',
+            'field.description': 'Function description',
+            'field.view_instruction': 'View instruction',
+            'field.employees': 'Employees',
+            'card.edit': 'EDIT',
+            'card.delete': 'DEL',
+            'card.edit_tooltip': 'Edit',
+            'card.delete_tooltip': 'Delete',
+            'card.add_subfunction': 'Add subfunction',
+            'export.preparing': 'Preparing...',
+            'export.success_jpeg': 'JPEG saved!',
+            'export.success_pdf': 'PDF saved!',
+            'export.error': 'Export error',
+            'export.links_section': 'Description links',
+            'export.active_links': 'Active links to function descriptions'
         },
         
         bg: {
@@ -3695,6 +3817,7 @@
             'ecosystem.steps.desc': 'Алгоритъм за внедряване',
             'export.pdf': 'Запази като PDF',
             'export.excel': 'Запази като Excel',
+            'export.jpeg': 'Запази като JPEG',
             'backup.restore': 'Възстанови от backup',
             'backup.restore_desc': 'Предишни версии на структурата',
             'backup.modal_title': '🔄 Възстановяване от backup',
@@ -3703,7 +3826,53 @@
             'lang.uk': 'УКР',
             'lang.ru': 'РУС',
             'lang.en': 'ENG',
-            'lang.bg': 'БГ'
+            'lang.bg': 'БГ',
+            'loading.data': 'Зареждане на данни...',
+            'loading.syncing': 'Синхронизация...',
+            'prompt.logout': 'Наистина ли искате да излезете?',
+            'prompt.delete_connection': 'Изтриване на връзката между "%s" и "%s"?',
+            'modal.add_subfunction': 'Добави подфункция',
+            'modal.edit_function': 'Редактирай функция',
+            'modal.function_name': 'Име на функцията *',
+            'modal.responsible': 'Отговорник *',
+            'modal.card_color': 'Цвят на картата',
+            'modal.description_link': 'Връзка към описание',
+            'modal.link_placeholder': 'https://...',
+            'modal.kpi': 'КПИ (Ключов показател)',
+            'modal.statistics': 'Статистика',
+            'modal.add_metric': '+ Добави метрика',
+            'modal.employees': 'Служители',
+            'modal.employees_placeholder': 'Въведете име и натиснете Enter',
+            'modal.required_fields': 'Попълнете задължителните полета',
+            'confirm.message': 'Наистина ли искате да изтриете функцията',
+            'confirm.warning': 'Това ще изтрие и всички връзки. Действието не може да бъде отменено.',
+            'zoom.in': 'Увеличи',
+            'zoom.out': 'Намали',
+            'notification.structure_copied': 'Структурата е копирана!',
+            'notification.copy_error': 'Грешка при копиране',
+            'notification.data_synced': 'Данните са синхронизирани',
+            'notification.sync_error': 'Грешка при синхронизация',
+            'notification.connection_lost': 'Връзката е загубена',
+            'notification.connection_restored': 'Връзката е възстановена',
+            'notification.sync_in_progress': 'Синхронизация...',
+            'notification.saving': 'Запазване...',
+            'notification.saved': 'Запазено',
+            'field.kpi': 'КПИ',
+            'field.description': 'Описание на функцията',
+            'field.view_instruction': 'Виж инструкция',
+            'field.employees': 'Служители',
+            'card.edit': 'РЕД',
+            'card.delete': 'ИЗТ',
+            'card.edit_tooltip': 'Редактирай',
+            'card.delete_tooltip': 'Изтрий',
+            'card.add_subfunction': 'Добави подфункция',
+            'empty.title': 'Създайте бизнес система',
+            'empty.subtitle': 'Започнете с главната функция',
+            'empty.button': '+ Добави първа функция',
+            'export.preparing': 'Подготовка...',
+            'export.success_jpeg': 'JPEG запазен!',
+            'export.success_pdf': 'PDF запазен!',
+            'export.error': 'Грешка при експорт'
         }
     };
 
@@ -4083,7 +4252,8 @@
                                 functions: State.functions,
                                 connections: State.connections,
                                 language: State.currentLanguage,
-                                timestamp: Date.now()
+                                timestamp: Date.now(),
+                                userId: State.currentUser.uid
                             }));
                         } catch (e) {}
                         
@@ -4155,6 +4325,9 @@
         State.structureListener = db.collection('users').doc(State.currentUser.uid)
             .collection('main').doc('structure')
             .onSnapshot(doc => {
+                // Скидаємо лічильник спроб при успішному отриманні даних
+                State.retryAttempts = 0;
+                
                 if (State.isLocalUpdate || State.isSaving || State.hasPendingChanges) {
                     return;
                 }
@@ -4193,7 +4366,8 @@
                                     functions: State.functions,
                                     connections: State.connections,
                                     language: State.currentLanguage,
-                                    timestamp: Date.now()
+                                    timestamp: Date.now(),
+                                    userId: State.currentUser.uid
                                 }));
                             } catch (e) {}
                             
@@ -4205,7 +4379,27 @@
                     }
                 }
             }, error => {
-                console.error('[ERR] Помилка підписки:', error);
+                console.error('[ERR] Помилка listener:', error.code || error.message || error);
+                
+                // Відписуємось від зламаного listener
+                if (State.structureListener) {
+                    State.structureListener();
+                    State.structureListener = null;
+                }
+                
+                // Перезапускаємо listener через 5 секунд
+                if (State.retryAttempts < State.MAX_RETRY_ATTEMPTS) {
+                    State.retryAttempts++;
+                    console.log('[RETRY] Перезапуск listener через 5 сек... Спроба', State.retryAttempts);
+                    setTimeout(() => {
+                        if (State.currentUser) {
+                            setupStructureListener();
+                        }
+                    }, 5000);
+                } else {
+                    console.error('[ERR] Досягнуто максимум спроб перезапуску listener');
+                    showNotification('Помилка синхронізації. Оновіть сторінку.', 'error');
+                }
             });
     }
 
@@ -4363,6 +4557,7 @@
             .then(() => {
                 console.log('[OK] Збережено в Firestore');
                 updateConnectionStatus('success', t('notification.saved'));
+                State.saveRetryAttempts = 0; // Скидаємо лічильник при успіху
                 
                 // Оновлюємо локальний backup
                 try {
@@ -4370,7 +4565,8 @@
                         functions: State.functions,
                         connections: State.connections,
                         language: State.currentLanguage,
-                        timestamp: Date.now()
+                        timestamp: Date.now(),
+                        userId: State.currentUser.uid
                     }));
                 } catch (e) {}
                 
@@ -4391,6 +4587,7 @@
                         connections: State.connections,
                         language: State.currentLanguage,
                         timestamp: Date.now(),
+                        userId: State.currentUser.uid,
                         pendingSync: true
                     }));
                     console.log('[LOCAL] Збережено локально, очікує синхронізації');
@@ -4398,8 +4595,16 @@
                 
                 updateConnectionStatus('error', t('notification.sync_error'));
                 
-                // Retry
-                setTimeout(() => saveToFirestore(), 5000);
+                // Retry з обмеженням спроб
+                if (State.saveRetryAttempts < State.MAX_RETRY_ATTEMPTS) {
+                    State.saveRetryAttempts++;
+                    console.log('[RETRY] Повторне збереження через 5 сек... Спроба', State.saveRetryAttempts);
+                    setTimeout(() => saveToFirestore(), 5000);
+                } else {
+                    console.error('[ERR] Досягнуто максимум спроб збереження');
+                    showNotification('Не вдалося зберегти. Перевірте підключення.', 'error');
+                    State.saveRetryAttempts = 0;
+                }
             });
     }
 
@@ -4452,7 +4657,10 @@
         
         // Також зберігаємо локально
         try {
-            localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify(backupData));
+            localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
+                ...backupData,
+                userId: State.currentUser.uid
+            }));
         } catch (err) {
             console.warn('[WARN] Не вдалося зберегти локальний backup');
         }
