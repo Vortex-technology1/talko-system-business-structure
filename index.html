@@ -1635,7 +1635,7 @@
     }
 
     .function-card.dragging {
-        z-index: 1000;
+        z-index: 10000; /* Вище за все при перетягуванні */
         transform: rotate(2deg) scale(1.02);
         box-shadow: var(--shadow-lg);
         transition: none;
@@ -1828,44 +1828,110 @@
     }
 
     .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
         margin-top: 12px;
         padding-top: 12px;
         border-top: 1px solid var(--gray-200);
     }
 
     .stat-item {
+        flex: 1;
+        min-width: 70px;
+        max-width: 100px;
         text-align: center;
         border-radius: var(--border-radius);
-        padding: 8px;
+        padding: 10px 6px;
         transition: var(--transition);
         border: 1px solid;
+        cursor: default;
     }
 
-    .stat-item.blue { background: rgba(66, 153, 225, 0.1); border-color: rgba(66, 153, 225, 0.2); }
-    .stat-item.green { background: rgba(72, 187, 120, 0.1); border-color: rgba(72, 187, 120, 0.2); }
-    .stat-item.red { background: rgba(245, 101, 101, 0.1); border-color: rgba(245, 101, 101, 0.2); }
-    .stat-item.yellow { background: rgba(236, 201, 75, 0.1); border-color: rgba(236, 201, 75, 0.2); }
-    .stat-item.purple { background: rgba(159, 122, 234, 0.1); border-color: rgba(159, 122, 234, 0.2); }
-    .stat-item.orange { background: rgba(237, 137, 54, 0.1); border-color: rgba(237, 137, 54, 0.2); }
-    .stat-item.teal { background: rgba(79, 209, 199, 0.1); border-color: rgba(79, 209, 199, 0.2); }
-    .stat-item.pink { background: rgba(237, 100, 166, 0.1); border-color: rgba(237, 100, 166, 0.2); }
-    .stat-item.gray { background: rgba(113, 128, 150, 0.1); border-color: rgba(113, 128, 150, 0.2); }
+    .stat-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .stat-item.blue { background: rgba(66, 153, 225, 0.1); border-color: rgba(66, 153, 225, 0.3); }
+    .stat-item.green { background: rgba(72, 187, 120, 0.1); border-color: rgba(72, 187, 120, 0.3); }
+    .stat-item.red { background: rgba(245, 101, 101, 0.1); border-color: rgba(245, 101, 101, 0.3); }
+    .stat-item.yellow { background: rgba(236, 201, 75, 0.1); border-color: rgba(236, 201, 75, 0.3); }
+    .stat-item.purple { background: rgba(159, 122, 234, 0.1); border-color: rgba(159, 122, 234, 0.3); }
+    .stat-item.orange { background: rgba(237, 137, 54, 0.1); border-color: rgba(237, 137, 54, 0.3); }
+    .stat-item.teal { background: rgba(79, 209, 199, 0.1); border-color: rgba(79, 209, 199, 0.3); }
+    .stat-item.pink { background: rgba(237, 100, 166, 0.1); border-color: rgba(237, 100, 166, 0.3); }
+    .stat-item.gray { background: rgba(113, 128, 150, 0.1); border-color: rgba(113, 128, 150, 0.3); }
+
+    .stat-item.blue .stat-value { color: #2b6cb0; }
+    .stat-item.green .stat-value { color: #276749; }
+    .stat-item.red .stat-value { color: #c53030; }
+    .stat-item.yellow .stat-value { color: #975a16; }
+    .stat-item.purple .stat-value { color: #553c9a; }
+    .stat-item.orange .stat-value { color: #c05621; }
+    .stat-item.teal .stat-value { color: #285e61; }
+    .stat-item.pink .stat-value { color: #97266d; }
+    .stat-item.gray .stat-value { color: #4a5568; }
 
     .stat-value {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 700;
-        color: var(--gray-700);
+        line-height: 1.2;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .stat-label {
-        font-size: 10px;
+        font-size: 9px;
         color: var(--gray-500);
-        margin-top: 2px;
+        margin-top: 4px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    /* Якщо статистика має довгий текст замість числа - показуємо як tooltip */
+    .stat-item[data-full-text] {
+        position: relative;
+    }
+
+    .stat-item[data-full-text]:hover::after {
+        content: attr(data-full-text);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--gray-800);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: normal;
+        max-width: 200px;
+        z-index: 100;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 8px;
+        text-transform: none;
+        letter-spacing: normal;
+        font-weight: 400;
+    }
+
+    .stat-item[data-full-text]:hover::before {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: var(--gray-800);
+        margin-bottom: -4px;
+        z-index: 101;
     }
 
     /* === MODALS === */
@@ -2557,7 +2623,7 @@
 
     .function-card.dragging {
         opacity: 0.9;
-        z-index: 1000;
+        z-index: 10000; /* Вище за все при перетягуванні */
     }
 
     /* Canvas touch improvements */
@@ -2950,6 +3016,279 @@
     }
 
     .dark-mode .stats-tag-item {
+        background: #21262d;
+    }
+
+    /* Dark mode для stat-item на картках */
+    .dark-mode .stat-item {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .dark-mode .stat-item.blue { background: rgba(99, 179, 237, 0.15); }
+    .dark-mode .stat-item.green { background: rgba(104, 211, 145, 0.15); }
+    .dark-mode .stat-item.red { background: rgba(252, 129, 129, 0.15); }
+    .dark-mode .stat-item.yellow { background: rgba(246, 173, 85, 0.15); }
+    .dark-mode .stat-item.purple { background: rgba(183, 148, 244, 0.15); }
+    .dark-mode .stat-item.orange { background: rgba(246, 173, 85, 0.15); }
+    .dark-mode .stat-item.teal { background: rgba(129, 230, 217, 0.15); }
+    .dark-mode .stat-item.pink { background: rgba(246, 135, 179, 0.15); }
+    .dark-mode .stat-item.gray { background: rgba(160, 174, 192, 0.15); }
+
+    .dark-mode .stat-item .stat-value { color: var(--gray-100); }
+    .dark-mode .stat-item .stat-label { color: var(--gray-400); }
+
+    .dark-mode .stat-item[data-full-text]:hover::after {
+        background: var(--gray-100);
+        color: var(--gray-800);
+    }
+
+    .dark-mode .stat-item[data-full-text]:hover::before {
+        border-top-color: var(--gray-100);
+    }
+
+    /* === GROUPS === */
+    .group-btn {
+        position: relative;
+    }
+
+    .group-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .group-btn:not(:disabled) {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .selected-count {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: var(--danger-color);
+        color: white;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+    }
+
+    .function-card.selected {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+        box-shadow: 0 0 20px rgba(66, 153, 225, 0.4);
+    }
+
+    /* Group Modal */
+    .group-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        padding: 20px;
+    }
+
+    .group-modal.show {
+        display: flex;
+    }
+
+    .group-modal-content {
+        background: white;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .group-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .group-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .group-close {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: var(--gray-100);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        color: var(--gray-600);
+    }
+
+    .group-modal-body {
+        padding: 20px;
+    }
+
+    .group-modal-footer {
+        padding: 16px 20px;
+        border-top: 1px solid var(--gray-200);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
+    .group-color-picker {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+    }
+
+    .group-color-option {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: var(--transition);
+    }
+
+    .group-color-option:hover {
+        transform: scale(1.1);
+    }
+
+    .group-color-option.selected {
+        border-width: 3px;
+        transform: scale(1.1);
+    }
+
+    .group-info {
+        margin: 16px 0 0;
+        padding: 12px;
+        background: var(--gray-50);
+        border-radius: var(--border-radius);
+        font-size: 14px;
+        color: var(--gray-600);
+    }
+
+    /* Group containers on canvas */
+    .group-container {
+        position: absolute;
+        border-radius: var(--border-radius-lg);
+        pointer-events: auto;
+        transition: box-shadow 0.2s;
+        z-index: 1; /* Групи завжди під картками */
+    }
+
+    .group-container:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .group-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        cursor: move;
+        user-select: none;
+    }
+
+    .group-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .group-count {
+        font-size: 12px;
+        opacity: 0.8;
+        padding: 2px 8px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 10px;
+    }
+
+    .group-actions {
+        display: flex;
+        gap: 4px;
+    }
+
+    .group-action-btn {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background: rgba(255,255,255,0.3);
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+        transition: var(--transition);
+    }
+
+    .group-action-btn:hover {
+        background: rgba(255,255,255,0.5);
+    }
+
+    .group-container.collapsed .group-body {
+        display: none;
+    }
+
+    .group-container.collapsed {
+        width: auto !important;
+        height: auto !important;
+    }
+
+    /* Group colors */
+    .group-container.blue { background: rgba(66, 153, 225, 0.15); border: 2px solid rgba(66, 153, 225, 0.5); }
+    .group-container.blue .group-header { background: rgba(66, 153, 225, 0.3); color: #2b6cb0; }
+    
+    .group-container.green { background: rgba(72, 187, 120, 0.15); border: 2px solid rgba(72, 187, 120, 0.5); }
+    .group-container.green .group-header { background: rgba(72, 187, 120, 0.3); color: #276749; }
+    
+    .group-container.purple { background: rgba(159, 122, 234, 0.15); border: 2px solid rgba(159, 122, 234, 0.5); }
+    .group-container.purple .group-header { background: rgba(159, 122, 234, 0.3); color: #553c9a; }
+    
+    .group-container.red { background: rgba(245, 101, 101, 0.15); border: 2px solid rgba(245, 101, 101, 0.5); }
+    .group-container.red .group-header { background: rgba(245, 101, 101, 0.3); color: #c53030; }
+    
+    .group-container.orange { background: rgba(237, 137, 54, 0.15); border: 2px solid rgba(237, 137, 54, 0.5); }
+    .group-container.orange .group-header { background: rgba(237, 137, 54, 0.3); color: #c05621; }
+    
+    .group-container.teal { background: rgba(79, 209, 199, 0.15); border: 2px solid rgba(79, 209, 199, 0.5); }
+    .group-container.teal .group-header { background: rgba(79, 209, 199, 0.3); color: #285e61; }
+    
+    .group-container.pink { background: rgba(237, 100, 166, 0.15); border: 2px solid rgba(237, 100, 166, 0.5); }
+    .group-container.pink .group-header { background: rgba(237, 100, 166, 0.3); color: #97266d; }
+    
+    .group-container.yellow { background: rgba(236, 201, 75, 0.15); border: 2px solid rgba(236, 201, 75, 0.5); }
+    .group-container.yellow .group-header { background: rgba(236, 201, 75, 0.3); color: #975a16; }
+
+    .dark-mode .group-modal-content {
+        background: #161b22;
+    }
+
+    .dark-mode .group-modal-header,
+    .dark-mode .group-modal-footer {
+        border-color: #30363d;
+    }
+
+    .dark-mode .group-info {
         background: #21262d;
     }
 
@@ -3978,6 +4317,14 @@
                     </svg>
                     <span data-text="toolbar.stats">СТАТИСТИКА</span>
                 </button>
+                <button class="tool-btn group-btn" id="groupBtn" type="button" data-title="toolbar.group" disabled>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span data-text="toolbar.group">ГРУПУВАТИ</span>
+                    <span class="selected-count" id="selectedCount" style="display:none;">0</span>
+                </button>
                 <!-- AI Assistants Dropdown -->
                 <div class="ai-dropdown">
                     <button class="tool-btn ai-btn" id="aiAssistantsBtn" type="button" title="AI Асистенти" aria-haspopup="true" aria-expanded="false">
@@ -4284,6 +4631,46 @@
         </div>
     </div>
 
+    <!-- Group Modal -->
+    <div id="groupModal" class="group-modal" role="dialog" aria-modal="true">
+        <div class="group-modal-content">
+            <div class="group-modal-header">
+                <h3 data-text="group.create_title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    Створити групу
+                </h3>
+                <button class="group-close" id="groupCloseBtn" type="button">×</button>
+            </div>
+            <div class="group-modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="groupName" data-text="group.name">Назва групи *</label>
+                    <input type="text" class="form-input" id="groupName" placeholder="Наприклад: Відділ продажів" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-text="group.color">Колір групи</label>
+                    <div class="group-color-picker" id="groupColorPicker">
+                        <div class="group-color-option selected" data-color="blue" style="background: rgba(66, 153, 225, 0.2); border-color: #4299e1;"></div>
+                        <div class="group-color-option" data-color="green" style="background: rgba(72, 187, 120, 0.2); border-color: #48bb78;"></div>
+                        <div class="group-color-option" data-color="purple" style="background: rgba(159, 122, 234, 0.2); border-color: #9f7aea;"></div>
+                        <div class="group-color-option" data-color="red" style="background: rgba(245, 101, 101, 0.2); border-color: #f56565;"></div>
+                        <div class="group-color-option" data-color="orange" style="background: rgba(237, 137, 54, 0.2); border-color: #ed8936;"></div>
+                        <div class="group-color-option" data-color="teal" style="background: rgba(79, 209, 199, 0.2); border-color: #4fd1c7;"></div>
+                        <div class="group-color-option" data-color="pink" style="background: rgba(237, 100, 166, 0.2); border-color: #ed64a6;"></div>
+                        <div class="group-color-option" data-color="yellow" style="background: rgba(236, 201, 75, 0.2); border-color: #ecc94b;"></div>
+                    </div>
+                </div>
+                <p class="group-info" id="groupInfo">Виділено функцій: <strong>0</strong></p>
+            </div>
+            <div class="group-modal-footer">
+                <button class="btn btn-secondary" id="groupCancelBtn" type="button" data-text="modal.cancel">Скасувати</button>
+                <button class="btn btn-primary" id="groupCreateBtn" type="button" data-text="group.create">Створити групу</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal відновлення з backup -->
     <div id="backupModal" class="modal backup-modal" role="dialog" aria-modal="true" aria-labelledby="backupModalTitle">
         <div class="modal-content backup-modal-content">
@@ -4384,6 +4771,10 @@
         
         // Filter
         filterResponsible: null,
+        
+        // Groups
+        groups: [],
+        selectedCards: [],
         
         // UI State
         editingIndex: -1,
@@ -4622,6 +5013,19 @@
             'card.duplicate_tooltip': 'Дублювати функцію',
             'duplicate.copy': '(копія)',
             'duplicate.success': 'Функцію дубльовано',
+            'toolbar.group': 'ГРУПУВАТИ',
+            'group.create_title': 'Створити групу',
+            'group.name': 'Назва групи *',
+            'group.color': 'Колір групи',
+            'group.create': 'Створити групу',
+            'group.select_min': 'Виділіть мінімум 2 функції (Shift+клік)',
+            'group.selected_count': 'Виділено функцій: %d',
+            'group.name_required': 'Введіть назву групи',
+            'group.created': 'Групу створено',
+            'group.collapse': 'Згорнути',
+            'group.expand': 'Розгорнути',
+            'group.ungroup': 'Розгрупувати',
+            'group.ungrouped': 'Групу розформовано',
             'prompt.delete_connection': 'Видалити зв\'язок між "%s" та "%s"?',
             'lang.uk': 'УКР',
             'lang.ru': 'РУС',
@@ -4787,6 +5191,19 @@
             'card.duplicate_tooltip': 'Дублировать функцию',
             'duplicate.copy': '(копия)',
             'duplicate.success': 'Функция дублирована',
+            'toolbar.group': 'ГРУППИРОВАТЬ',
+            'group.create_title': 'Создать группу',
+            'group.name': 'Название группы *',
+            'group.color': 'Цвет группы',
+            'group.create': 'Создать группу',
+            'group.select_min': 'Выделите минимум 2 функции (Shift+клик)',
+            'group.selected_count': 'Выделено функций: %d',
+            'group.name_required': 'Введите название группы',
+            'group.created': 'Группа создана',
+            'group.collapse': 'Свернуть',
+            'group.expand': 'Развернуть',
+            'group.ungroup': 'Разгруппировать',
+            'group.ungrouped': 'Группа расформирована',
             'prompt.delete_connection': 'Удалить связь между "%s" и "%s"?',
             'modal.add_subfunction': 'Добавить подфункцию',
             'modal.card_color': 'Цвет карточки',
@@ -4998,6 +5415,19 @@
             'card.duplicate_tooltip': 'Duplicate function',
             'duplicate.copy': '(copy)',
             'duplicate.success': 'Function duplicated',
+            'toolbar.group': 'GROUP',
+            'group.create_title': 'Create Group',
+            'group.name': 'Group Name *',
+            'group.color': 'Group Color',
+            'group.create': 'Create Group',
+            'group.select_min': 'Select at least 2 functions (Shift+click)',
+            'group.selected_count': 'Selected functions: %d',
+            'group.name_required': 'Enter group name',
+            'group.created': 'Group created',
+            'group.collapse': 'Collapse',
+            'group.expand': 'Expand',
+            'group.ungroup': 'Ungroup',
+            'group.ungrouped': 'Group disbanded',
             'prompt.delete_connection': 'Delete connection between "%s" and "%s"?',
             'modal.add_subfunction': 'Add subfunction',
             'modal.card_color': 'Card color',
@@ -5189,6 +5619,19 @@
             'card.duplicate_tooltip': 'Дублирай функция',
             'duplicate.copy': '(копие)',
             'duplicate.success': 'Функцията е дублирана',
+            'toolbar.group': 'ГРУПИРАЙ',
+            'group.create_title': 'Създай група',
+            'group.name': 'Име на групата *',
+            'group.color': 'Цвят на групата',
+            'group.create': 'Създай група',
+            'group.select_min': 'Изберете минимум 2 функции (Shift+клик)',
+            'group.selected_count': 'Избрани функции: %d',
+            'group.name_required': 'Въведете име на групата',
+            'group.created': 'Групата е създадена',
+            'group.collapse': 'Свий',
+            'group.expand': 'Разшири',
+            'group.ungroup': 'Разгрупирай',
+            'group.ungrouped': 'Групата е разформирована',
             'prompt.delete_connection': 'Изтриване на връзката между "%s" и "%s"?',
             'modal.add_subfunction': 'Добави подфункция',
             'modal.edit_function': 'Редактирай функция',
@@ -5317,6 +5760,7 @@
         const snapshot = JSON.stringify({
             functions: State.functions,
             connections: State.connections,
+            groups: State.groups,
             action: actionName,
             timestamp: Date.now()
         });
@@ -5352,6 +5796,7 @@
         const snapshot = JSON.parse(State.history[State.historyIndex]);
         State.functions = snapshot.functions;
         State.connections = snapshot.connections;
+        State.groups = snapshot.groups || [];
         
         if (typeof window.renderFunctions === 'function') {
             window.renderFunctions();
@@ -5377,6 +5822,7 @@
         const snapshot = JSON.parse(State.history[State.historyIndex]);
         State.functions = snapshot.functions;
         State.connections = snapshot.connections;
+        State.groups = snapshot.groups || [];
         
         if (typeof window.renderFunctions === 'function') {
             window.renderFunctions();
@@ -5947,22 +6393,19 @@
                     const connections = data.connections || (data.structure && data.structure.connections) || [];
                     
                     if (timeDiff > 5000 && functions.length > 0) {
-                        // Захист від втрати даних - якщо сервер має менше функцій
-                        if (functions.length < State.functions.length && State.functions.length > 0) {
-                            console.warn('[WARN] Сервер має менше функцій ніж локально:', functions.length, 'vs', State.functions.length);
-                            // Не перезаписуємо - можливо інша вкладка видалила дані
-                            return;
-                        }
+                        const serverVersion = data.version || 0;
                         
-                        if (State.functions.length === 0 || functions.length >= State.functions.length) {
-                            console.log('[LOAD] Застосовуємо серверні дані:', functions.length, 'функцій');
+                        // Якщо сервер має новішу версію - застосовуємо серверні дані
+                        // Навіть якщо там менше функцій (користувач міг видалити на іншому пристрої)
+                        if (serverVersion > State.dataVersion || State.functions.length === 0) {
+                            console.log('[SYNC] Застосовуємо серверні дані v' + serverVersion + ':', functions.length, 'функцій');
                             
                             State.functions = functions.map(func => ({
                                 ...func,
                                 id: func.id || Utils.generateId()
                             }));
                             State.connections = connections;
-                            State.dataVersion = data.version || 0;
+                            State.dataVersion = serverVersion;
                             
                             // Оновлюємо локальний backup
                             try {
@@ -6038,6 +6481,7 @@
                 
                 State.functions = data.functions;
                 State.connections = data.connections || [];
+                State.groups = data.groups || [];
                 
                 if (data.language && translations[data.language]) {
                     State.currentLanguage = data.language;
@@ -6148,6 +6592,7 @@
         const data = {
             functions: State.functions,
             connections: State.connections,
+            groups: State.groups,
             language: State.currentLanguage,
             version: State.dataVersion,
             lastModified: new Date().toISOString(),
@@ -6170,6 +6615,7 @@
                     localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
                         functions: State.functions,
                         connections: State.connections,
+                        groups: State.groups,
                         language: State.currentLanguage,
                         timestamp: Date.now(),
                         userId: State.currentUser.uid
@@ -6191,6 +6637,7 @@
                     localStorage.setItem('talko_local_backup_' + State.currentUser.uid, JSON.stringify({
                         functions: State.functions,
                         connections: State.connections,
+                        groups: State.groups,
                         language: State.currentLanguage,
                         timestamp: Date.now(),
                         userId: State.currentUser.uid,
@@ -6217,6 +6664,29 @@
 
     const debouncedSave = Utils.debounce(() => {
         State.hasPendingChanges = true;
+        
+        // Якщо offline - зберігаємо тільки локально
+        if (!State.isOnline) {
+            console.log('[OFFLINE] Зберігаємо локально, очікуємо підключення...');
+            updateSaveIndicator('unsaved');
+            
+            // Зберігаємо локальний backup
+            try {
+                localStorage.setItem('talko_local_backup_' + State.currentUser?.uid, JSON.stringify({
+                    functions: State.functions,
+                    connections: State.connections,
+                    groups: State.groups,
+                    language: State.currentLanguage,
+                    timestamp: Date.now(),
+                    userId: State.currentUser?.uid,
+                    pendingSync: true
+                }));
+            } catch (e) {
+                console.warn('[WARN] Не вдалося зберегти локальний backup');
+            }
+            return;
+        }
+        
         saveToFirestore();
     }, PERFORMANCE.SAVE_INTERVAL);
 
@@ -6489,11 +6959,15 @@
         if (State.editingIndex >= 0) {
             State.functions[State.editingIndex] = functionData;
         } else {
-            const newIndex = State.functions.length;
             State.functions.push(functionData);
             
-            if (State.parentFunction !== null) {
-                State.connections.push({ from: State.parentFunction, to: newIndex });
+            // Використовуємо ID-based connection замість індексів
+            if (State.parentFunction !== null && State.functions[State.parentFunction]) {
+                const parentId = State.functions[State.parentFunction].id;
+                const childId = functionData.id;
+                if (parentId && childId) {
+                    State.connections.push({ fromId: parentId, toId: childId });
+                }
             }
         }
         
@@ -6677,6 +7151,249 @@
         if (modal) modal.classList.remove('show');
     }
     
+    // === GROUPS SYSTEM ===
+    let selectedGroupColor = 'blue';
+    
+    function toggleCardSelection(index, isShiftKey) {
+        if (!isShiftKey) {
+            // Без Shift - очищаємо виділення
+            State.selectedCards = [];
+        }
+        
+        const idx = State.selectedCards.indexOf(index);
+        if (idx >= 0) {
+            State.selectedCards.splice(idx, 1);
+        } else {
+            State.selectedCards.push(index);
+        }
+        
+        updateSelectedCardsUI();
+    }
+    
+    function updateSelectedCardsUI() {
+        // Оновлюємо виділення карток
+        Utils.queryAll('.function-card').forEach((card, i) => {
+            const cardIndex = parseInt(card.dataset.index);
+            card.classList.toggle('selected', State.selectedCards.includes(cardIndex));
+        });
+        
+        // Оновлюємо кнопку групування
+        const groupBtn = Utils.getElement('groupBtn');
+        const countBadge = Utils.getElement('selectedCount');
+        
+        if (groupBtn && countBadge) {
+            const count = State.selectedCards.length;
+            groupBtn.disabled = count < 2;
+            
+            if (count > 0) {
+                countBadge.textContent = count;
+                countBadge.style.display = 'flex';
+            } else {
+                countBadge.style.display = 'none';
+            }
+        }
+    }
+    
+    function clearSelection() {
+        State.selectedCards = [];
+        updateSelectedCardsUI();
+    }
+    
+    function showGroupModal() {
+        if (State.selectedCards.length < 2) {
+            showNotification(t('group.select_min'), 'error');
+            return;
+        }
+        
+        const modal = Utils.getElement('groupModal');
+        const nameInput = Utils.getElement('groupName');
+        const info = Utils.getElement('groupInfo');
+        
+        if (nameInput) nameInput.value = '';
+        if (info) info.innerHTML = t('group.selected_count').replace('%d', `<strong>${State.selectedCards.length}</strong>`);
+        
+        // Скидаємо вибір кольору
+        selectedGroupColor = 'blue';
+        Utils.queryAll('.group-color-option').forEach(opt => {
+            opt.classList.toggle('selected', opt.dataset.color === 'blue');
+        });
+        
+        if (modal) modal.classList.add('show');
+        if (nameInput) setTimeout(() => nameInput.focus(), 100);
+    }
+    
+    function closeGroupModal() {
+        const modal = Utils.getElement('groupModal');
+        if (modal) modal.classList.remove('show');
+    }
+    
+    function createGroup() {
+        const nameInput = Utils.getElement('groupName');
+        const name = (nameInput?.value || '').trim();
+        
+        if (!name) {
+            showNotification(t('group.name_required'), 'error');
+            if (nameInput) {
+                nameInput.classList.add('error');
+                nameInput.focus();
+            }
+            return;
+        }
+        
+        // Зберігаємо історію
+        saveHistory('create_group');
+        
+        // Знаходимо bounds виділених карток
+        const selectedFuncs = State.selectedCards.map(i => State.functions[i]).filter(Boolean);
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        
+        selectedFuncs.forEach(func => {
+            const x = func.x || 0;
+            const y = func.y || 0;
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x + 280); // card width
+            maxY = Math.max(maxY, y + 200); // approximate card height
+        });
+        
+        const group = {
+            id: Utils.generateId(),
+            name: name,
+            color: selectedGroupColor,
+            collapsed: false,
+            cardIds: State.selectedCards.map(i => State.functions[i]?.id).filter(Boolean),
+            x: minX - 20,
+            y: minY - 50,
+            width: maxX - minX + 40,
+            height: maxY - minY + 70
+        };
+        
+        State.groups.push(group);
+        
+        closeGroupModal();
+        clearSelection();
+        renderGroups();
+        saveToFirestore();
+        
+        showNotification(t('group.created'), 'success');
+    }
+    
+    function renderGroups() {
+        // Видаляємо старі групи
+        Utils.queryAll('.group-container').forEach(el => el.remove());
+        
+        const canvas = Utils.getElement('canvas');
+        if (!canvas) return;
+        
+        State.groups.forEach((group, groupIndex) => {
+            // Перераховуємо bounds якщо група не collapsed
+            if (!group.collapsed) {
+                const cardIds = group.cardIds || [];
+                const funcs = State.functions.filter(f => cardIds.includes(f.id));
+                
+                if (funcs.length > 0) {
+                    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                    funcs.forEach(func => {
+                        minX = Math.min(minX, func.x || 0);
+                        minY = Math.min(minY, func.y || 0);
+                        maxX = Math.max(maxX, (func.x || 0) + 280);
+                        maxY = Math.max(maxY, (func.y || 0) + 200);
+                    });
+                    group.x = minX - 20;
+                    group.y = minY - 50;
+                    group.width = maxX - minX + 40;
+                    group.height = maxY - minY + 70;
+                }
+            }
+            
+            const container = document.createElement('div');
+            container.className = `group-container ${group.color}${group.collapsed ? ' collapsed' : ''}`;
+            container.dataset.groupId = group.id;
+            container.style.left = group.x + 'px';
+            container.style.top = group.y + 'px';
+            if (!group.collapsed) {
+                container.style.width = group.width + 'px';
+                container.style.height = group.height + 'px';
+            }
+            
+            const cardCount = (group.cardIds || []).filter(id => 
+                State.functions.some(f => f.id === id)
+            ).length;
+            
+            container.innerHTML = `
+                <div class="group-header">
+                    <div class="group-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                        ${Utils.escapeHtml(group.name)}
+                        <span class="group-count">${cardCount}</span>
+                    </div>
+                    <div class="group-actions">
+                        <button class="group-action-btn toggle-group" data-group-id="${group.id}" title="${group.collapsed ? t('group.expand') : t('group.collapse')}">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                ${group.collapsed 
+                                    ? '<polyline points="6 9 12 15 18 9"/>' 
+                                    : '<polyline points="18 15 12 9 6 15"/>'}
+                            </svg>
+                        </button>
+                        <button class="group-action-btn ungroup-btn" data-group-id="${group.id}" title="${t('group.ungroup')}">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="group-body"></div>
+            `;
+            
+            // Вставляємо групу ЗА картками (z-index нижче)
+            canvas.insertBefore(container, canvas.firstChild);
+        });
+    }
+    
+    function toggleGroup(groupId) {
+        const group = State.groups.find(g => g.id === groupId);
+        if (!group) return;
+        
+        group.collapsed = !group.collapsed;
+        
+        // Приховуємо/показуємо картки
+        const cardIds = group.cardIds || [];
+        Utils.queryAll('.function-card').forEach(card => {
+            const funcId = card.dataset.funcId;
+            if (cardIds.includes(funcId)) {
+                card.style.display = group.collapsed ? 'none' : 'block';
+            }
+        });
+        
+        renderGroups();
+        saveToFirestore();
+    }
+    
+    function ungroupCards(groupId) {
+        const idx = State.groups.findIndex(g => g.id === groupId);
+        if (idx < 0) return;
+        
+        saveHistory('ungroup');
+        
+        // Показуємо картки якщо були приховані
+        const cardIds = State.groups[idx].cardIds || [];
+        Utils.queryAll('.function-card').forEach(card => {
+            const funcId = card.dataset.funcId;
+            if (cardIds.includes(funcId)) {
+                card.style.display = 'block';
+            }
+        });
+        
+        State.groups.splice(idx, 1);
+        renderGroups();
+        saveToFirestore();
+        
+        showNotification(t('group.ungrouped'), 'success');
+    }
+    
     // === THEME SYSTEM ===
     function loadTheme() {
         const savedTheme = localStorage.getItem('talko_dark_mode');
@@ -6774,10 +7491,12 @@
     function applyFilter() {
         const cards = Utils.queryAll('.function-card');
         
-        cards.forEach((card, index) => {
+        cards.forEach((card) => {
             card.classList.remove('filter-hidden');
             
             if (State.filterResponsible) {
+                // Використовуємо data-index для отримання правильної функції
+                const index = parseInt(card.dataset.index);
                 const func = State.functions[index];
                 if (func && func.responsible !== State.filterResponsible) {
                     card.classList.add('filter-hidden');
@@ -6818,7 +7537,8 @@
             exportedAt: new Date().toISOString(),
             exportedBy: State.currentUser?.email || 'anonymous',
             functions: State.functions,
-            connections: State.connections
+            connections: State.connections,
+            groups: State.groups
         };
         
         const json = JSON.stringify(exportData, null, 2);
@@ -6917,36 +7637,81 @@
         saveHistory('delete_function');
         
         const deletingIndex = State.deletingIndex;
+        const deletingFunc = State.functions[deletingIndex];
+        const deletingId = deletingFunc?.id;
         
-        // Reconnect children to parents
-        const incomingConnections = State.connections.filter(conn => conn.to === deletingIndex);
-        const outgoingConnections = State.connections.filter(conn => conn.from === deletingIndex);
+        // Визначаємо чи використовується новий формат (ID) чи старий (index)
+        const hasIdConnections = State.connections.some(conn => conn.fromId || conn.toId);
         
-        const newConnections = [];
-        incomingConnections.forEach(incoming => {
-            outgoingConnections.forEach(outgoing => {
-                const exists = State.connections.find(conn => 
-                    conn.from === incoming.from && conn.to === outgoing.to
-                );
-                if (!exists && incoming.from !== outgoing.to) {
-                    newConnections.push({
-                        from: incoming.from > deletingIndex ? incoming.from - 1 : incoming.from,
-                        to: outgoing.to > deletingIndex ? outgoing.to - 1 : outgoing.to
-                    });
-                }
+        if (hasIdConnections || deletingId) {
+            // Новий формат - просто фільтруємо по ID
+            const incomingConnections = State.connections.filter(conn => 
+                conn.toId === deletingId || conn.to === deletingIndex
+            );
+            const outgoingConnections = State.connections.filter(conn => 
+                conn.fromId === deletingId || conn.from === deletingIndex
+            );
+            
+            // Reconnect children to parents (якщо є)
+            const newConnections = [];
+            incomingConnections.forEach(incoming => {
+                outgoingConnections.forEach(outgoing => {
+                    const fromId = incoming.fromId || (State.functions[incoming.from]?.id);
+                    const toId = outgoing.toId || (State.functions[outgoing.to]?.id);
+                    
+                    if (fromId && toId && fromId !== toId) {
+                        const exists = State.connections.find(conn => 
+                            (conn.fromId === fromId && conn.toId === toId) ||
+                            (State.functions[conn.from]?.id === fromId && State.functions[conn.to]?.id === toId)
+                        );
+                        if (!exists) {
+                            newConnections.push({ fromId, toId });
+                        }
+                    }
+                });
             });
-        });
-        
-        // Remove connections to/from deleted node
-        State.connections = State.connections
-            .filter(conn => conn.from !== deletingIndex && conn.to !== deletingIndex)
-            .map(conn => ({
-                from: conn.from > deletingIndex ? conn.from - 1 : conn.from,
-                to: conn.to > deletingIndex ? conn.to - 1 : conn.to
-            }));
-        
-        // Add new connections
-        State.connections.push(...newConnections);
+            
+            // Remove connections to/from deleted node
+            State.connections = State.connections.filter(conn => {
+                // Перевіряємо обидва формати
+                const isFromDeleted = conn.fromId === deletingId || conn.from === deletingIndex;
+                const isToDeleted = conn.toId === deletingId || conn.to === deletingIndex;
+                return !isFromDeleted && !isToDeleted;
+            });
+            
+            // Add new connections
+            State.connections.push(...newConnections);
+        } else {
+            // Старий формат - коригуємо індекси (для backward compatibility)
+            const incomingConnections = State.connections.filter(conn => conn.to === deletingIndex);
+            const outgoingConnections = State.connections.filter(conn => conn.from === deletingIndex);
+            
+            const newConnections = [];
+            incomingConnections.forEach(incoming => {
+                outgoingConnections.forEach(outgoing => {
+                    const exists = State.connections.find(conn => 
+                        conn.from === incoming.from && conn.to === outgoing.to
+                    );
+                    if (!exists && incoming.from !== outgoing.to) {
+                        newConnections.push({
+                            from: incoming.from > deletingIndex ? incoming.from - 1 : incoming.from,
+                            to: outgoing.to > deletingIndex ? outgoing.to - 1 : outgoing.to
+                        });
+                    }
+                });
+            });
+            
+            // Remove connections to/from deleted node and adjust indices
+            State.connections = State.connections
+                .filter(conn => conn.from !== deletingIndex && conn.to !== deletingIndex)
+                .map(conn => ({
+                    from: conn.from > deletingIndex ? conn.from - 1 : conn.from,
+                    to: conn.to > deletingIndex ? conn.to - 1 : conn.to
+                }));
+            
+            // Add new connections
+            State.connections.push(...newConnections);
+        }
         
         // Remove function
         State.functions.splice(deletingIndex, 1);
@@ -7594,6 +8359,41 @@
             if (e.target.id === 'statsModal') closeStatsModal();
         });
         
+        // Group modal
+        Utils.getElement('groupBtn')?.addEventListener('click', showGroupModal);
+        Utils.getElement('groupCloseBtn')?.addEventListener('click', closeGroupModal);
+        Utils.getElement('groupCancelBtn')?.addEventListener('click', closeGroupModal);
+        Utils.getElement('groupCreateBtn')?.addEventListener('click', createGroup);
+        Utils.getElement('groupModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'groupModal') closeGroupModal();
+        });
+        
+        // Group color picker
+        Utils.getElement('groupColorPicker')?.addEventListener('click', (e) => {
+            const option = e.target.closest('.group-color-option');
+            if (option) {
+                selectedGroupColor = option.dataset.color;
+                Utils.queryAll('.group-color-option').forEach(opt => {
+                    opt.classList.toggle('selected', opt === option);
+                });
+            }
+        });
+        
+        // Group actions (delegation on canvas)
+        Utils.getElement('canvas')?.addEventListener('click', (e) => {
+            const toggleBtn = e.target.closest('.toggle-group');
+            const ungroupBtn = e.target.closest('.ungroup-btn');
+            
+            if (toggleBtn) {
+                e.stopPropagation();
+                toggleGroup(toggleBtn.dataset.groupId);
+            }
+            if (ungroupBtn) {
+                e.stopPropagation();
+                ungroupCards(ungroupBtn.dataset.groupId);
+            }
+        });
+        
         // Theme toggle
         Utils.getElement('themeToggleBtn')?.addEventListener('click', toggleDarkMode);
         
@@ -7747,6 +8547,8 @@
                 closeConfirmModal();
                 closeShortcutsModal();
                 closeStatsModal();
+                closeGroupModal();
+                clearSelection();
                 Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu, .language-options').forEach(m => {
                     m.classList.remove('show');
                 });
@@ -8663,15 +9465,18 @@
             // Визначаємо де функції - шукаємо на різних рівнях вкладеності
             let functions = [];
             let connections = [];
+            let groups = [];
             let language = 'uk';
             
             if (backupData.functions) {
                 functions = backupData.functions;
                 connections = backupData.connections || [];
+                groups = backupData.groups || [];
                 language = backupData.language || backupData.Language || 'uk';
             } else if (backupData.structure && backupData.structure.functions) {
                 functions = backupData.structure.functions;
                 connections = backupData.structure.connections || [];
+                groups = backupData.structure.groups || [];
                 language = backupData.structure.language || backupData.structure.Language || 'uk';
             }
             
@@ -8689,6 +9494,7 @@
                 .set({
                     functions: functions,
                     connections: connections,
+                    groups: groups,
                     language: language,
                     version: (backupData.version || 0) + 1,
                     lastModified: new Date().toISOString(),
@@ -8747,14 +9553,17 @@
         renderConnections();
         
         // Застосовуємо фільтр якщо активний
-        if (State.filterResponsible) {
+        if (window.State && window.State.filterResponsible) {
             applyFilter();
         }
         
         // Застосовуємо пошук якщо активний
-        if (State.searchQuery) {
+        if (window.State && window.State.searchQuery) {
             highlightSearchResults();
         }
+        
+        // Рендеримо групи
+        renderGroups();
     }
 
     function createFunctionCard(func, index) {
@@ -8770,15 +9579,26 @@
         card.setAttribute('role', 'article');
         card.setAttribute('aria-label', func.name);
         
-        // Statistics HTML (max 4 visible)
+        // Statistics HTML (max 4 visible) з розумною обробкою довгих текстів
         const statsHTML = func.statisticsArray && func.statisticsArray.length > 0 ? 
             `<div class="stats-grid">
-                ${func.statisticsArray.slice(0, 4).map(stat => `
-                    <div class="stat-item ${Utils.escapeHtml(stat.color || 'blue')}">
-                        <div class="stat-value">${Utils.escapeHtml(stat.value || '')}</div>
-                        <div class="stat-label">${Utils.escapeHtml(stat.name || '')}</div>
-                    </div>
-                `).join('')}
+                ${func.statisticsArray.slice(0, 4).map(stat => {
+                    const value = stat.value || '';
+                    const name = stat.name || '';
+                    const color = stat.color || 'blue';
+                    
+                    // Якщо значення довше 15 символів - скорочуємо і показуємо повний текст у tooltip
+                    const isLongValue = value.length > 15;
+                    const displayValue = isLongValue ? value.substring(0, 12) + '...' : value;
+                    const tooltipAttr = isLongValue ? `data-full-text="${Utils.escapeHtml(value)}"` : '';
+                    
+                    return `
+                        <div class="stat-item ${Utils.escapeHtml(color)}" ${tooltipAttr}>
+                            <div class="stat-value">${Utils.escapeHtml(displayValue)}</div>
+                            <div class="stat-label">${Utils.escapeHtml(name)}</div>
+                        </div>
+                    `;
+                }).join('')}
             </div>` : '';
         
         // Employees HTML (max 4 visible + counter)
@@ -8862,8 +9682,8 @@
             </div>
         `;
         
-        // Add event listeners using delegation-friendly approach
-        setupCardEventListeners(card, index);
+        // Event listeners тепер обробляються через delegation на canvas
+        // (див. setupCanvasEventDelegation)
         
         return card;
     }
@@ -8878,9 +9698,25 @@
         initialY: 0
     };
 
-    function setupCardEventListeners(card, index) {
-        // Click handlers via delegation
-        card.addEventListener('click', (e) => {
+    // Флаг чи вже ініціалізовано event delegation
+    let canvasEventDelegationInitialized = false;
+
+    // Event Delegation - один listener на canvas для всіх карток
+    function setupCanvasEventDelegation() {
+        if (canvasEventDelegationInitialized) return;
+        
+        const canvas = document.getElementById('canvas');
+        if (!canvas) return;
+        
+        canvasEventDelegationInitialized = true;
+        
+        // === CLICK HANDLER ===
+        canvas.addEventListener('click', (e) => {
+            const card = e.target.closest('.function-card');
+            if (!card) return;
+            
+            const index = parseInt(card.dataset.index);
+            
             const editBtn = e.target.closest('.edit-btn');
             const deleteBtn = e.target.closest('.delete-btn');
             const duplicateBtn = e.target.closest('.duplicate-btn');
@@ -8924,6 +9760,16 @@
                 return;
             }
             
+            // Shift+Click для виділення карток
+            if (e.shiftKey && window.currentTool === 'select') {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof window.toggleCardSelection === 'function') {
+                    window.toggleCardSelection(index, true);
+                }
+                return;
+            }
+            
             // Connection mode
             if (window.currentTool === 'connect') {
                 e.preventDefault();
@@ -8932,8 +9778,11 @@
             }
         });
         
-        // Mouse drag handling
-        card.addEventListener('mousedown', (e) => {
+        // === MOUSEDOWN HANDLER (для drag) ===
+        canvas.addEventListener('mousedown', (e) => {
+            const card = e.target.closest('.function-card');
+            if (!card) return;
+            
             if (e.target.closest('.action-btn, .plus-btn, .field-link')) return;
             if (window.currentTool !== 'select') return;
             
@@ -8941,8 +9790,11 @@
             e.preventDefault();
         });
 
-        // Touch drag handling
-        card.addEventListener('touchstart', (e) => {
+        // === TOUCHSTART HANDLER (для drag на мобільних) ===
+        canvas.addEventListener('touchstart', (e) => {
+            const card = e.target.closest('.function-card');
+            if (!card) return;
+            
             if (e.target.closest('.action-btn, .plus-btn, .field-link')) return;
             if (window.currentTool !== 'select') return;
             if (e.touches.length !== 1) return;
@@ -8951,6 +9803,8 @@
             startDrag(card, touch.clientX, touch.clientY);
             // Don't prevent default to allow scrolling
         }, { passive: true });
+        
+        console.log('[OK] Canvas event delegation initialized');
     }
 
     function startDrag(card, clientX, clientY) {
@@ -8965,20 +9819,26 @@
     }
 
     function handleConnectionClick(card, index) {
+        const funcId = card.dataset.funcId;
+        if (!funcId) return;
+        
         if (window.connectingFrom === null) {
-            window.connectingFrom = index;
+            // Зберігаємо ID функції замість індексу
+            window.connectingFrom = funcId;
             card.classList.add('connecting');
             
-            document.querySelectorAll('.function-card').forEach((c, i) => {
-                if (i !== index) {
+            document.querySelectorAll('.function-card').forEach((c) => {
+                if (c.dataset.funcId !== funcId) {
                     c.classList.add('connect-target');
                     c.style.opacity = '0.8';
                 }
             });
-        } else if (window.connectingFrom !== index) {
-            // Check if connection already exists
+        } else if (window.connectingFrom !== funcId) {
+            // Check if connection already exists (перевіряємо обидва формати)
             const exists = window.connections.find(conn => 
-                conn.from === window.connectingFrom && conn.to === index
+                (conn.fromId === window.connectingFrom && conn.toId === funcId) ||
+                (conn.from !== undefined && window.functions[conn.from]?.id === window.connectingFrom && 
+                 window.functions[conn.to]?.id === funcId)
             );
             
             if (!exists) {
@@ -8986,7 +9846,8 @@
                 if (typeof saveHistory === 'function') {
                     saveHistory('add_connection');
                 }
-                window.connections.push({ from: window.connectingFrom, to: index });
+                // Використовуємо новий формат з ID
+                window.connections.push({ fromId: window.connectingFrom, toId: funcId });
                 if (typeof window.debouncedSave === 'function') {
                     window.debouncedSave();
                 }
@@ -9098,8 +9959,22 @@
         const canvasRect = canvas.getBoundingClientRect();
         
         window.connections.forEach((conn, connIndex) => {
-            const fromNode = document.querySelector(`[data-index="${conn.from}"]`);
-            const toNode = document.querySelector(`[data-index="${conn.to}"]`);
+            // Підтримка обох форматів: новий (fromId/toId) та старий (from/to як індекси)
+            let fromNode, toNode, fromFunc, toFunc;
+            
+            if (conn.fromId && conn.toId) {
+                // Новий формат - пошук по ID
+                fromNode = document.querySelector(`[data-func-id="${conn.fromId}"]`);
+                toNode = document.querySelector(`[data-func-id="${conn.toId}"]`);
+                fromFunc = window.functions.find(f => f.id === conn.fromId);
+                toFunc = window.functions.find(f => f.id === conn.toId);
+            } else {
+                // Старий формат - пошук по індексу
+                fromNode = document.querySelector(`[data-index="${conn.from}"]`);
+                toNode = document.querySelector(`[data-index="${conn.to}"]`);
+                fromFunc = window.functions[conn.from];
+                toFunc = window.functions[conn.to];
+            }
             
             if (!fromNode || !toNode) return;
             
@@ -9153,8 +10028,8 @@
                 e.preventDefault();
                 
                 const t = window.t || ((k) => k);
-                const fromName = window.functions[conn.from]?.name || '';
-                const toName = window.functions[conn.to]?.name || '';
+                const fromName = fromFunc?.name || '';
+                const toName = toFunc?.name || '';
                 
                 const message = t('prompt.delete_connection')
                     .replace('%s', fromName)
@@ -9467,6 +10342,7 @@
         await waitForDependencies();
         
         setupCanvasPanning();
+        setupCanvasEventDelegation(); // Event delegation для карток
         
         // Initial zoom level display
         if (typeof window.updateZoomLevel === 'function') {
@@ -9539,6 +10415,16 @@
     window.showStatsModal = showStatsModal;
     window.closeStatsModal = closeStatsModal;
     
+    // Groups
+    window.toggleCardSelection = toggleCardSelection;
+    window.clearSelection = clearSelection;
+    window.showGroupModal = showGroupModal;
+    window.closeGroupModal = closeGroupModal;
+    window.createGroup = createGroup;
+    window.renderGroups = renderGroups;
+    window.toggleGroup = toggleGroup;
+    window.ungroupCards = ungroupCards;
+    
     // Theme
     window.toggleDarkMode = toggleDarkMode;
     window.loadTheme = loadTheme;
@@ -9574,18 +10460,23 @@
                     // Зберігаємо історію перед імпортом
                     saveHistory('import');
                     
-                    // Імпортуємо
-                    State.functions = data.functions.map(f => ({
+                    // Імпортуємо (використовуємо window для доступу до глобального стану)
+                    window.functions = data.functions.map(f => ({
                         ...f,
                         id: f.id || Utils.generateId(),
                         x: f.x || Math.random() * 500 + 100,
                         y: f.y || Math.random() * 300 + 100
                     }));
                     
-                    State.connections = data.connections || [];
+                    window.connections = data.connections || [];
+                    if (window.State) {
+                        window.State.groups = data.groups || [];
+                    }
                     
                     renderFunctions();
-                    saveToFirestore();
+                    if (typeof window.debouncedSave === 'function') {
+                        window.debouncedSave();
+                    }
                     
                     showNotification(t('import.success').replace('%d', count), 'success');
                 }
