@@ -8470,21 +8470,21 @@
             // Undo: Ctrl+Z (працює завжди)
             if (e.ctrlKey && !e.shiftKey && e.key === 'z') {
                 e.preventDefault();
-                undo();
+                if (typeof window.undo === 'function') window.undo();
                 return;
             }
             
             // Redo: Ctrl+Shift+Z або Ctrl+Y (працює завжди)
             if ((e.ctrlKey && e.shiftKey && e.key === 'z') || (e.ctrlKey && e.key === 'y')) {
                 e.preventDefault();
-                redo();
+                if (typeof window.redo === 'function') window.redo();
                 return;
             }
             
             // Search: Ctrl+F
             if (e.ctrlKey && e.key === 'f') {
                 e.preventDefault();
-                focusSearch();
+                if (typeof window.focusSearch === 'function') window.focusSearch();
                 return;
             }
             
@@ -8702,6 +8702,17 @@
             isSaving: State.isSaving
         });
     };
+
+    // === ЕКСПОРТИ В WINDOW (BLOCK 2) ===
+    // Ці функції визначені в Block 2, експортуємо їх тут
+    window.undo = undo;
+    window.redo = redo;
+    window.saveHistory = saveHistory;
+    window.clearHistory = clearHistory;
+    window.renderGroups = renderGroups;
+    window.focusSearch = focusSearch;
+    window.searchFunctions = searchFunctions;
+    window.clearSearch = clearSearch;
 
 })();
 </script>
@@ -9562,8 +9573,10 @@
             highlightSearchResults();
         }
         
-        // Рендеримо групи
-        renderGroups();
+        // Рендеримо групи (функція з Block 2)
+        if (typeof window.renderGroups === 'function') {
+            window.renderGroups();
+        }
     }
 
     function createFunctionCard(func, index) {
@@ -10393,16 +10406,7 @@
     window.restoreFromBackup = restoreFromBackup;
     window.updateCanvasTransform = updateCanvasTransform;
     
-    // Undo/Redo
-    window.undo = undo;
-    window.redo = redo;
-    window.saveHistory = saveHistory;
-    window.clearHistory = clearHistory;
-    
-    // Search
-    window.searchFunctions = searchFunctions;
-    window.clearSearch = clearSearch;
-    window.focusSearch = focusSearch;
+    // Undo/Redo/Search/renderGroups - експортовано в Block 2
     
     // Save indicator
     window.updateSaveIndicator = updateSaveIndicator;
@@ -10415,13 +10419,13 @@
     window.showStatsModal = showStatsModal;
     window.closeStatsModal = closeStatsModal;
     
-    // Groups
+    // Groups (toggleCardSelection etc визначені в Block 3)
     window.toggleCardSelection = toggleCardSelection;
     window.clearSelection = clearSelection;
     window.showGroupModal = showGroupModal;
     window.closeGroupModal = closeGroupModal;
     window.createGroup = createGroup;
-    window.renderGroups = renderGroups;
+    // renderGroups - експортовано в Block 2
     window.toggleGroup = toggleGroup;
     window.ungroupCards = ungroupCards;
     
