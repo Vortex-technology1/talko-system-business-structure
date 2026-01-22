@@ -6449,6 +6449,13 @@
                             window.renderFunctions();
                         }
                         
+                        // Автоматично центруємо всі картки після завантаження
+                        setTimeout(() => {
+                            if (typeof window.zoomToFit === 'function') {
+                                window.zoomToFit();
+                            }
+                        }, 300);
+                        
                         // Ініціалізуємо історію з завантаженими даними
                         clearHistory();
                         
