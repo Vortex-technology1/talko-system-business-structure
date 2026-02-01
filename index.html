@@ -908,12 +908,33 @@
         height: 60px;
         background: #ffffff;
         border-bottom: 1px solid var(--gray-200);
-        display: flex;
-        align-items: center;
-        padding: 0 12px;
         z-index: 1000;
         box-shadow: var(--shadow-sm);
         overflow: visible;
+    }
+
+    .toolbar-scroll {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding: 0 12px;
+        overflow-x: auto;
+        overflow-y: visible;
+        scrollbar-width: thin;
+        -ms-overflow-style: none;
+    }
+
+    .toolbar-scroll::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .toolbar-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .toolbar-scroll::-webkit-scrollbar-thumb {
+        background: var(--gray-300);
+        border-radius: 2px;
     }
 
     .toolbar-left,
@@ -3173,10 +3194,11 @@
 
     /* Розширена підказка для групування */
     .group-tooltip {
-        position: absolute;
-        bottom: -75px;
-        left: 50%;
-        transform: translateX(-50%) translateY(5px);
+        position: fixed;
+        top: 65px;
+        left: auto;
+        right: auto;
+        transform: translateX(-50%);
         background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
         color: white;
         font-size: 12px;
@@ -3186,8 +3208,8 @@
         white-space: nowrap;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.2s ease, transform 0.2s ease;
-        z-index: 1002;
+        transition: opacity 0.2s ease;
+        z-index: 9999;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         text-align: center;
         line-height: 1.4;
@@ -3215,7 +3237,6 @@
 
     .group-btn:disabled:hover .group-tooltip {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
     }
 
     /* Коли є виділені картки - ховаємо підказки */
@@ -4256,6 +4277,7 @@
     <!-- Main Application -->
     <div class="app-container" id="appContainer" style="display: none;">
         <div class="toolbar" role="toolbar">
+            <div class="toolbar-scroll">
             <div class="toolbar-left">
                 <div class="logo">TALKO System</div>
                 <button class="tool-btn add-btn" id="addFunctionBtn" type="button" data-title="toolbar.add_function">
@@ -4594,6 +4616,7 @@
                     <span class="user-email" id="userEmail"></span>
                     <button class="logout-btn" id="logoutBtn" type="button" data-title="toolbar.logout" data-text="toolbar.logout">Вийти</button>
                 </div>
+            </div>
             </div>
         </div>
 
