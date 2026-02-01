@@ -913,22 +913,7 @@
         padding: 0 12px;
         z-index: 1000;
         box-shadow: var(--shadow-sm);
-        overflow-x: auto;
-        overflow-y: visible;
-        scrollbar-width: thin;
-    }
-
-    .toolbar::-webkit-scrollbar {
-        height: 4px;
-    }
-
-    .toolbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .toolbar::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        border-radius: 2px;
+        overflow: visible;
     }
 
     .toolbar-left,
@@ -8192,13 +8177,9 @@
 
     // === DROPDOWN MENUS ===
     function toggleMenu(menuId, btnId) {
-        console.log('[MENU] toggleMenu called:', menuId, btnId);
-        
+    function toggleMenu(menuId, btnId) {
         const menu = Utils.getElement(menuId);
         const btn = Utils.getElement(btnId);
-        
-        console.log('[MENU] Menu element:', menu);
-        console.log('[MENU] Button element:', btn);
         
         if (!menu) {
             console.warn('[MENU] Menu not found:', menuId);
@@ -8206,7 +8187,7 @@
         }
         
         // Close ALL other dropdown menus
-        Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu').forEach(m => {
+        Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu, .filter-menu').forEach(m => {
             if (m.id !== menuId) m.classList.remove('show');
         });
         
@@ -8216,7 +8197,6 @@
         });
         
         const isOpen = menu.classList.toggle('show');
-        console.log('[MENU] Menu is now:', isOpen ? 'OPEN' : 'CLOSED');
         
         // Special handling for AI dropdown
         if (menuId === 'aiMenu') {
