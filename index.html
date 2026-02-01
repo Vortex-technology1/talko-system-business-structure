@@ -905,43 +905,23 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 60px;
+        height: 56px;
         background: #ffffff;
         border-bottom: 1px solid var(--gray-200);
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
         z-index: 1000;
         box-shadow: var(--shadow-sm);
         overflow: visible;
-    }
-
-    .toolbar-scroll {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        padding: 0 12px;
-        overflow-x: auto;
-        overflow-y: visible;
-        scrollbar-width: thin;
-        -ms-overflow-style: none;
-    }
-
-    .toolbar-scroll::-webkit-scrollbar {
-        height: 3px;
-    }
-
-    .toolbar-scroll::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .toolbar-scroll::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        border-radius: 2px;
+        gap: 6px;
     }
 
     .toolbar-left,
     .toolbar-right {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 5px;
         flex-shrink: 0;
     }
 
@@ -950,15 +930,15 @@
     }
 
     .logo {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 700;
         color: var(--gray-700);
-        margin-right: 6px;
+        margin-right: 4px;
         white-space: nowrap;
     }
 
     .tool-btn {
-        height: 36px;
+        height: 32px;
         border: 1px solid var(--gray-200);
         background: white;
         border-radius: var(--border-radius);
@@ -966,11 +946,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 600;
         transition: var(--transition);
         position: relative;
-        padding: 0 10px;
+        padding: 0 8px;
         white-space: nowrap;
         text-decoration: none;
         color: var(--gray-700);
@@ -982,22 +962,51 @@
     }
 
     .tool-btn svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         flex-shrink: 0;
+    }
+
+    .toolbar-divider {
+        width: 1px;
+        height: 20px;
+        background: var(--gray-200);
+        margin: 0 2px;
+    }
+
+    /* Приховуємо менш важливі кнопки на середніх екранах */
+    @media (max-width: 1400px) {
+        #copyBtn, #pasteBtn {
+            display: none;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        #showAllBtn, #statsBtn {
+            display: none;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .toolbar-divider {
+            display: none;
+        }
+        .tool-btn {
+            padding: 0 6px;
+        }
     }
 
     /* Адаптивність тулбара - тільки для дуже малих екранів */
     @media (max-width: 768px) {
         .toolbar {
-            padding: 0 8px;
+            padding: 0 6px;
         }
         .toolbar-left, .toolbar-right {
-            gap: 4px;
+            gap: 3px;
         }
         .tool-btn {
-            padding: 0 6px;
-            font-size: 10px;
+            padding: 0 5px;
+            font-size: 9px;
         }
         .search-container {
             max-width: 100px;
@@ -1639,7 +1648,7 @@
     /* === CANVAS === */
     .canvas-container {
         position: fixed;
-        top: 60px;
+        top: 56px;
         left: 0;
         right: 0;
         bottom: 0;
@@ -4277,7 +4286,6 @@
     <!-- Main Application -->
     <div class="app-container" id="appContainer" style="display: none;">
         <div class="toolbar" role="toolbar">
-            <div class="toolbar-scroll">
             <div class="toolbar-left">
                 <div class="logo">TALKO System</div>
                 <button class="tool-btn add-btn" id="addFunctionBtn" type="button" data-title="toolbar.add_function">
@@ -4616,7 +4624,6 @@
                     <span class="user-email" id="userEmail"></span>
                     <button class="logout-btn" id="logoutBtn" type="button" data-title="toolbar.logout" data-text="toolbar.logout">Вийти</button>
                 </div>
-            </div>
             </div>
         </div>
 
