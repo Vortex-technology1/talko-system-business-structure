@@ -996,6 +996,63 @@
         }
     }
 
+    /* Tools Menu Dropdown */
+    .tools-dropdown {
+        position: relative;
+    }
+
+    .tools-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        display: none;
+        z-index: 1001;
+        margin-top: 8px;
+        min-width: 200px;
+        padding: 8px 0;
+    }
+
+    .tools-menu.show {
+        display: block;
+        animation: slideDown 0.2s ease;
+    }
+
+    .tools-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        color: var(--gray-700);
+        font-size: 13px;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+    }
+
+    .tools-menu-item:hover {
+        background: var(--gray-50);
+        color: var(--primary-color);
+    }
+
+    .tools-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    .tools-menu-divider {
+        height: 1px;
+        background: var(--gray-200);
+        margin: 8px 0;
+    }
+
     /* Адаптивність тулбара - тільки для дуже малих екранів */
     @media (max-width: 768px) {
         .toolbar {
@@ -4456,56 +4513,69 @@
                     </div>
                 </div>
 
-                <!-- Export Dropdown -->
-                <div class="export-dropdown">
-                    <button class="tool-btn" id="exportBtn" type="button" data-title="toolbar.export" aria-haspopup="true" aria-expanded="false">
-                        <span data-text="toolbar.export">↓ ЕКСПОРТ</span>
+                <!-- Tools Menu - об'єднує експорт, копіювання і т.д. -->
+                <div class="tools-dropdown">
+                    <button class="tool-btn" id="toolsMenuBtn" type="button" title="Інструменти" aria-haspopup="true" aria-expanded="false">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+                        </svg>
+                        <span>МЕНЮ</span>
                     </button>
-                    <div class="export-menu" id="exportMenu" role="menu">
-                        <div class="export-menu-item" id="exportJpegBtn" role="menuitem" tabindex="0">
-                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
-                            <span data-text="export.jpeg">Зберегти як JPEG</span>
-                        </div>
-                        <div class="export-menu-item" id="exportPdfBtn" role="menuitem" tabindex="0">
-                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
-                            <span data-text="export.pdf">Зберегти як PDF</span>
-                        </div>
-                        <div class="export-menu-item" id="exportExcelBtn" role="menuitem" tabindex="0">
-                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></svg></span>
-                            <span data-text="export.excel">Зберегти як Excel</span>
-                        </div>
-                        <div class="export-menu-item" id="exportJsonBtn" role="menuitem" tabindex="0">
-                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13l2 2 4-4"/></svg></span>
-                            <span data-text="export.json">Зберегти як JSON</span>
-                        </div>
-                        <div class="export-menu-item" id="exportCsvBtn" role="menuitem" tabindex="0">
-                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></span>
-                            <span data-text="export.csv">Зберегти як CSV</span>
-                        </div>
-                        <div class="export-menu-divider"></div>
-                        <div class="export-menu-item import-item" id="importJsonBtn" role="menuitem" tabindex="0">
-                            <span class="export-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
-                            <span data-text="import.json">Імпорт з JSON</span>
-                        </div>
-                        <input type="file" id="importFileInput" accept=".json" style="display:none;">
+                    <div class="tools-menu" id="toolsMenu" role="menu">
+                        <button class="tools-menu-item" id="showAllBtn" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                            </svg>
+                            <span>Показати все</span>
+                        </button>
+                        <button class="tools-menu-item" id="statsBtn" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                            <span>Статистика</span>
+                        </button>
+                        <div class="tools-menu-divider"></div>
+                        <button class="tools-menu-item" id="copyBtn" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                            <span>Копіювати структуру</span>
+                        </button>
+                        <button class="tools-menu-item" id="pasteBtn" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            </svg>
+                            <span>Вставити структуру</span>
+                        </button>
+                        <div class="tools-menu-divider"></div>
+                        <button class="tools-menu-item" id="exportJpegBtn2" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                            <span>Експорт JPEG</span>
+                        </button>
+                        <button class="tools-menu-item" id="exportPdfBtn2" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span>Експорт PDF</span>
+                        </button>
+                        <button class="tools-menu-item" id="exportExcelBtn2" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
+                            </svg>
+                            <span>Експорт Excel</span>
+                        </button>
+                        <div class="tools-menu-divider"></div>
+                        <button class="tools-menu-item" id="themeToggleBtn2" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                            </svg>
+                            <span id="themeToggleText">Темна тема</span>
+                        </button>
                     </div>
                 </div>
 
-                <button class="tool-btn" id="copyBtn" type="button" data-title="toolbar.copy">
-                    <span data-text="toolbar.copy">КОПІЮВАТИ</span>
-                </button>
-                <button class="tool-btn" id="pasteBtn" type="button" data-title="toolbar.paste">
-                    <span data-text="toolbar.paste">ВСТАВИТИ</span>
-                </button>
-                <button class="tool-btn" id="showAllBtn" type="button" data-title="toolbar.show_all">
-                    <span data-text="toolbar.show_all">ПОКАЗАТИ ВСЕ</span>
-                </button>
-                <button class="tool-btn stats-btn" id="statsBtn" type="button" data-title="toolbar.stats">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                    <span data-text="toolbar.stats">СТАТИСТИКА</span>
-                </button>
                 <button class="tool-btn group-btn" id="groupBtn" type="button" data-title="toolbar.group" disabled>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -8216,7 +8286,7 @@
         }
         
         // Close ALL other dropdown menus
-        Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu, .filter-menu').forEach(m => {
+        Utils.queryAll('.ecosystem-menu, .export-menu, .support-menu, .ai-menu, .filter-menu, .tools-menu').forEach(m => {
             if (m.id !== menuId) m.classList.remove('show');
         });
         
@@ -8396,9 +8466,10 @@
             toggleMenu('ecosystemMenu', 'ecosystemBtn');
         });
         
-        Utils.getElement('exportBtn')?.addEventListener('click', (e) => {
+        // Tools Menu
+        Utils.getElement('toolsMenuBtn')?.addEventListener('click', (e) => {
             e.stopPropagation();
-            toggleMenu('exportMenu', 'exportBtn');
+            toggleMenu('toolsMenu', 'toolsMenuBtn');
         });
         
         Utils.getElement('supportBtn')?.addEventListener('click', (e) => {
@@ -8406,35 +8477,30 @@
             toggleMenu('supportMenu', 'supportBtn');
         });
 
-        // Export buttons
-        Utils.getElement('exportJpegBtn')?.addEventListener('click', () => {
-            Utils.getElement('exportMenu')?.classList.remove('show');
+        // Tools Menu items
+        Utils.getElement('exportJpegBtn2')?.addEventListener('click', () => {
+            Utils.getElement('toolsMenu')?.classList.remove('show');
             if (typeof window.exportToJPEG === 'function') window.exportToJPEG();
         });
         
-        Utils.getElement('exportPdfBtn')?.addEventListener('click', () => {
-            Utils.getElement('exportMenu')?.classList.remove('show');
+        Utils.getElement('exportPdfBtn2')?.addEventListener('click', () => {
+            Utils.getElement('toolsMenu')?.classList.remove('show');
             if (typeof window.exportToPDF === 'function') window.exportToPDF();
         });
         
-        Utils.getElement('exportExcelBtn')?.addEventListener('click', () => {
-            Utils.getElement('exportMenu')?.classList.remove('show');
+        Utils.getElement('exportExcelBtn2')?.addEventListener('click', () => {
+            Utils.getElement('toolsMenu')?.classList.remove('show');
             if (typeof window.exportToExcel === 'function') window.exportToExcel();
         });
         
-        Utils.getElement('exportJsonBtn')?.addEventListener('click', () => {
-            Utils.getElement('exportMenu')?.classList.remove('show');
-            exportToJSON();
-        });
-        
-        Utils.getElement('exportCsvBtn')?.addEventListener('click', () => {
-            Utils.getElement('exportMenu')?.classList.remove('show');
-            exportToCSV();
-        });
-        
-        Utils.getElement('importJsonBtn')?.addEventListener('click', () => {
-            Utils.getElement('exportMenu')?.classList.remove('show');
-            Utils.getElement('importFileInput')?.click();
+        Utils.getElement('themeToggleBtn2')?.addEventListener('click', () => {
+            Utils.getElement('toolsMenu')?.classList.remove('show');
+            toggleTheme();
+            // Оновлюємо текст кнопки
+            const themeText = Utils.getElement('themeToggleText');
+            if (themeText) {
+                themeText.textContent = State.darkMode ? 'Світла тема' : 'Темна тема';
+            }
         });
         
         Utils.getElement('importFileInput')?.addEventListener('change', (e) => {
@@ -8662,9 +8728,9 @@
                 });
             }
             
-            // Export menu
-            if (!e.target.closest('.export-dropdown')) {
-                Utils.getElement('exportMenu')?.classList.remove('show');
+            // Tools menu
+            if (!e.target.closest('.tools-dropdown')) {
+                Utils.getElement('toolsMenu')?.classList.remove('show');
             }
             
             // Ecosystem menu
