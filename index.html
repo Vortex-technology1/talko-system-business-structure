@@ -3314,6 +3314,22 @@
         box-shadow: 0 0 20px rgba(66, 153, 225, 0.4);
     }
 
+    /* Selection rubber band */
+    .selection-rect {
+        position: absolute;
+        border: 2px dashed var(--primary-color);
+        background: rgba(34, 197, 94, 0.08);
+        pointer-events: none;
+        z-index: 50;
+        border-radius: 4px;
+    }
+
+    .function-card.drag-selected {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 1px;
+        opacity: 0.9;
+    }
+
     /* Group Modal */
     .group-modal {
         position: fixed;
@@ -10201,6 +10217,31 @@
         dragState.initialX = card.offsetLeft;
         dragState.initialY = card.offsetTop;
         
+        // Масове перетягування: якщо картка виділена — тягнемо всі виділені
+        const cardIndex = parseInt(card.dataset.index);
+        const selectedCards = window.State?.selectedCards || [];
+        
+        if (selectedCards.includes(cardIndex) && selectedCards.length > 1) {
+            dragState.multiDrag = true;
+            dragState.multiCards = [];
+            
+            selectedCards.forEach(idx => {
+                const el = document.querySelector(`.function-card[data-index="${idx}"]`);
+                if (el && el !== card) {
+                    dragState.multiCards.push({
+                        element: el,
+                        index: idx,
+                        initialX: el.offsetLeft,
+                        initialY: el.offsetTop
+                    });
+                    el.classList.add('dragging');
+                }
+            });
+        } else {
+            dragState.multiDrag = false;
+            dragState.multiCards = [];
+        }
+        
         card.classList.add('dragging');
     }
 
@@ -10301,6 +10342,22 @@
             window.functions[index].modified = new Date().toISOString();
         }
         
+        // Масове перетягування: рухаємо всі виділені картки
+        if (dragState.multiDrag && dragState.multiCards) {
+            dragState.multiCards.forEach(mc => {
+                const mcX = Math.max(0, mc.initialX + deltaX);
+                const mcY = Math.max(0, mc.initialY + deltaY);
+                mc.element.style.left = mcX + 'px';
+                mc.element.style.top = mcY + 'px';
+                if (window.functions && window.functions[mc.index]) {
+                    window.functions[mc.index].x = mcX;
+                    window.functions[mc.index].y = mcY;
+                    window.functions[mc.index].modified = new Date().toISOString();
+                }
+                expandCanvasIfNeeded(mcX, mcY);
+            });
+        }
+        
         // Розширюємо canvas якщо картка близько до краю
         expandCanvasIfNeeded(newX, newY);
         
@@ -10383,6 +10440,12 @@
     function endDrag() {
         if (dragState.isDragging && dragState.currentCard) {
             dragState.currentCard.classList.remove('dragging');
+            
+            // Знімаємо dragging з усіх мульти-карток
+            if (dragState.multiDrag && dragState.multiCards) {
+                dragState.multiCards.forEach(mc => mc.element.classList.remove('dragging'));
+            }
+            
             if (typeof window.debouncedSave === 'function') {
                 window.debouncedSave();
             }
@@ -10390,6 +10453,8 @@
         
         dragState.isDragging = false;
         dragState.currentCard = null;
+        dragState.multiDrag = false;
+        dragState.multiCards = [];
     }
 
     function renderConnections() {
@@ -10517,6 +10582,11 @@
         let isPanning = false;
         let lastPanPoint = null;
         
+        // === RUBBER BAND SELECTION ===
+        let isSelecting = false;
+        let selectionStart = null;
+        let selectionRect = null;
+        
         // === MOUSE EVENTS ===
         container.addEventListener('mousedown', (e) => {
             if (e.target.closest('.function-card')) return;
@@ -10527,31 +10597,125 @@
                 container.classList.add('panning');
                 e.preventDefault();
             }
+            // Rubber band: інструмент "вибір" + клік на пустому місці
+            else if (window.currentTool === 'select' && !e.target.closest('.zoom-controls')) {
+                const canvas = document.getElementById('canvas');
+                if (!canvas) return;
+                const scale = window.scale || 1;
+                const panX = window.panX || 0;
+                const panY = window.panY || 0;
+                const rect = container.getBoundingClientRect();
+                
+                // Координати в canvas space
+                const canvasX = (e.clientX - rect.left - panX) / scale;
+                const canvasY = (e.clientY - rect.top - panY) / scale;
+                
+                isSelecting = true;
+                selectionStart = { x: canvasX, y: canvasY, clientX: e.clientX, clientY: e.clientY };
+                
+                // Створюємо рамку
+                selectionRect = document.createElement('div');
+                selectionRect.className = 'selection-rect';
+                selectionRect.style.left = canvasX + 'px';
+                selectionRect.style.top = canvasY + 'px';
+                selectionRect.style.width = '0px';
+                selectionRect.style.height = '0px';
+                canvas.appendChild(selectionRect);
+                
+                // Якщо без Shift — очищаємо попереднє виділення
+                if (!e.shiftKey && typeof window.clearCardSelection === 'function') {
+                    window.clearCardSelection();
+                }
+                
+                e.preventDefault();
+            }
         });
         
         container.addEventListener('mousemove', (e) => {
-            if (!isPanning || !lastPanPoint) return;
+            if (isPanning && lastPanPoint) {
+                const deltaX = e.clientX - lastPanPoint.x;
+                const deltaY = e.clientY - lastPanPoint.y;
+                
+                window.panX = (window.panX || 0) + deltaX;
+                window.panY = (window.panY || 0) + deltaY;
+                
+                updateCanvasTransform();
+                lastPanPoint = { x: e.clientX, y: e.clientY };
+            }
             
-            const deltaX = e.clientX - lastPanPoint.x;
-            const deltaY = e.clientY - lastPanPoint.y;
-            
-            window.panX = (window.panX || 0) + deltaX;
-            window.panY = (window.panY || 0) + deltaY;
-            
-            updateCanvasTransform();
-            lastPanPoint = { x: e.clientX, y: e.clientY };
+            // Rubber band selection
+            if (isSelecting && selectionStart && selectionRect) {
+                const scale = window.scale || 1;
+                const panX = window.panX || 0;
+                const panY = window.panY || 0;
+                const rect = container.getBoundingClientRect();
+                
+                const canvasX = (e.clientX - rect.left - panX) / scale;
+                const canvasY = (e.clientY - rect.top - panY) / scale;
+                
+                const x = Math.min(selectionStart.x, canvasX);
+                const y = Math.min(selectionStart.y, canvasY);
+                const w = Math.abs(canvasX - selectionStart.x);
+                const h = Math.abs(canvasY - selectionStart.y);
+                
+                selectionRect.style.left = x + 'px';
+                selectionRect.style.top = y + 'px';
+                selectionRect.style.width = w + 'px';
+                selectionRect.style.height = h + 'px';
+                
+                // Підсвічуємо картки що потрапляють в рамку
+                if (w > 5 || h > 5) {
+                    document.querySelectorAll('.function-card').forEach(card => {
+                        const cx = card.offsetLeft;
+                        const cy = card.offsetTop;
+                        const cw = card.offsetWidth;
+                        const ch = card.offsetHeight;
+                        const overlap = !(cx + cw < x || cx > x + w || cy + ch < y || cy > y + h);
+                        card.classList.toggle('drag-selected', overlap);
+                    });
+                }
+            }
         });
         
-        container.addEventListener('mouseup', () => {
+        container.addEventListener('mouseup', (e) => {
             isPanning = false;
             lastPanPoint = null;
             container.classList.remove('panning');
+            
+            // Завершуємо rubber band selection
+            if (isSelecting && selectionRect) {
+                // Вибираємо всі картки з класом drag-selected
+                document.querySelectorAll('.function-card.drag-selected').forEach(card => {
+                    const idx = parseInt(card.dataset.index);
+                    card.classList.remove('drag-selected');
+                    if (!isNaN(idx) && typeof window.toggleCardSelection === 'function') {
+                        const selectedCards = window.State?.selectedCards || [];
+                        if (!selectedCards.includes(idx)) {
+                            window.toggleCardSelection(idx, true);
+                        }
+                    }
+                });
+                
+                selectionRect.remove();
+                selectionRect = null;
+                isSelecting = false;
+                selectionStart = null;
+            }
         });
         
         container.addEventListener('mouseleave', () => {
             isPanning = false;
             lastPanPoint = null;
             container.classList.remove('panning');
+            
+            // Cleanup rubber band
+            if (isSelecting && selectionRect) {
+                selectionRect.remove();
+                selectionRect = null;
+                isSelecting = false;
+                selectionStart = null;
+                document.querySelectorAll('.function-card.drag-selected').forEach(c => c.classList.remove('drag-selected'));
+            }
         });
         
         // Mouse wheel zoom
