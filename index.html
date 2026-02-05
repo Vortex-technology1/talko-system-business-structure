@@ -3330,6 +3330,87 @@
         opacity: 0.9;
     }
 
+    /* Tool button tooltip (для кнопки ВИБІР) */
+    .tool-tooltip {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
+        background: #1a202c;
+        color: white;
+        font-size: 12px;
+        font-weight: 400;
+        padding: 12px 16px;
+        border-radius: 10px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        text-align: left;
+        line-height: 1.4;
+        min-width: 240px;
+    }
+
+    .tool-tooltip::before {
+        content: '';
+        position: absolute;
+        top: -7px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid #1a202c;
+    }
+
+    .tool-select-btn:hover .tool-tooltip {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .tool-tooltip-title {
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+        color: #22c55e;
+    }
+
+    .tool-tooltip-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .tool-tooltip-row kbd {
+        display: inline-block;
+        background: rgba(255,255,255,0.15);
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 10px;
+        font-weight: 600;
+        min-width: 40px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .tool-tooltip-hint {
+        margin-top: 8px;
+        padding-top: 6px;
+        border-top: 1px solid rgba(255,255,255,0.15);
+        font-size: 11px;
+        color: #22c55e;
+        font-weight: 500;
+    }
+
     /* Group Modal */
     .group-modal {
         position: fixed;
@@ -4345,17 +4426,25 @@
         <div class="toolbar" role="toolbar">
             <div class="toolbar-left">
                 <div class="logo">TALKO System</div>
-                <button class="tool-btn add-btn" id="addFunctionBtn" type="button" data-title="toolbar.add_function">
-                    <span data-text="toolbar.add">+ ДОДАТИ</span>
+                <button class="tool-btn add-btn" id="addFunctionBtn" type="button" title="Додати нову функцію">
+                    <span>+ ДОДАТИ</span>
                 </button>
-                <button class="tool-btn active" id="selectTool" type="button" data-title="toolbar.select" aria-pressed="true">
-                    <span data-text="toolbar.select">ВИБІР</span>
+                <button class="tool-btn active tool-select-btn" id="selectTool" type="button" aria-pressed="true">
+                    <span>ВИБІР</span>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-title">Інструмент вибору</div>
+                        <div class="tool-tooltip-row"><kbd>Клік</kbd> Відкрити картку</div>
+                        <div class="tool-tooltip-row"><kbd>Тягни</kbd> Перемістити картку</div>
+                        <div class="tool-tooltip-row"><kbd>Рамка</kbd> Виділити кілька карток</div>
+                        <div class="tool-tooltip-row"><kbd>Shift</kbd>+<kbd>Клік</kbd> Додати до виділення</div>
+                        <div class="tool-tooltip-hint">Виділені картки перетягуються разом</div>
+                    </div>
                 </button>
-                <button class="tool-btn" id="handTool" type="button" data-title="toolbar.move" aria-pressed="false">
-                    <span data-text="toolbar.hand">РУКА</span>
+                <button class="tool-btn" id="handTool" type="button" title="Переміщення полотна" aria-pressed="false">
+                    <span>РУКА</span>
                 </button>
-                <button class="tool-btn" id="connectTool" type="button" data-title="toolbar.connect" aria-pressed="false">
-                    <span data-text="toolbar.connect">З'ЄДНАТИ</span>
+                <button class="tool-btn" id="connectTool" type="button" title="З'єднати картки стрілкою" aria-pressed="false">
+                    <span>З'ЄДНАТИ</span>
                 </button>
                 <div class="toolbar-divider"></div>
                 <button class="tool-btn undo-redo-btn disabled" id="undoBtn" type="button" title="Відмінити (Ctrl+Z)" disabled>
