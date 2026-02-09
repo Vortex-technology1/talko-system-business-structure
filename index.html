@@ -3480,21 +3480,9 @@
 
     /* Mobile fix: prevent tooltip/filter overflow */
     @media (max-width: 768px) {
+        /* Hide hover tooltip on touch devices - not useful */
         .tool-tooltip {
-            position: fixed !important;
-            top: 52px !important;
-            left: 8px !important;
-            right: 8px !important;
-            transform: none !important;
-            min-width: auto;
-            max-width: none;
-            white-space: normal;
-            margin-top: 0;
-        }
-
-        .tool-tooltip::before {
-            left: 56px;
-            transform: none;
+            display: none !important;
         }
 
         .filter-dropdown {
@@ -9174,7 +9162,7 @@
         
         Utils.getElement('themeToggleBtn2')?.addEventListener('click', () => {
             Utils.getElement('toolsMenu')?.classList.remove('show');
-            toggleTheme();
+            toggleDarkMode();
             // Оновлюємо текст кнопки
             const themeText = Utils.getElement('themeToggleText');
             if (themeText) {
