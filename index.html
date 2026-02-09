@@ -3481,8 +3481,14 @@
     /* Mobile fix: prevent tooltip/filter overflow */
     @media (max-width: 768px) {
         /* Hide hover tooltip on touch devices - not useful */
-        .tool-tooltip {
+        .tool-tooltip,
+        .tool-select-btn:hover .tool-tooltip,
+        .tool-select-btn:active .tool-tooltip,
+        .tool-select-btn:focus .tool-tooltip {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
 
         .filter-dropdown {
