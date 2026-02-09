@@ -4415,7 +4415,6 @@
 
     .mobile-slide-panel {
         display: none;
-        visibility: hidden;
         position: fixed;
         bottom: 56px;
         bottom: calc(56px + env(safe-area-inset-bottom, 0px));
@@ -4426,18 +4425,21 @@
         border-radius: 16px 16px 0 0;
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
         z-index: 999;
-        transform: translateY(100%);
-        transition: transform 0.3s ease, visibility 0s 0.3s;
+        transform: translateY(110%);
+        transition: transform 0.3s ease;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         pointer-events: none;
     }
 
+    .mobile-slide-panel.active {
+        display: block;
+    }
+
     .mobile-slide-panel.show {
+        display: block;
         transform: translateY(0);
-        visibility: visible;
         pointer-events: auto;
-        transition: transform 0.3s ease, visibility 0s;
     }
 
     .mobile-panel-handle {
@@ -4539,13 +4541,11 @@
         }
 
         .mobile-slide-panel {
-            display: block;
-            visibility: hidden;
-            pointer-events: none;
+            /* stays display:none until JS adds .show class */
         }
 
         .mobile-slide-panel.show {
-            visibility: visible;
+            display: block;
             pointer-events: auto;
         }
 
@@ -8903,7 +8903,17 @@
 
             function closeAllPanels() {
                 overlay?.classList.remove('show');
-                Object.values(panels).forEach(p => p?.classList.remove('show'));
+                Object.values(panels).forEach(p => {
+                    if (p) {
+                        p.classList.remove('show');
+                        // After transition, hide completely
+                        setTimeout(() => {
+                            if (!p.classList.contains('show')) {
+                                p.classList.remove('active');
+                            }
+                        }, 350);
+                    }
+                });
                 document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
                 activePanel = null;
             }
@@ -8917,6 +8927,10 @@
                 const panel = panels[name];
                 if (panel) {
                     overlay?.classList.add('show');
+                    // First make visible (display:block), then animate
+                    panel.classList.add('active');
+                    // Force reflow before adding show class for animation
+                    panel.offsetHeight;
                     panel.classList.add('show');
                     activePanel = name;
                     // Mark button active
