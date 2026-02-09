@@ -1047,23 +1047,105 @@
     @media (max-width: 768px) {
         .toolbar {
             padding: 0 6px;
+            height: 48px;
         }
         .toolbar-left, .toolbar-right {
-            gap: 3px;
+            gap: 2px;
         }
+
+        /* All toolbar buttons compact icon-only */
         .tool-btn {
-            padding: 0 5px;
+            padding: 0 6px;
             font-size: 9px;
+            height: 34px;
+            min-width: 34px;
         }
+
+        /* Hide text labels - SVG/pseudo icons only */
+        .tool-btn#selectTool span,
+        .tool-btn#handTool span,
+        .tool-btn#connectTool span {
+            display: none;
+        }
+
+        .tool-btn#selectTool::after {
+            content: '⬚';
+            font-size: 16px;
+        }
+
+        .tool-btn#handTool::after {
+            content: '✋';
+            font-size: 14px;
+        }
+
+        .tool-btn#connectTool::after {
+            content: '⤵';
+            font-size: 14px;
+        }
+
+        /* Hide undo/redo and connect on mobile - available in tools panel */
+        .tool-btn.undo-redo-btn,
+        .tool-btn#connectTool {
+            display: none;
+        }
+
+        /* Search compact */
         .search-container {
-            max-width: 100px;
+            flex: 1;
+            max-width: 160px;
         }
         .search-input {
-            width: 100px;
-            font-size: 11px;
-        }
-        .logo {
+            width: 100%;
+            height: 32px;
             font-size: 12px;
+            padding: 0 8px 0 28px;
+        }
+        .search-icon {
+            width: 12px;
+            height: 12px;
+            left: 8px;
+        }
+
+        /* Filter - icon only */
+        .filter-btn .filter-label {
+            display: none;
+        }
+
+        .logo {
+            display: none;
+        }
+
+        /* Dividers gone */
+        .toolbar-divider {
+            display: none;
+        }
+
+        /* toolbar-right: hide everything that moved to bottom nav */
+        .toolbar-right {
+            display: none;
+        }
+
+        /* Canvas accounts for shorter toolbar */
+        .canvas-container {
+            top: 48px;
+        }
+
+        /* Language selector adjust */
+        .language-selector {
+            top: 52px;
+            right: 8px;
+        }
+
+        .user-info {
+            display: none;
+        }
+
+        /* Group button compact */
+        .tool-btn.group-btn span {
+            display: none;
+        }
+        .tool-btn.group-btn {
+            padding: 0 8px;
         }
     }
 
@@ -3809,99 +3891,39 @@
     @media (max-width: 480px) {
         /* Toolbar becomes more compact */
         .toolbar {
-            height: 52px;
-            padding: 0 8px;
-        }
-
-        .logo {
-            display: none;
+            height: 44px;
+            padding: 0 6px;
         }
 
         .toolbar-left {
-            gap: 4px;
-        }
-
-        .toolbar-right {
-            gap: 4px;
-        }
-
-        /* Hide less important buttons on mobile */
-        .tool-btn#copyBtn,
-        .tool-btn#pasteBtn,
-        .tool-btn#showAllBtn {
-            display: none;
+            gap: 3px;
         }
 
         /* Compact buttons */
         .tool-btn {
-            padding: 0 8px;
-            font-size: 9px;
-            height: 36px;
-            min-width: 36px;
+            padding: 0 6px;
+            height: 32px;
+            min-width: 32px;
         }
 
-        .tool-btn.add-btn {
-            padding: 0 12px;
+        /* Search fills available space */
+        .search-container {
+            flex: 1;
+            max-width: 140px;
+        }
+        .search-input {
+            width: 100%;
+            height: 30px;
+            font-size: 11px;
         }
 
-        /* Icon-only mode for tools */
-        .tool-btn#selectTool span,
-        .tool-btn#handTool span,
-        .tool-btn#connectTool span {
-            display: none;
+        /* Canvas top offset matches toolbar */
+        .canvas-container {
+            top: 44px;
         }
 
-        .tool-btn#selectTool::after {
-            content: '⬚';
-            font-size: 14px;
-        }
-
-        .tool-btn#handTool::after {
-            content: '✋';
-            font-size: 14px;
-        }
-
-        .tool-btn#connectTool::after {
-            content: '⤵';
-            font-size: 14px;
-        }
-
-        /* Ecosystem button - icon only */
-        .tool-btn#ecosystemBtn span {
-            display: none;
-        }
-
-        .tool-btn#ecosystemBtn::after {
-            content: '⚙';
-            font-size: 16px;
-        }
-
-        /* Export button - icon only */
-        .tool-btn#exportBtn span {
-            display: none;
-        }
-
-        .tool-btn#exportBtn::after {
-            content: '↓';
-            font-size: 16px;
-        }
-
-        /* Support button hidden on very small screens */
-        .tool-btn.support-btn {
-            display: none;
-        }
-
-        /* AI buttons - icon only on mobile */
-        .tool-btn.ai-btn span:not(.ai-icon) {
-            display: none;
-        }
-
-        .tool-btn.ai-btn .ai-icon {
-            margin-right: 0;
-        }
-
-        .tool-btn.ai-btn {
-            padding: 0 10px;
+        .language-selector {
+            top: 48px;
         }
 
         .function-card {
@@ -8989,6 +9011,9 @@
             const toolsPanelBody = Utils.getElement('mobileToolsPanelBody');
             if (toolsPanelBody) {
                 const toolItems = [
+                    { icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M3 13a9 9 0 1 0 2.5-6.5L3 9"/></svg>', label: 'Відмінити', action: () => { closeAllPanels(); Utils.getElement('undoBtn')?.click(); }},
+                    { icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M21 13a9 9 0 1 1-2.5-6.5L21 9"/></svg>', label: 'Повторити', action: () => { closeAllPanels(); Utils.getElement('redoBtn')?.click(); }},
+                    { icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>', label: "З'єднати картки", action: () => { closeAllPanels(); if(typeof window.setTool==='function') window.setTool('connect'); }},
                     { icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', label: 'Статистика', action: () => { closeAllPanels(); if(typeof window.showStatsModal==='function') window.showStatsModal(); }},
                     { icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>', label: 'Показати все', action: () => { closeAllPanels(); if(typeof window.zoomToFit==='function') window.zoomToFit(); }},
                     { icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>', label: 'Копіювати структуру', action: () => { closeAllPanels(); if(typeof window.copyStructure==='function') window.copyStructure(); }},
