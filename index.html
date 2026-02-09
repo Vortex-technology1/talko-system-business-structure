@@ -395,6 +395,16 @@
         padding: 2px;
     }
 
+    @media (max-width: 640px) {
+        .ecosystem-menu {
+            min-width: auto;
+            max-width: none;
+        }
+        .ecosystem-menu-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     .export-menu {
         min-width: 180px;
     }
@@ -1100,9 +1110,6 @@
     }
 
     @media (max-width: 1000px) {
-        #ecosystemBtn, #statsBtn {
-            display: none;
-        }
         .search-input {
             width: 100px;
         }
@@ -4204,12 +4211,12 @@
             padding: 4px 12px;
         }
 
-        /* Mobile FAB visible */
+        /* Mobile FAB hidden when bottom nav present */
         .mobile-fab {
-            display: flex;
+            display: none !important;
         }
 
-        /* Hide desktop add button when FAB is shown */
+        /* Hide desktop add button when bottom nav is shown */
         .tool-btn.add-btn {
             display: none;
         }
@@ -4295,6 +4302,250 @@
             flex-direction: row;
             bottom: 8px;
             right: 8px;
+        }
+    }
+
+    /* === MOBILE BOTTOM NAVIGATION === */
+    .mobile-bottom-nav {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 56px;
+        background: #ffffff;
+        border-top: 1px solid var(--gray-200);
+        z-index: 999;
+        padding: 0;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .mobile-bottom-nav-inner {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-around;
+        height: 56px;
+        max-width: 100%;
+    }
+
+    .mobile-nav-btn {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        border: none;
+        background: none;
+        color: var(--gray-500);
+        font-size: 9px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        padding: 4px 2px;
+        position: relative;
+        font-family: inherit;
+        letter-spacing: 0.2px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-nav-btn svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    .mobile-nav-btn:active {
+        background: var(--gray-100);
+    }
+
+    .mobile-nav-btn.active {
+        color: var(--primary-color);
+    }
+
+    .mobile-nav-btn.nav-ecosystem {
+        color: var(--gray-600);
+    }
+
+    .mobile-nav-btn.nav-ecosystem:active,
+    .mobile-nav-btn.nav-ecosystem.active {
+        color: #7c3aed;
+    }
+
+    .mobile-nav-btn.nav-ai {
+        color: var(--gray-600);
+    }
+
+    .mobile-nav-btn.nav-ai:active,
+    .mobile-nav-btn.nav-ai.active {
+        color: #8b5cf6;
+    }
+
+    .mobile-nav-btn.nav-support {
+        color: var(--gray-600);
+    }
+
+    .mobile-nav-btn.nav-support:active,
+    .mobile-nav-btn.nav-support.active {
+        color: var(--success-color);
+    }
+
+    .mobile-nav-btn.nav-add {
+        color: white;
+        background: var(--success-color);
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        margin: 6px 4px;
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+    }
+
+    .mobile-nav-btn.nav-add:active {
+        transform: scale(0.92);
+        background: #38a169;
+    }
+
+    .mobile-nav-label {
+        font-size: 9px;
+        line-height: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 64px;
+    }
+
+    /* Mobile bottom nav overlay panels */
+    .mobile-panel-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 56px;
+        bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 998;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .mobile-panel-overlay.show {
+        display: block;
+        opacity: 1;
+    }
+
+    .mobile-slide-panel {
+        position: fixed;
+        bottom: 56px;
+        bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+        left: 0;
+        right: 0;
+        max-height: 70vh;
+        background: white;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+        z-index: 999;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-slide-panel.show {
+        transform: translateY(0);
+    }
+
+    .mobile-panel-handle {
+        width: 36px;
+        height: 4px;
+        background: var(--gray-300);
+        border-radius: 2px;
+        margin: 8px auto;
+    }
+
+    .mobile-panel-header {
+        padding: 12px 16px 8px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--gray-800);
+        border-bottom: 1px solid var(--gray-100);
+    }
+
+    .mobile-panel-body {
+        padding: 8px 0;
+    }
+
+    /* Ecosystem single column on mobile panel */
+    .mobile-slide-panel .ecosystem-menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mobile-slide-panel .ecosystem-menu-item {
+        padding: 14px 16px;
+        min-height: 52px;
+    }
+
+    .mobile-slide-panel .ecosystem-item-title {
+        font-size: 14px;
+    }
+
+    .mobile-slide-panel .ecosystem-item-desc {
+        font-size: 11px;
+    }
+
+    /* Dark mode bottom nav */
+    .dark-mode .mobile-bottom-nav {
+        background: #0d1117;
+        border-top-color: #21262d;
+    }
+
+    .dark-mode .mobile-nav-btn {
+        color: var(--gray-400);
+    }
+
+    .dark-mode .mobile-nav-btn:active {
+        background: #21262d;
+    }
+
+    .dark-mode .mobile-slide-panel {
+        background: #161b22;
+    }
+
+    .dark-mode .mobile-panel-header {
+        color: var(--gray-200);
+        border-bottom-color: #21262d;
+    }
+
+    .dark-mode .mobile-panel-handle {
+        background: #30363d;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-bottom-nav {
+            display: block;
+        }
+
+        /* Adjust canvas and zoom for bottom nav */
+        .canvas-container {
+            bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+        }
+
+        .zoom-controls {
+            bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+        }
+
+        /* Hide desktop ecosystem and support buttons */
+        .tool-btn#ecosystemBtn,
+        .tool-btn.support-btn,
+        .tool-btn.ai-btn,
+        .tool-btn#statsBtn {
+            display: none !important;
+        }
+
+        /* Notification above bottom nav */
+        .notification-toast {
+            bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
         }
     }
 
@@ -4820,6 +5071,77 @@
                 <line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
         </button>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-bottom-nav" id="mobileBottomNav">
+            <div class="mobile-bottom-nav-inner">
+                <button class="mobile-nav-btn nav-ecosystem" id="mobileEcosystemBtn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/>
+                    </svg>
+                    <span class="mobile-nav-label">Екосистема</span>
+                </button>
+                <button class="mobile-nav-btn nav-ai" id="mobileAiBtn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                        <circle cx="8" cy="14" r="2"/><circle cx="16" cy="14" r="2"/>
+                    </svg>
+                    <span class="mobile-nav-label">AI</span>
+                </button>
+                <button class="mobile-nav-btn nav-add" id="mobileAddBtn" type="button" aria-label="Додати функцію">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+                <button class="mobile-nav-btn nav-tools" id="mobileToolsBtn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span class="mobile-nav-label">Інструменти</span>
+                </button>
+                <button class="mobile-nav-btn nav-support" id="mobileSupportBtn" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span class="mobile-nav-label">Підтримка</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Slide Panels -->
+        <div class="mobile-panel-overlay" id="mobilePanelOverlay"></div>
+
+        <div class="mobile-slide-panel" id="mobileEcosystemPanel">
+            <div class="mobile-panel-handle"></div>
+            <div class="mobile-panel-header" data-text="ecosystem.header">Системи TALKO</div>
+            <div class="mobile-panel-body" id="mobileEcosystemPanelBody">
+                <!-- Заповнюється динамічно з ecosystem-menu -->
+            </div>
+        </div>
+
+        <div class="mobile-slide-panel" id="mobileAiPanel">
+            <div class="mobile-panel-handle"></div>
+            <div class="mobile-panel-header">AI Асистенти</div>
+            <div class="mobile-panel-body" id="mobileAiPanelBody">
+                <!-- Заповнюється динамічно з ai-menu -->
+            </div>
+        </div>
+
+        <div class="mobile-slide-panel" id="mobileSupportPanel">
+            <div class="mobile-panel-handle"></div>
+            <div class="mobile-panel-header" data-text="toolbar.support">Підтримка 24/7</div>
+            <div class="mobile-panel-body" id="mobileSupportPanelBody">
+                <!-- Заповнюється динамічно з support-menu -->
+            </div>
+        </div>
+
+        <div class="mobile-slide-panel" id="mobileToolsPanel">
+            <div class="mobile-panel-handle"></div>
+            <div class="mobile-panel-header">Інструменти</div>
+            <div class="mobile-panel-body" id="mobileToolsPanelBody">
+                <!-- Заповнюється динамічно -->
+            </div>
+        </div>
 
         <div class="zoom-controls">
             <button class="zoom-btn" id="zoomInBtn" type="button" data-title="zoom.in" aria-label="Збільшити">
@@ -6574,6 +6896,15 @@
         State.isOnline = true;
         console.log('[OK] Інтернет з\'єднання відновлено');
         updateConnectionStatus('syncing', t('notification.connection_restored'));
+        
+        // Force re-enable Firebase network connection
+        try {
+            db.enableNetwork().then(() => {
+                console.log('[OK] Firebase network re-enabled');
+            }).catch(err => {
+                console.warn('[WARN] Firebase enableNetwork:', err.message);
+            });
+        } catch(e) {}
         
         if (!State.currentUser) return;
         
@@ -8519,6 +8850,131 @@
         Utils.getElement('addFunctionBtn')?.addEventListener('click', () => addFunction());
         Utils.getElement('addFirstBtn')?.addEventListener('click', () => addFunction());
         Utils.getElement('mobileFab')?.addEventListener('click', () => addFunction());
+
+        // === MOBILE BOTTOM NAVIGATION ===
+        (function initMobileBottomNav() {
+            const isMobile = () => window.innerWidth <= 768;
+            if (!isMobile()) return;
+
+            const overlay = Utils.getElement('mobilePanelOverlay');
+            const panels = {
+                ecosystem: Utils.getElement('mobileEcosystemPanel'),
+                ai: Utils.getElement('mobileAiPanel'),
+                support: Utils.getElement('mobileSupportPanel'),
+                tools: Utils.getElement('mobileToolsPanel')
+            };
+
+            let activePanel = null;
+
+            function closeAllPanels() {
+                overlay?.classList.remove('show');
+                Object.values(panels).forEach(p => p?.classList.remove('show'));
+                document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+                activePanel = null;
+            }
+
+            function openPanel(name) {
+                if (activePanel === name) {
+                    closeAllPanels();
+                    return;
+                }
+                closeAllPanels();
+                const panel = panels[name];
+                if (panel) {
+                    overlay?.classList.add('show');
+                    panel.classList.add('show');
+                    activePanel = name;
+                    // Mark button active
+                    const btnMap = {
+                        ecosystem: 'mobileEcosystemBtn',
+                        ai: 'mobileAiBtn',
+                        support: 'mobileSupportBtn',
+                        tools: 'mobileToolsBtn'
+                    };
+                    Utils.getElement(btnMap[name])?.classList.add('active');
+                }
+            }
+
+            // Clone ecosystem menu content
+            const ecosystemGrid = document.querySelector('.ecosystem-menu .ecosystem-menu-grid');
+            const ecosystemPanelBody = Utils.getElement('mobileEcosystemPanelBody');
+            if (ecosystemGrid && ecosystemPanelBody) {
+                const cloned = ecosystemGrid.cloneNode(true);
+                cloned.style.gridTemplateColumns = '1fr';
+                ecosystemPanelBody.appendChild(cloned);
+            }
+
+            // Clone AI menu content
+            const aiMenu = document.querySelector('.ai-menu');
+            const aiPanelBody = Utils.getElement('mobileAiPanelBody');
+            if (aiMenu && aiPanelBody) {
+                const items = aiMenu.querySelectorAll('.ai-menu-item');
+                items.forEach(item => {
+                    aiPanelBody.appendChild(item.cloneNode(true));
+                });
+            }
+
+            // Clone support menu content
+            const supportMenu = document.querySelector('.support-menu');
+            const supportPanelBody = Utils.getElement('mobileSupportPanelBody');
+            if (supportMenu && supportPanelBody) {
+                const items = supportMenu.querySelectorAll('.support-menu-item');
+                items.forEach(item => {
+                    supportPanelBody.appendChild(item.cloneNode(true));
+                });
+            }
+
+            // Build tools panel
+            const toolsPanelBody = Utils.getElement('mobileToolsPanelBody');
+            if (toolsPanelBody) {
+                const toolItems = [
+                    { icon: '📊', label: 'Статистика', action: () => { closeAllPanels(); if(typeof showStats==='function') showStats(); else Utils.getElement('statsBtn')?.click(); }},
+                    { icon: '👁', label: 'Показати все', action: () => { closeAllPanels(); if(typeof showAll==='function') showAll(); else Utils.getElement('showAllBtn')?.click(); }},
+                    { icon: '📋', label: 'Копіювати структуру', action: () => { closeAllPanels(); if(typeof copyStructure==='function') copyStructure(); }},
+                    { icon: '📥', label: 'Вставити структуру', action: () => { closeAllPanels(); if(typeof pasteStructure==='function') pasteStructure(); }},
+                    { icon: '🖼', label: 'Експорт JPEG', action: () => { closeAllPanels(); if(typeof exportToJPEG==='function') exportToJPEG(); }},
+                    { icon: '📄', label: 'Експорт PDF', action: () => { closeAllPanels(); if(typeof exportToPDF==='function') exportToPDF(); }},
+                    { icon: '📊', label: 'Експорт Excel', action: () => { closeAllPanels(); if(typeof exportToExcel==='function') exportToExcel(); }},
+                    { icon: '🔄', label: 'Бекапи', action: () => { closeAllPanels(); if(typeof showBackupModal==='function') showBackupModal(); }},
+                    { icon: '🌙', label: 'Тема', action: () => { closeAllPanels(); Utils.getElement('themeToggleBtn')?.click(); }},
+                    { icon: '🚪', label: 'Вийти', action: () => { closeAllPanels(); if(typeof logout==='function') logout(); }}
+                ];
+
+                toolItems.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.className = 'tools-menu-item';
+                    btn.style.cssText = 'display:flex;align-items:center;gap:12px;padding:14px 16px;border:none;background:none;width:100%;text-align:left;font-size:14px;color:var(--gray-700);cursor:pointer;border-bottom:1px solid var(--gray-100);font-family:inherit;';
+                    btn.innerHTML = `<span style="font-size:18px;width:24px;text-align:center;">${item.icon}</span><span>${item.label}</span>`;
+                    btn.addEventListener('click', item.action);
+                    toolsPanelBody.appendChild(btn);
+                });
+            }
+
+            // Event listeners
+            Utils.getElement('mobileEcosystemBtn')?.addEventListener('click', () => openPanel('ecosystem'));
+            Utils.getElement('mobileAiBtn')?.addEventListener('click', () => openPanel('ai'));
+            Utils.getElement('mobileSupportBtn')?.addEventListener('click', () => openPanel('support'));
+            Utils.getElement('mobileToolsBtn')?.addEventListener('click', () => openPanel('tools'));
+            Utils.getElement('mobileAddBtn')?.addEventListener('click', () => { closeAllPanels(); addFunction(); });
+            overlay?.addEventListener('click', closeAllPanels);
+
+            // Swipe down to close panels
+            Object.values(panels).forEach(panel => {
+                if (!panel) return;
+                let startY = 0;
+                panel.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                }, { passive: true });
+                panel.addEventListener('touchmove', (e) => {
+                    const dy = e.touches[0].clientY - startY;
+                    if (dy > 60) {
+                        closeAllPanels();
+                    }
+                }, { passive: true });
+            });
+
+            console.log('[OK] Mobile bottom navigation initialized');
+        })();
         Utils.getElement('selectTool')?.addEventListener('click', () => setTool('select'));
         Utils.getElement('handTool')?.addEventListener('click', () => setTool('hand'));
         Utils.getElement('connectTool')?.addEventListener('click', () => setTool('connect'));
