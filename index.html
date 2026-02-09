@@ -1130,28 +1130,6 @@
             top: 48px;
         }
 
-        /* Fix tooltip overflow on mobile */
-        .tool-tooltip {
-            left: 0;
-            right: auto;
-            transform: none;
-            min-width: min(240px, calc(100vw - 24px));
-            max-width: calc(100vw - 24px);
-            white-space: normal;
-        }
-
-        .tool-tooltip::before {
-            left: 24px;
-            transform: none;
-        }
-
-        /* Fix filter menu overflow on mobile */
-        .filter-menu {
-            left: auto;
-            right: 0;
-            min-width: min(200px, calc(100vw - 16px));
-        }
-
         /* Language selector adjust */
         .language-selector {
             top: 52px;
@@ -3498,6 +3476,40 @@
         font-size: 11px;
         color: #22c55e;
         font-weight: 500;
+    }
+
+    /* Mobile fix: prevent tooltip/filter overflow */
+    @media (max-width: 768px) {
+        .tool-tooltip {
+            position: fixed !important;
+            top: 52px !important;
+            left: 8px !important;
+            right: 8px !important;
+            transform: none !important;
+            min-width: auto;
+            max-width: none;
+            white-space: normal;
+            margin-top: 0;
+        }
+
+        .tool-tooltip::before {
+            left: 56px;
+            transform: none;
+        }
+
+        .filter-dropdown {
+            position: static;
+        }
+
+        .filter-menu {
+            position: fixed !important;
+            top: 52px !important;
+            right: 8px !important;
+            left: auto !important;
+            min-width: 200px;
+            max-width: calc(100vw - 16px);
+            margin-top: 0;
+        }
     }
 
     /* Group Modal */
