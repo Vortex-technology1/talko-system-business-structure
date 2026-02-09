@@ -984,27 +984,7 @@
         margin: 0 2px;
     }
 
-    /* Приховуємо менш важливі кнопки на середніх екранах */
-    @media (max-width: 1400px) {
-        #copyBtn, #pasteBtn {
-            display: none;
-        }
-    }
-
-    @media (max-width: 1200px) {
-        #showAllBtn, #statsBtn {
-            display: none;
-        }
-    }
-
-    @media (max-width: 1000px) {
-        .toolbar-divider {
-            display: none;
-        }
-        .tool-btn {
-            padding: 0 6px;
-        }
-    }
+    /* Toolbar layout adjustments for medium screens - see detailed rules below */
 
     /* Tools Menu Dropdown */
     .tools-dropdown {
@@ -1110,6 +1090,9 @@
     }
 
     @media (max-width: 1000px) {
+        .toolbar-divider {
+            display: none;
+        }
         .search-input {
             width: 100px;
         }
@@ -1702,11 +1685,6 @@
     @keyframes pulse-ai {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.7; }
-    }
-
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
     }
 
     /* === CANVAS === */
@@ -4436,6 +4414,7 @@
     }
 
     .mobile-slide-panel {
+        display: none;
         position: fixed;
         bottom: 56px;
         bottom: calc(56px + env(safe-area-inset-bottom, 0px));
@@ -4521,8 +4500,48 @@
         background: #30363d;
     }
 
+    .dark-mode .mobile-slide-panel .ecosystem-menu-grid {
+        background: #21262d;
+    }
+
+    .dark-mode .mobile-slide-panel .ecosystem-menu-item {
+        background: #161b22;
+        color: var(--gray-300);
+    }
+
+    .dark-mode .mobile-slide-panel .ecosystem-menu-item:hover {
+        background: #21262d;
+    }
+
+    .dark-mode .mobile-slide-panel .ai-menu-item {
+        color: var(--gray-300);
+        border-bottom-color: #21262d;
+    }
+
+    .dark-mode .mobile-slide-panel .support-menu-item {
+        color: var(--gray-300);
+        border-bottom-color: #21262d;
+    }
+
+    .dark-mode .mobile-slide-panel .tools-menu-item {
+        color: var(--gray-300) !important;
+        border-bottom-color: #21262d !important;
+    }
+
     @media (max-width: 768px) {
         .mobile-bottom-nav {
+            display: block;
+        }
+
+        .mobile-slide-panel {
+            display: block;
+        }
+
+        .mobile-panel-overlay {
+            display: none; /* shown via .show class */
+        }
+
+        .mobile-panel-overlay.show {
             display: block;
         }
 
@@ -4557,7 +4576,7 @@
         right: 16px;
         width: 56px;
         height: 56px;
-        background: var(--primary-gradient);
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         border: none;
         border-radius: 50%;
         color: white;
@@ -4593,7 +4612,11 @@
         .language-selector,
         .connection-status,
         .modal,
-        .confirm-modal {
+        .confirm-modal,
+        .mobile-bottom-nav,
+        .mobile-slide-panel,
+        .mobile-panel-overlay,
+        .mobile-fab {
             display: none !important;
         }
 
@@ -8853,8 +8876,7 @@
 
         // === MOBILE BOTTOM NAVIGATION ===
         (function initMobileBottomNav() {
-            const isMobile = () => window.innerWidth <= 768;
-            if (!isMobile()) return;
+            // Always initialize - CSS controls visibility via media queries
 
             const overlay = Utils.getElement('mobilePanelOverlay');
             const panels = {
@@ -8914,13 +8936,25 @@
                 });
             }
 
-            // Clone support menu content
+            // Clone support menu content (remove IDs to prevent duplicates)
             const supportMenu = document.querySelector('.support-menu');
             const supportPanelBody = Utils.getElement('mobileSupportPanelBody');
             if (supportMenu && supportPanelBody) {
                 const items = supportMenu.querySelectorAll('.support-menu-item');
                 items.forEach(item => {
-                    supportPanelBody.appendChild(item.cloneNode(true));
+                    const clone = item.cloneNode(true);
+                    if (clone.id) {
+                        clone.dataset.sourceId = clone.id;
+                        clone.removeAttribute('id');
+                    }
+                    // Re-bind backup restore click
+                    if (item.id === 'backupRestoreBtn') {
+                        clone.addEventListener('click', () => {
+                            closeAllPanels();
+                            if (typeof window.showBackupModal === 'function') window.showBackupModal();
+                        });
+                    }
+                    supportPanelBody.appendChild(clone);
                 });
             }
 
@@ -8928,16 +8962,16 @@
             const toolsPanelBody = Utils.getElement('mobileToolsPanelBody');
             if (toolsPanelBody) {
                 const toolItems = [
-                    { icon: '📊', label: 'Статистика', action: () => { closeAllPanels(); if(typeof showStats==='function') showStats(); else Utils.getElement('statsBtn')?.click(); }},
-                    { icon: '👁', label: 'Показати все', action: () => { closeAllPanels(); if(typeof showAll==='function') showAll(); else Utils.getElement('showAllBtn')?.click(); }},
-                    { icon: '📋', label: 'Копіювати структуру', action: () => { closeAllPanels(); if(typeof copyStructure==='function') copyStructure(); }},
-                    { icon: '📥', label: 'Вставити структуру', action: () => { closeAllPanels(); if(typeof pasteStructure==='function') pasteStructure(); }},
-                    { icon: '🖼', label: 'Експорт JPEG', action: () => { closeAllPanels(); if(typeof exportToJPEG==='function') exportToJPEG(); }},
-                    { icon: '📄', label: 'Експорт PDF', action: () => { closeAllPanels(); if(typeof exportToPDF==='function') exportToPDF(); }},
-                    { icon: '📊', label: 'Експорт Excel', action: () => { closeAllPanels(); if(typeof exportToExcel==='function') exportToExcel(); }},
-                    { icon: '🔄', label: 'Бекапи', action: () => { closeAllPanels(); if(typeof showBackupModal==='function') showBackupModal(); }},
+                    { icon: '📊', label: 'Статистика', action: () => { closeAllPanels(); if(typeof window.showStatsModal==='function') window.showStatsModal(); }},
+                    { icon: '👁', label: 'Показати все', action: () => { closeAllPanels(); if(typeof window.zoomToFit==='function') window.zoomToFit(); }},
+                    { icon: '📋', label: 'Копіювати структуру', action: () => { closeAllPanels(); if(typeof window.copyStructure==='function') window.copyStructure(); }},
+                    { icon: '📥', label: 'Вставити структуру', action: () => { closeAllPanels(); if(typeof window.pasteStructure==='function') window.pasteStructure(); }},
+                    { icon: '🖼', label: 'Експорт JPEG', action: () => { closeAllPanels(); if(typeof window.exportToJPEG==='function') window.exportToJPEG(); }},
+                    { icon: '📄', label: 'Експорт PDF', action: () => { closeAllPanels(); if(typeof window.exportToPDF==='function') window.exportToPDF(); }},
+                    { icon: '📊', label: 'Експорт Excel', action: () => { closeAllPanels(); if(typeof window.exportToExcel==='function') window.exportToExcel(); }},
+                    { icon: '🔄', label: 'Бекапи', action: () => { closeAllPanels(); if(typeof window.showBackupModal==='function') window.showBackupModal(); }},
                     { icon: '🌙', label: 'Тема', action: () => { closeAllPanels(); Utils.getElement('themeToggleBtn')?.click(); }},
-                    { icon: '🚪', label: 'Вийти', action: () => { closeAllPanels(); if(typeof logout==='function') logout(); }}
+                    { icon: '🚪', label: 'Вийти', action: () => { closeAllPanels(); if(typeof window.logout==='function') window.logout(); }}
                 ];
 
                 toolItems.forEach(item => {
@@ -8955,7 +8989,7 @@
             Utils.getElement('mobileAiBtn')?.addEventListener('click', () => openPanel('ai'));
             Utils.getElement('mobileSupportBtn')?.addEventListener('click', () => openPanel('support'));
             Utils.getElement('mobileToolsBtn')?.addEventListener('click', () => openPanel('tools'));
-            Utils.getElement('mobileAddBtn')?.addEventListener('click', () => { closeAllPanels(); addFunction(); });
+            Utils.getElement('mobileAddBtn')?.addEventListener('click', () => { closeAllPanels(); if(typeof window.addFunction==='function') window.addFunction(); });
             overlay?.addEventListener('click', closeAllPanels);
 
             // Swipe down to close panels
