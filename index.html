@@ -1061,31 +1061,11 @@
             min-width: 34px;
         }
 
-        /* Hide text labels - SVG/pseudo icons only */
-        .tool-btn#selectTool span,
-        .tool-btn#handTool span,
-        .tool-btn#connectTool span {
-            display: none;
-        }
-
-        .tool-btn#selectTool::after {
-            content: '⬚';
-            font-size: 16px;
-        }
-
-        .tool-btn#handTool::after {
-            content: '✋';
-            font-size: 14px;
-        }
-
-        .tool-btn#connectTool::after {
-            content: '⤵';
-            font-size: 14px;
-        }
-
-        /* Hide undo/redo and connect on mobile - available in tools panel */
+        /* Hide tool buttons on mobile - touch gestures handle select/pan */
         .tool-btn.undo-redo-btn,
-        .tool-btn#connectTool {
+        .tool-btn#connectTool,
+        .tool-btn#selectTool,
+        .tool-btn#handTool {
             display: none;
         }
 
@@ -1112,7 +1092,8 @@
         }
 
         .logo {
-            display: none;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         /* Dividers gone */
@@ -3480,7 +3461,7 @@
 
     /* Mobile fix: prevent tooltip/filter overflow */
     @media (max-width: 768px) {
-        /* Hide hover tooltip on touch devices - not useful */
+        /* Hide hover tooltip completely on touch devices */
         .tool-tooltip,
         .tool-select-btn:hover .tool-tooltip,
         .tool-select-btn:active .tool-tooltip,
@@ -3489,6 +3470,20 @@
             visibility: hidden !important;
             opacity: 0 !important;
             pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            clip: rect(0,0,0,0) !important;
+        }
+
+        /* Prevent hover state from eating first tap on iOS */
+        .tool-select-btn:hover {
+            background: inherit;
+        }
+
+        .tool-select-btn.active:hover {
+            background: var(--primary-color);
         }
 
         .filter-dropdown {
