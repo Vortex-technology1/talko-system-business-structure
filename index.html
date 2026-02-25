@@ -9778,7 +9778,7 @@
     function copyStructure() {
         console.log('[COPY] copyStructure викликано');
         
-        if (!window.functions || window.functions.length === 0) {
+        if (!State.functions || State.functions.length === 0) {
             const msg = window.t ? window.t('notification.no_functions_to_copy') : 'Немає функцій для копіювання';
             window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
             return;
@@ -9786,38 +9786,69 @@
 
         const structureData = {
             talkoSystem: {
-                functions: window.functions.map(func => ({
+                functions: State.functions.map(func => ({
+                    _origId: func.id,
                     name: func.name,
                     responsible: func.responsible,
                     link: func.link || '',
                     kpi: func.kpi || '',
+                    notes: func.notes || '',
+                    tags: func.tags || [],
                     statisticsArray: func.statisticsArray || [],
                     employees: func.employees || [],
                     color: func.color || 'default',
+                    x: func.x || 0,
+                    y: func.y || 0,
                 })),
-                connections: [...window.connections],
+                connections: (State.connections || []).map(conn => {
+                    let fId = conn.fromId;
+                    let tId = conn.toId;
+                    if (!fId && conn.from !== undefined && State.functions[conn.from]) {
+                        fId = State.functions[conn.from].id;
+                    }
+                    if (!tId && conn.to !== undefined && State.functions[conn.to]) {
+                        tId = State.functions[conn.to].id;
+                    }
+                    return { fromId: fId, toId: tId };
+                }).filter(conn => conn.fromId && conn.toId),
+                groups: (State.groups || []).map(g => ({
+                    name: g.name,
+                    color: g.color || '',
+                    collapsed: g.collapsed || false,
+                    cardIds: g.cardIds || [],
+                    x: g.x || 0,
+                    y: g.y || 0,
+                    width: g.width || 0,
+                    height: g.height || 0
+                })),
                 version: '3.3',
                 exported: new Date().toISOString(),
-                exportedBy: window.currentUser ? window.currentUser.email : 'unknown'
+                exportedBy: State.currentUser ? State.currentUser.email : 'unknown'
             }
         };
 
         const jsonString = JSON.stringify(structureData, null, 2);
         
+        // Зберігаємо в localStorage — працює завжди, без permission prompts
+        try {
+            localStorage.setItem('talko_copied_structure', jsonString);
+            console.log('[OK] Структура збережена в localStorage');
+        } catch(e) {
+            console.error('[ERR] localStorage помилка:', e);
+        }
+        
+        // Також копіюємо в clipboard (для cross-browser/cross-device)
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(jsonString)
-                .then(() => {
-                    console.log('[OK] Структура скопійована');
-                    const msg = window.t ? window.t('notification.structure_copied') : 'Структуру скопійовано';
-                    window.showNotification ? window.showNotification(msg, 'success') : alert(msg);
-                })
-                .catch(err => {
-                    console.error('[ERR] Помилка копіювання:', err);
-                    fallbackCopyToClipboard(jsonString);
-                });
-        } else {
-            fallbackCopyToClipboard(jsonString);
+                .then(() => console.log('[OK] Також скопійовано в clipboard'))
+                .catch(err => console.warn('[WARN] Clipboard недоступний:', err.message));
         }
+        
+        const funcCount = State.functions.length;
+        const connCount = structureData.talkoSystem.connections.length;
+        const groupCount = structureData.talkoSystem.groups.length;
+        const msg = `Скопійовано: ${funcCount} функцій, ${connCount} зв'язків, ${groupCount} груп`;
+        window.showNotification ? window.showNotification(msg, 'success') : alert(msg);
     }
 
     function fallbackCopyToClipboard(text) {
@@ -9845,55 +9876,82 @@
     function pasteStructure() {
         console.log('[COPY] pasteStructure викликано');
         
-        if (!navigator.clipboard || !navigator.clipboard.readText) {
-            const msg = window.t ? window.t('notification.paste_not_supported') : 'Вставка не підтримується';
+        // 1. Спробуємо localStorage (завжди працює, без permission)
+        try {
+            const localData = localStorage.getItem('talko_copied_structure');
+            if (localData) {
+                console.log('[OK] Знайдено структуру в localStorage');
+                processPastedText(localData);
+                return;
+            }
+        } catch(e) {
+            console.warn('[WARN] localStorage недоступний:', e);
+        }
+        
+        // 2. Спробуємо clipboard API
+        if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText()
+                .then(text => {
+                    if (text && text.includes('talkoSystem')) {
+                        processPastedText(text);
+                    } else {
+                        fallbackPaste();
+                    }
+                })
+                .catch(err => {
+                    console.warn('[WARN] Clipboard API blocked:', err.message);
+                    fallbackPaste();
+                });
+        } else {
+            fallbackPaste();
+        }
+    }
+    
+    function fallbackPaste() {
+        // Fallback: prompt для вставки тексту
+        const text = prompt('Вставте скопійовану структуру (Ctrl+V):');
+        if (text) {
+            processPastedText(text);
+        }
+    }
+    
+    function processPastedText(text) {
+        if (!text || !text.trim()) {
+            const msg = window.t ? window.t('notification.clipboard_empty') : 'Буфер порожній';
             window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
             return;
         }
 
-        navigator.clipboard.readText()
-            .then(text => {
-                if (!text.trim()) {
-                    const msg = window.t ? window.t('notification.clipboard_empty') : 'Буфер порожній';
-                    window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
-                    return;
-                }
-
-                try {
-                    const data = JSON.parse(text);
-                    
-                    if (!data.talkoSystem || !data.talkoSystem.functions) {
-                        const msg = window.t ? window.t('notification.invalid_format') : 'Невірний формат';
-                        window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
-                        return;
-                    }
-
-                    const importedFunctions = data.talkoSystem.functions;
-                    const importedConnections = data.talkoSystem.connections || [];
-
-                    if (importedFunctions.length === 0) {
-                        const msg = window.t ? window.t('notification.no_functions') : 'Немає функцій';
-                        window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
-                        return;
-                    }
-
-                    console.log('[OK] Знайдено функцій:', importedFunctions.length);
-                    showPasteDialog(importedFunctions, importedConnections, data.talkoSystem.exportedBy);
-
-                } catch (error) {
-                    console.error('[ERR] Помилка парсингу:', error);
-                    const msg = window.t ? window.t('notification.parse_error') : 'Помилка читання';
-                    window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
-                }
-            })
-            .catch(err => {
-                console.error('[ERR] Помилка буфера:', err);
-                const msg = window.t ? window.t('notification.clipboard_error') : 'Помилка доступу';
+        try {
+            const data = JSON.parse(text);
+            
+            if (!data.talkoSystem || !data.talkoSystem.functions) {
+                const msg = window.t ? window.t('notification.invalid_format') : 'Невірний формат даних';
                 window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
-            });
+                return;
+            }
+
+            const importedFunctions = data.talkoSystem.functions;
+            const importedConnections = data.talkoSystem.connections || [];
+            const importedGroups = data.talkoSystem.groups || [];
+
+            if (importedFunctions.length === 0) {
+                const msg = window.t ? window.t('notification.no_functions') : 'Немає функцій';
+                window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
+                return;
+            }
+
+            console.log('[OK] Знайдено функцій:', importedFunctions.length, 'з\'єднань:', importedConnections.length, 'груп:', importedGroups.length);
+            showPasteDialog(importedFunctions, importedConnections, importedGroups, data.talkoSystem.exportedBy);
+
+        } catch (error) {
+            console.error('[ERR] Помилка парсингу:', error);
+            const msg = window.t ? window.t('notification.parse_error') : 'Помилка читання даних. Перевірте що скопійовано правильну структуру.';
+            window.showNotification ? window.showNotification(msg, 'error') : alert(msg);
+        }
     }
 
-    function showPasteDialog(importedFunctions, importedConnections, exportedBy) {
+    function showPasteDialog(importedFunctions, importedConnections, importedGroups, exportedBy) {
         const t = window.t || ((k) => k);
         
         // Remove existing dialog
@@ -9909,8 +9967,10 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>${t('modal.found')}:</strong> ${importedFunctions.length} ${t('modal.functions')}</p>
+                    <p><strong>З'єднань:</strong> ${importedConnections.length}</p>
+                    <p><strong>Груп:</strong> ${importedGroups.length}</p>
                     ${exportedBy ? `<p><strong>${t('modal.exported_by')}:</strong> ${window.Utils?.escapeHtml(exportedBy) || exportedBy}</p>` : ''}
-                    <p><strong>${t('modal.current_functions')}:</strong> ${window.functions?.length || 0}</p>
+                    <p><strong>${t('modal.current_functions')}:</strong> ${State.functions?.length || 0}</p>
                     
                     <div style="margin: 20px 0;">
                         <label style="display: block; margin-bottom: 8px; cursor: pointer;">
@@ -9937,7 +9997,7 @@
         `;
         
         // Store data for execution
-        modal._pasteData = { functions: importedFunctions, connections: importedConnections };
+        modal._pasteData = { functions: importedFunctions, connections: importedConnections, groups: importedGroups };
         
         // Event handlers
         modal.querySelector('#pasteCancelBtn').addEventListener('click', () => modal.remove());
@@ -9951,53 +10011,113 @@
 
     function executePaste(modal) {
         const pasteMode = modal.querySelector('input[name="pasteMode"]:checked')?.value || 'add';
-        const { functions: importedFunctions, connections: importedConnections } = modal._pasteData;
+        const { functions: importedFunctions, connections: importedConnections, groups: importedGroups } = modal._pasteData;
         
         // Зберігаємо історію перед вставкою
-        if (typeof saveHistory === 'function') {
-            saveHistory('paste_structure');
+        if (typeof window.saveHistory === 'function') {
+            window.saveHistory('paste_structure');
         }
-        
-        const startIndex = pasteMode === 'replace' ? 0 : window.functions.length;
         
         if (pasteMode === 'replace') {
-            window.functions = [];
-            window.connections = [];
+            State.functions = [];
+            State.connections = [];
+            State.groups = [];
         }
         
-        const Utils = window.Utils || { generateId: () => Date.now() + '_' + Math.random().toString(36).substr(2, 9) };
+        // Маппінг старих ID → нових ID
+        const idMap = {};
+        
+        // Для режиму "add" - зсуваємо позиції щоб не накладались на існуючі картки
+        let offsetX = 0;
+        let offsetY = 0;
+        if (pasteMode === 'add' && State.functions.length > 0) {
+            let maxX = 0;
+            State.functions.forEach(f => {
+                if ((f.x || 0) + 300 > maxX) maxX = (f.x || 0) + 300;
+            });
+            offsetX = maxX + 100;
+        }
         
         importedFunctions.forEach((func, index) => {
+            const newId = Utils.generateId();
+            const origId = func._origId || func.id || ('idx_' + index);
+            idMap[origId] = newId;
+            // Також маппимо по індексу для старого формату connections
+            idMap['__idx__' + index] = newId;
+            console.log(`[PASTE] Функція ${index}: "${func.name}" | origId=${origId} → newId=${newId}`);
+            
             const newFunction = {
                 ...func,
-                id: Utils.generateId(),
-                x: 100 + (index % 3) * 320,
-                y: 100 + Math.floor(index / 3) * 300,
+                id: newId,
+                x: (typeof func.x === 'number' ? func.x : 100) + offsetX,
+                y: (typeof func.y === 'number' ? func.y : 100) + offsetY,
                 created: new Date().toISOString(),
                 modified: new Date().toISOString()
             };
-            window.functions.push(newFunction);
+            // Видаляємо тимчасове поле
+            delete newFunction._origId;
+            
+            State.functions.push(newFunction);
         });
         
-        importedConnections.forEach(conn => {
-            const newConnection = {
-                from: conn.from + startIndex,
-                to: conn.to + startIndex
-            };
+        // Ремаппінг connections з oldId → newId (підтримка обох форматів)
+        let connMapped = 0, connSkipped = 0;
+        (importedConnections || []).forEach(conn => {
+            let newFromId, newToId;
             
-            if (newConnection.from < window.functions.length && newConnection.to < window.functions.length) {
-                window.connections.push(newConnection);
+            if (conn.fromId) {
+                newFromId = idMap[conn.fromId];
+            }
+            if (conn.toId) {
+                newToId = idMap[conn.toId];
+            }
+            // Fallback: старий індексний формат
+            if (!newFromId && conn.from !== undefined) {
+                newFromId = idMap['__idx__' + conn.from];
+            }
+            if (!newToId && conn.to !== undefined) {
+                newToId = idMap['__idx__' + conn.to];
+            }
+            
+            if (newFromId && newToId) {
+                State.connections.push({ fromId: newFromId, toId: newToId });
+                connMapped++;
+            } else {
+                console.warn(`[PASTE] Connection скіпнуто: fromId=${conn.fromId}, toId=${conn.toId}, from=${conn.from}, to=${conn.to}`);
+                connSkipped++;
+            }
+        });
+        console.log(`[PASTE] Connections: ${connMapped} mapped, ${connSkipped} skipped`);
+        
+        // Ремаппінг groups з oldId → newId
+        (importedGroups || []).forEach(g => {
+            const newCardIds = (g.cardIds || []).map(oldId => idMap[oldId]).filter(Boolean);
+            if (newCardIds.length > 0) {
+                State.groups.push({
+                    id: Utils.generateId(),
+                    name: g.name || '',
+                    color: g.color || '',
+                    collapsed: g.collapsed || false,
+                    cardIds: newCardIds,
+                    x: (g.x || 0) + offsetX,
+                    y: (g.y || 0) + offsetY,
+                    width: g.width || 0,
+                    height: g.height || 0
+                });
             }
         });
         
         modal.remove();
-        renderFunctions();
+        renderFunctions(); // Includes renderConnections + renderGroups internally
+        
+        // Очистити скопійовану структуру після вставки
+        try { localStorage.removeItem('talko_copied_structure'); } catch(e) {}
         
         if (typeof window.debouncedSave === 'function') {
             window.debouncedSave();
         }
         
-        const msg = (window.t ? window.t('notification.functions_pasted') : 'Вставлено функцій:') + ' ' + importedFunctions.length;
+        const msg = `Вставлено: ${importedFunctions.length} функцій, ${connMapped} зв'язків`;
         window.showNotification ? window.showNotification(msg, 'success') : alert(msg);
     }
 
@@ -10321,13 +10441,13 @@
             
             // Sheet 3: Connections
             const connectionsData = (window.connections || []).map((conn, index) => {
-                const fromFunc = window.functions[conn.from];
-                const toFunc = window.functions[conn.to];
+                const fromFunc = window.functions.find(f => f.id === conn.fromId);
+                const toFunc = window.functions.find(f => f.id === conn.toId);
                 return {
                     '№': index + 1,
-                    'Від (індекс)': conn.from,
+                    'Від (ID)': conn.fromId || '',
                     'Від (назва)': fromFunc ? fromFunc.name : '',
-                    'До (індекс)': conn.to,
+                    'До (ID)': conn.toId || '',
                     'До (назва)': toFunc ? toFunc.name : ''
                 };
             });
